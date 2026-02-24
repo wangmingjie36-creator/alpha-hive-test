@@ -1,9 +1,9 @@
 {
   "ticker": "TSLA",
-  "timestamp": "2026-02-24T13:33:08.862744",
+  "timestamp": "2026-02-24T13:35:57.249181",
   "advanced_analysis": {
     "ticker": "TSLA",
-    "timestamp": "2026-02-24T13:33:09.585060",
+    "timestamp": "2026-02-24T13:35:57.820494",
     "overview": "EV \u6210\u672c\u9886\u5bfc\u8005\uff0c\u4ea7\u80fd\u6269\u5f20\u5feb\uff0c\u4f46\u7ade\u4e89\u52a0\u5267\uff0c\u5229\u6da6\u7387\u627f\u538b",
     "industry_comparison": {
       "industry": "EV",
@@ -102,7 +102,7 @@
     },
     "options_analysis": {
       "ticker": "TSLA",
-      "timestamp": "2026-02-24T13:33:10.043330",
+      "timestamp": "2026-02-24T13:35:58.342468",
       "iv_rank": 0,
       "iv_percentile": 0.0,
       "iv_current": 25.0,
@@ -114,15 +114,15 @@
         {
           "type": "put_sweep",
           "strike": 400.0,
-          "volume": 84901.0,
+          "volume": 84960.0,
           "oi": 4261,
-          "ratio": 19.93,
+          "ratio": 19.94,
           "bullish": false
         },
         {
           "type": "call_sweep",
           "strike": 405.0,
-          "volume": 79948.0,
+          "volume": 79949.0,
           "oi": 3783,
           "ratio": 21.13,
           "bullish": true
@@ -130,23 +130,23 @@
         {
           "type": "call_sweep",
           "strike": 415.0,
-          "volume": 78741.0,
+          "volume": 78760.0,
           "oi": 3691,
-          "ratio": 21.33,
+          "ratio": 21.34,
           "bullish": true
         },
         {
           "type": "call_sweep",
           "strike": 410.0,
-          "volume": 66568.0,
+          "volume": 67169.0,
           "oi": 4928,
-          "ratio": 13.51,
+          "ratio": 13.63,
           "bullish": true
         },
         {
           "type": "put_sweep",
           "strike": 405.0,
-          "volume": 50650.0,
+          "volume": 50661.0,
           "oi": 2426,
           "ratio": 20.88,
           "bullish": false
@@ -162,29 +162,29 @@
         {
           "type": "call_sweep",
           "strike": 402.5,
-          "volume": 45584.0,
+          "volume": 45604.0,
           "oi": 2675,
-          "ratio": 17.04,
+          "ratio": 17.05,
           "bullish": true
         },
         {
           "type": "call_sweep",
           "strike": 407.5,
-          "volume": 41329.0,
+          "volume": 41361.0,
           "oi": 3149,
-          "ratio": 13.12,
+          "ratio": 13.13,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 400.0,
-          "volume": 39014.0,
+          "volume": 39069.0,
           "bullish": true
         },
         {
           "type": "call_sweep",
           "strike": 400.0,
-          "volume": 37323.0,
+          "volume": 37324.0,
           "oi": 3845,
           "ratio": 9.71,
           "bullish": true
@@ -238,7 +238,7 @@
   },
   "ml_prediction": {
     "ticker": "TSLA",
-    "date": "2026-02-24T13:33:10.043437",
+    "date": "2026-02-24T13:35:58.342570",
     "input": {
       "crowding_score": 63.5,
       "catalyst_quality": "A",

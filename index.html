@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha Hive 投资简报系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 60px 40px;
+            text-align: center;
+            max-width: 600px;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .loading {
+            font-size: 16px;
+            color: #999;
+            margin-bottom: 40px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .features {
+            margin-top: 50px;
+            text-align: left;
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        .features h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .features ul {
+            list-style: none;
+        }
+
+        .features li {
+            padding: 8px 0;
+            color: #666;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .features li:last-child {
+            border-bottom: none;
+        }
+
+        .features li::before {
+            content: "✅";
+            font-size: 16px;
+        }
+
+        .info {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #999;
+            line-height: 1.8;
+        }
+
+        .report-list {
+            margin-top: 40px;
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .report-item {
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .report-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .report-item h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .report-item .meta {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .score {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐝 Alpha Hive</h1>
+        <div class="subtitle">去中心化投资研究简报系统</div>
+
+        <div class="loading">
+            <span class="spinner"></span>
+            正在加载最新简报...
+        </div>
+
+        <div class="btn-group">
+            <a href="./alpha-hive-nvda-2026-02-23.html" class="btn btn-primary">📊 查看 NVDA 简报</a>
+            <a href="./README.md" class="btn btn-secondary">📖 了解详情</a>
+        </div>
+
+        <div class="features">
+            <h3>✨ 系统特性</h3>
+            <ul>
+                <li>6 个核心 Agent 并行采集</li>
+                <li>100% 去中心化共识机制</li>
+                <li>8 版块结构化简报</li>
+                <li>实时市场数据采集</li>
+                <li>完整风险评估与建议</li>
+                <li>支持分享、打印、PDF导出</li>
+            </ul>
+        </div>
+
+        <div class="report-list">
+            <h3>📋 最新简报</h3>
+
+            <div class="report-item">
+                <h4>
+                    【2026-02-23】NVDA (英伟达) 机会扫描
+                    <span class="score">8.52/10</span>
+                </h4>
+                <div class="meta">
+                    📊 综合分数：8.52/10 | 🤝 支持Agent：6/6 | 💯 共识：100%
+                </div>
+            </div>
+        </div>
+
+        <div class="info">
+            <p>💡 <strong>提示</strong>：这是一个蜂群智能系统生成的投资研究简报。</p>
+            <p>所有内容基于公开信息，非投资建议，投资风险自担。</p>
+            <p>支持在浏览器中打印或另存为 PDF 版本。</p>
+        </div>
+    </div>
+
+    <script>
+        // 延迟移除加载提示，显示内容
+        setTimeout(() => {
+            const loading = document.querySelector('.loading');
+            if (loading) {
+                loading.style.opacity = '0';
+                loading.style.transition = 'opacity 0.3s';
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                }, 300);
+            }
+        }, 1500);
+    </script>
+</body>
+</html>

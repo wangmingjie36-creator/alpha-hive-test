@@ -1,13 +1,13 @@
 {
   "NVDA": {
     "ticker": "NVDA",
-    "timestamp": "2026-02-24T12:14:58.991043",
+    "timestamp": "2026-02-24T12:33:09.982766",
     "sources": {
       "stocktwits": {
         "messages_per_day": 45000,
         "bullish_ratio": 0.75,
         "sentiment_trend": "positive",
-        "last_updated": "2026-02-24T11:19:26.244757"
+        "last_updated": "2026-02-24T12:20:02.256560"
       },
       "polymarket": {
         "event": "NVDA Q1 2026 Earnings Beat",
@@ -15,15 +15,15 @@
         "no_odds": 0.35,
         "volume_24h": 8200000,
         "odds_change_24h": 8.2,
-        "last_updated": "2026-02-24T12:14:58.991243"
+        "last_updated": "2026-02-24T12:30:07.356287"
       },
       "yahoo_finance": {
-        "current_price": 192.6801,
-        "price_change_5d": 2.505589329140075,
+        "current_price": 192.83,
+        "price_change_5d": 2.5800650142291173,
         "short_float_ratio": 0.011,
-        "market_cap": 4691182747648,
-        "volume": 127225645,
-        "last_updated": "2026-02-24T12:15:00.244712"
+        "market_cap": 4694832316416,
+        "volume": 130803222,
+        "last_updated": "2026-02-24T12:30:08.297185"
       },
       "google_trends": {
         "search_interest_percentile": 84.0,
@@ -33,7 +33,7 @@
           "NVDA stock",
           "NVDA earnings"
         ],
-        "last_updated": "2026-02-24T12:15:00.585155"
+        "last_updated": "2026-02-24T12:33:10.602049"
       },
       "sec_filings": [
         {
@@ -56,18 +56,18 @@
       "polymarket_odds_change_24h": 8.2,
       "seeking_alpha_page_views": 85000,
       "short_float_ratio": 0.011,
-      "price_momentum_5d": 2.505589329140075
+      "price_momentum_5d": 2.5800650142291173
     }
   },
   "VKTX": {
     "ticker": "VKTX",
-    "timestamp": "2026-02-24T12:15:00.587258",
+    "timestamp": "2026-02-24T12:33:10.606227",
     "sources": {
       "stocktwits": {
         "messages_per_day": 8000,
         "bullish_ratio": 0.6,
         "sentiment_trend": "positive",
-        "last_updated": "2026-02-24T11:19:27.521926"
+        "last_updated": "2026-02-24T12:20:03.321158"
       },
       "polymarket": {
         "event": "VKTX Q1 2026 Earnings Beat",
@@ -75,15 +75,15 @@
         "no_odds": 0.52,
         "volume_24h": 1200000,
         "odds_change_24h": 3.2,
-        "last_updated": "2026-02-24T12:15:00.587734"
+        "last_updated": "2026-02-24T12:30:08.682731"
       },
       "yahoo_finance": {
-        "current_price": 33.92,
-        "price_change_5d": 12.504141287278781,
+        "current_price": 33.79,
+        "price_change_5d": 12.072972945445464,
         "short_float_ratio": 0.27629998,
-        "market_cap": 3919601408,
-        "volume": 1551212,
-        "last_updated": "2026-02-24T12:15:00.775061"
+        "market_cap": 3904579840,
+        "volume": 1649785,
+        "last_updated": "2026-02-24T12:30:08.910004"
       },
       "google_trends": {
         "search_interest_percentile": 84.0,
@@ -93,7 +93,7 @@
           "VKTX stock",
           "VKTX earnings"
         ],
-        "last_updated": "2026-02-24T12:15:01.083238"
+        "last_updated": "2026-02-24T12:33:10.895480"
       },
       "sec_filings": [
         {
@@ -116,18 +116,18 @@
       "polymarket_odds_change_24h": 3.2,
       "seeking_alpha_page_views": 12000,
       "short_float_ratio": 0.27629998,
-      "price_momentum_5d": 12.504141287278781
+      "price_momentum_5d": 12.072972945445464
     }
   },
   "TSLA": {
     "ticker": "TSLA",
-    "timestamp": "2026-02-24T12:15:01.085202",
+    "timestamp": "2026-02-24T12:33:10.899726",
     "sources": {
       "stocktwits": {
         "messages_per_day": 38000,
         "bullish_ratio": 0.68,
         "sentiment_trend": "positive",
-        "last_updated": "2026-02-24T11:19:28.297131"
+        "last_updated": "2026-02-24T12:20:03.869229"
       },
       "polymarket": {
         "event": "TSLA Q1 2026 Earnings Beat",
@@ -135,15 +135,15 @@
         "no_odds": 0.44999999999999996,
         "volume_24h": 5500000,
         "odds_change_24h": 5.5,
-        "last_updated": "2026-02-24T12:15:01.085695"
+        "last_updated": "2026-02-24T12:30:09.256539"
       },
       "yahoo_finance": {
-        "current_price": 408.429,
-        "price_change_5d": -0.7269329715819712,
+        "current_price": 408.88,
+        "price_change_5d": -0.5932126806277486,
         "short_float_ratio": 0.019299999,
-        "market_cap": 1532230500352,
-        "volume": 44283436,
-        "last_updated": "2026-02-24T12:15:01.297736"
+        "market_cap": 1534294360064,
+        "volume": 46304395,
+        "last_updated": "2026-02-24T12:30:09.459255"
       },
       "google_trends": {
         "search_interest_percentile": 84.0,
@@ -153,7 +153,7 @@
           "TSLA stock",
           "TSLA earnings"
         ],
-        "last_updated": "2026-02-24T12:15:01.596132"
+        "last_updated": "2026-02-24T12:33:11.191956"
       },
       "sec_filings": [
         {
@@ -176,7 +176,7 @@
       "polymarket_odds_change_24h": 5.5,
       "seeking_alpha_page_views": 125000,
       "short_float_ratio": 0.019299999,
-      "price_momentum_5d": -0.7269329715819712
+      "price_momentum_5d": -0.5932126806277486
     }
   }
 }

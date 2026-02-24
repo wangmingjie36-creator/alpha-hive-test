@@ -1,7 +1,7 @@
 {
   "NVDA": {
     "ticker": "NVDA",
-    "timestamp": "2026-02-24T08:13:35.983746",
+    "timestamp": "2026-02-24T08:41:56.522197",
     "sources": {
       "stocktwits": {
         "messages_per_day": 45000,
@@ -15,15 +15,15 @@
         "no_odds": 0.35,
         "volume_24h": 8200000,
         "odds_change_24h": 8.2,
-        "last_updated": "2026-02-24T08:13:30.724511"
+        "last_updated": "2026-02-24T08:41:56.522642"
       },
       "yahoo_finance": {
-        "current_price": 192.885,
-        "price_change_5d": 2.6093195503665463,
+        "current_price": 192.0601,
+        "price_change_5d": 2.1705015083051142,
         "short_float_ratio": 0.011,
-        "market_cap": 4696171347968,
-        "volume": 66548417,
-        "last_updated": "2026-02-24T08:13:31.654656"
+        "market_cap": 4676087447552,
+        "volume": 76847751,
+        "last_updated": "2026-02-24T08:41:57.371774"
       },
       "google_trends": {
         "search_interest_percentile": 84.0,
@@ -33,7 +33,7 @@
           "NVDA stock",
           "NVDA earnings"
         ],
-        "last_updated": "2026-02-24T08:13:36.662531"
+        "last_updated": "2026-02-24T08:41:57.733602"
       },
       "sec_filings": [
         {
@@ -56,12 +56,12 @@
       "polymarket_odds_change_24h": 8.2,
       "seeking_alpha_page_views": 85000,
       "short_float_ratio": 0.011,
-      "price_momentum_5d": 2.6093195503665463
+      "price_momentum_5d": 2.1705015083051142
     }
   },
   "VKTX": {
     "ticker": "VKTX",
-    "timestamp": "2026-02-24T08:13:36.665303",
+    "timestamp": "2026-02-24T08:41:57.737990",
     "sources": {
       "stocktwits": {
         "messages_per_day": 8000,
@@ -75,15 +75,15 @@
         "no_odds": 0.52,
         "volume_24h": 1200000,
         "odds_change_24h": 3.2,
-        "last_updated": "2026-02-24T08:13:32.568401"
+        "last_updated": "2026-02-24T08:41:57.739186"
       },
       "yahoo_finance": {
-        "current_price": 34.01,
-        "price_change_5d": 12.802649259838011,
+        "current_price": 34.02,
+        "price_change_5d": 12.835823841453333,
         "short_float_ratio": 0.27629998,
-        "market_cap": 3930001408,
-        "volume": 699484,
-        "last_updated": "2026-02-24T08:13:32.987706"
+        "market_cap": 3931157248,
+        "volume": 880949,
+        "last_updated": "2026-02-24T08:41:57.941919"
       },
       "google_trends": {
         "search_interest_percentile": 84.0,
@@ -93,7 +93,7 @@
           "VKTX stock",
           "VKTX earnings"
         ],
-        "last_updated": "2026-02-24T08:13:37.111388"
+        "last_updated": "2026-02-24T08:41:58.265937"
       },
       "sec_filings": [
         {
@@ -116,12 +116,12 @@
       "polymarket_odds_change_24h": 3.2,
       "seeking_alpha_page_views": 12000,
       "short_float_ratio": 0.27629998,
-      "price_momentum_5d": 12.802649259838011
+      "price_momentum_5d": 12.835823841453333
     }
   },
   "TSLA": {
     "ticker": "TSLA",
-    "timestamp": "2026-02-24T08:13:37.114367",
+    "timestamp": "2026-02-24T08:41:58.270313",
     "sources": {
       "stocktwits": {
         "messages_per_day": 38000,
@@ -135,15 +135,15 @@
         "no_odds": 0.44999999999999996,
         "volume_24h": 5500000,
         "odds_change_24h": 5.5,
-        "last_updated": "2026-02-24T08:13:33.571418"
+        "last_updated": "2026-02-24T08:41:58.271271"
       },
       "yahoo_finance": {
-        "current_price": 404.4,
-        "price_change_5d": -1.682391642641333,
+        "current_price": 403.4692,
+        "price_change_5d": -1.9155396436925172,
         "short_float_ratio": 0.019299999,
-        "market_cap": 1517483458560,
-        "volume": 21647431,
-        "last_updated": "2026-02-24T08:13:33.949671"
+        "market_cap": 1513990651904,
+        "volume": 25018924,
+        "last_updated": "2026-02-24T08:41:58.506046"
       },
       "google_trends": {
         "search_interest_percentile": 84.0,
@@ -153,7 +153,7 @@
           "TSLA stock",
           "TSLA earnings"
         ],
-        "last_updated": "2026-02-24T08:13:37.630926"
+        "last_updated": "2026-02-24T08:41:58.859359"
       },
       "sec_filings": [
         {
@@ -176,7 +176,7 @@
       "polymarket_odds_change_24h": 5.5,
       "seeking_alpha_page_views": 125000,
       "short_float_ratio": 0.019299999,
-      "price_momentum_5d": -1.682391642641333
+      "price_momentum_5d": -1.9155396436925172
     }
   }
 }

@@ -971,3 +971,51 @@ Traceback (most recent call last):
     cached_data = self.cache.get(cache_key)
 AttributeError: 'CacheManager' object has no attribute 'get'
 
+2026-02-24 18:18:35,210 - INFO - 📊 开始采集实时数据...
+2026-02-24 18:18:35,272 - ERROR - ❌ 数据采集失败: 2026-02-24 18:18:35,269 - INFO - 🚀 启动实时数据采集系统
+Traceback (most recent call last):
+  File "/Users/igg/.claude/reports/data_fetcher.py", line 524, in <module>
+    metrics = fetcher.collect_all_metrics(ticker)
+  File "/Users/igg/.claude/reports/data_fetcher.py", line 469, in collect_all_metrics
+    cached_data = self.cache.get(cache_key)
+AttributeError: 'CacheManager' object has no attribute 'get'
+
+2026-02-24 18:20:35,282 - INFO - ============================================================
+2026-02-24 18:20:35,284 - INFO - 🔄 启动完整流程
+2026-02-24 18:20:35,284 - INFO - ============================================================
+2026-02-24 18:20:35,284 - INFO - 📊 开始采集实时数据...
+2026-02-24 18:20:35,355 - ERROR - ❌ 数据采集失败: 2026-02-24 18:20:35,352 - INFO - 🚀 启动实时数据采集系统
+Traceback (most recent call last):
+  File "/Users/igg/.claude/reports/data_fetcher.py", line 524, in <module>
+    metrics = fetcher.collect_all_metrics(ticker)
+  File "/Users/igg/.claude/reports/data_fetcher.py", line 469, in collect_all_metrics
+    cached_data = self.cache.get(cache_key)
+AttributeError: 'CacheManager' object has no attribute 'get'
+
+2026-02-24 18:20:35,355 - WARNING - ⚠️ 跳过报告生成（数据未采集）
+2026-02-24 18:20:35,355 - INFO - 🚀 上传报告到 GitHub...
+2026-02-24 18:20:35,383 - WARNING - ⚠️ Git 操作失败: 
+2026-02-24 18:20:35,383 - INFO - ============================================================
+2026-02-24 18:20:35,383 - INFO - ✅ 流程完成
+2026-02-24 18:20:35,383 - INFO - ============================================================
+2026-02-24 18:23:35,395 - INFO - 📊 开始采集实时数据...
+2026-02-24 18:23:35,471 - ERROR - ❌ 数据采集失败: 2026-02-24 18:23:35,468 - INFO - 🚀 启动实时数据采集系统
+Traceback (most recent call last):
+  File "/Users/igg/.claude/reports/data_fetcher.py", line 524, in <module>
+    metrics = fetcher.collect_all_metrics(ticker)
+  File "/Users/igg/.claude/reports/data_fetcher.py", line 469, in collect_all_metrics
+    cached_data = self.cache.get(cache_key)
+AttributeError: 'CacheManager' object has no attribute 'get'
+
+2026-02-24 18:27:35,490 - INFO - 🚀 上传报告到 GitHub...
+2026-02-24 18:27:35,545 - WARNING - ⚠️ Git 操作失败: 
+2026-02-24 18:27:35,545 - WARNING - ⚠️ 跳过报告生成（数据未采集）
+2026-02-24 18:28:35,550 - INFO - 📊 开始采集实时数据...
+2026-02-24 18:28:35,610 - ERROR - ❌ 数据采集失败: 2026-02-24 18:28:35,608 - INFO - 🚀 启动实时数据采集系统
+Traceback (most recent call last):
+  File "/Users/igg/.claude/reports/data_fetcher.py", line 524, in <module>
+    metrics = fetcher.collect_all_metrics(ticker)
+  File "/Users/igg/.claude/reports/data_fetcher.py", line 469, in collect_all_metrics
+    cached_data = self.cache.get(cache_key)
+AttributeError: 'CacheManager' object has no attribute 'get'
+

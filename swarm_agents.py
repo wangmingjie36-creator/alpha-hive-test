@@ -1015,7 +1015,7 @@ class BearBeeContrarian(BeeAgent):
             scout_entry = self._read_board_entry(ticker, "ScoutBee")
             if scout_entry and scout_entry.discovery:
                 disc = scout_entry.discovery
-                data_sources["insider"] = "pheromone_board"
+                data_sources["insider"] = "real"  # ScoutBee 真实 SEC 数据（经信息素板中转）
                 # 解析 ScoutBeeNova 的 discovery 文本提取内幕数据
                 import re
                 # 匹配 "内幕卖出 $150,000,000" 格式
@@ -1114,7 +1114,7 @@ class BearBeeContrarian(BeeAgent):
             oracle_entry = self._read_board_entry(ticker, "OracleBee")
             if oracle_entry and oracle_entry.discovery:
                 disc = oracle_entry.discovery
-                data_sources["options"] = "pheromone_board"
+                data_sources["options"] = "real"  # OracleBee 真实期权数据（经信息素板中转）
                 import re
                 # 解析 P/C Ratio、IV Rank 等
                 pc_match = re.search(r'P/C[:\s]*Ratio[:\s]*([\d.]+)', disc)
@@ -1215,7 +1215,7 @@ class BearBeeContrarian(BeeAgent):
             buzz_entry = self._read_board_entry(ticker, "BuzzBee")
             if buzz_entry and buzz_entry.discovery:
                 disc = buzz_entry.discovery
-                data_sources["news"] = "pheromone_board"
+                data_sources["news"] = "real"  # BuzzBee 真实情绪数据（经信息素板中转）
                 import re
                 # 解析 "情绪 42%" 或 "情绪 38%" 格式
                 sent_match = re.search(r'情绪\s*(\d+)%', disc)
@@ -1440,9 +1440,17 @@ class QueenDistiller:
             if src:
                 per_agent_directions[src] = r.get("direction", "neutral")
 
-        # 9. data_quality 汇总
+        # 9. data_quality 汇总（三级评分：real=1.0, proxy=0.7, fallback=0）
+        REAL_SOURCES = {
+            "real", "yfinance", "finviz_api", "options_api",
+            "keyword", "llm_enhanced", "reddit_apewisdom",
+        }
+        PROXY_SOURCES = {
+            "proxy_volume", "proxy_momentum", "proxy_social",
+            "pheromone_board",
+        }
         data_quality_summary = {}
-        real_count = 0
+        quality_score = 0.0
         total_fields = 0
         for r in valid_results:
             dq = r.get("data_quality", {})
@@ -1451,10 +1459,12 @@ class QueenDistiller:
                 data_quality_summary[src] = dq
                 for v in dq.values():
                     total_fields += 1
-                    if v == "real":
-                        real_count += 1
+                    if v in REAL_SOURCES:
+                        quality_score += 1.0
+                    elif v in PROXY_SOURCES:
+                        quality_score += 0.7
 
-        data_real_pct = round(real_count / total_fields * 100, 1) if total_fields > 0 else 0.0
+        data_real_pct = round(quality_score / total_fields * 100, 1) if total_fields > 0 else 0.0
 
         # ===== LLM 引擎（可用时叠加）=====
         llm_result = None

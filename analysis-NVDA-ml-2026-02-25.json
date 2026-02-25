@@ -1,9 +1,9 @@
 {
   "ticker": "NVDA",
-  "timestamp": "2026-02-25T10:56:27.234173",
+  "timestamp": "2026-02-25T11:27:08.604952",
   "advanced_analysis": {
     "ticker": "NVDA",
-    "timestamp": "2026-02-25T10:56:27.234943",
+    "timestamp": "2026-02-25T11:27:08.605563",
     "overview": "AI \u82af\u7247\u9f99\u5934\uff0cCUDA \u751f\u6001\u62a4\u57ce\u6cb3\u6df1\u539a\uff0c\u4f46\u4f30\u503c\u5df2\u9ad8\uff0c\u76d1\u7ba1\u98ce\u9669\u9700\u5173\u6ce8",
     "industry_comparison": {
       "industry": "GPU",
@@ -125,10 +125,10 @@
     },
     "options_analysis": {
       "ticker": "NVDA",
-      "timestamp": "2026-02-25T10:56:27.236162",
-      "iv_rank": 55.05,
-      "iv_percentile": 90.09,
-      "iv_current": 76.95,
+      "timestamp": "2026-02-25T11:27:08.606332",
+      "iv_rank": 38.03,
+      "iv_percentile": 85.34,
+      "iv_current": 61.72,
       "put_call_ratio": 0.7,
       "total_oi": 1366331,
       "gamma_exposure": 0.0,
@@ -137,62 +137,62 @@
         {
           "type": "large_call_volume",
           "strike": 200.0,
-          "volume": 82548.0,
+          "volume": 88158.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 215.0,
-          "volume": 76597.0,
+          "volume": 78806.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 210.0,
-          "volume": 61540.0,
+          "volume": 70342.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 195.0,
-          "volume": 52736.0,
-          "bullish": true
-        },
-        {
-          "type": "large_call_volume",
-          "strike": 220.0,
-          "volume": 38298.0,
+          "volume": 54076.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 205.0,
-          "volume": 38144.0,
-          "bullish": true
-        },
-        {
-          "type": "large_call_volume",
-          "strike": 207.5,
-          "volume": 32267.0,
-          "bullish": true
-        },
-        {
-          "type": "large_call_volume",
-          "strike": 197.5,
-          "volume": 30062.0,
+          "volume": 45853.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 220.0,
-          "volume": 29629.0,
+          "volume": 43151.0,
+          "bullish": true
+        },
+        {
+          "type": "large_call_volume",
+          "strike": 207.5,
+          "volume": 32928.0,
           "bullish": true
         },
         {
           "type": "large_put_volume",
           "strike": 185.0,
-          "volume": 27971.0,
+          "volume": 32198.0,
           "bullish": false
+        },
+        {
+          "type": "large_call_volume",
+          "strike": 197.5,
+          "volume": 32193.0,
+          "bullish": true
+        },
+        {
+          "type": "large_call_volume",
+          "strike": 220.0,
+          "volume": 30243.0,
+          "bullish": true
         }
       ],
       "key_levels": {
@@ -200,40 +200,40 @@
           {
             "strike": 190.0,
             "oi": 36950,
-            "iv": 0.8332536206054686
+            "iv": 0.867188828125
           },
           {
             "strike": 105.0,
             "oi": 34118,
-            "iv": 2.1250046874999997
+            "iv": 2.1875045312499997
           },
           {
             "strike": 180.0,
             "oi": 30026,
-            "iv": 0.8828136718749999
+            "iv": 0.9091805957031249
           }
         ],
         "resistance": [
           {
             "strike": 200.0,
             "oi": 109267,
-            "iv": 0.804689453125
+            "iv": 0.7722190747070312
           },
           {
             "strike": 195.0,
             "oi": 98625,
-            "iv": 0.8266618896484373
+            "iv": 0.780275634765625
           },
           {
             "strike": 202.5,
             "oi": 66913,
-            "iv": 0.7949239257812499
+            "iv": 0.7587914746093751
           }
         ]
       },
       "flow_direction": "bullish",
-      "options_score": 8.0,
-      "signal_summary": "IV \u5904\u4e8e\u7406\u60f3\u6c34\u4f4d | \u68c0\u6d4b\u5230 9 \u4e2a\u770b\u6da8\u5f02\u52a8",
+      "options_score": 7.0,
+      "signal_summary": "\u68c0\u6d4b\u5230 9 \u4e2a\u770b\u6da8\u5f02\u52a8",
       "expiration_dates": [
         "2026-02-27",
         "2026-03-02",
@@ -243,7 +243,7 @@
   },
   "ml_prediction": {
     "ticker": "NVDA",
-    "date": "2026-02-25T10:56:27.236195",
+    "date": "2026-02-25T11:27:08.606360",
     "input": {
       "crowding_score": 63.5,
       "catalyst_quality": "A",
@@ -270,7 +270,7 @@
   },
   "swarm_results": {
     "ticker": "NVDA",
-    "final_score": 6.79,
+    "final_score": 6.64,
     "direction": "bullish",
     "resonance": {
       "resonance_detected": true,
@@ -286,30 +286,198 @@
     },
     "agent_directions": {
       "RivalBeeVanguard": "bullish",
-      "ChronosBeeHorizon": "bullish",
-      "CodeExecutorAgent": "neutral",
       "OracleBeeEcho": "bullish",
-      "ScoutBeeNova": "bearish",
       "GuardBeeSentinel": "neutral",
       "BuzzBeeWhisper": "bullish",
+      "ChronosBeeHorizon": "bullish",
+      "CodeExecutorAgent": "neutral",
+      "ScoutBeeNova": "bearish",
       "BearBeeContrarian": "bullish"
     },
     "agent_details": {
       "RivalBeeVanguard": {
-        "discovery": "ML \u80dc\u7387 28% | 7d +1.34% | 30d +1.51% | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
-        "score": 2.8,
+        "discovery": "ML \u80dc\u7387 28% | 7d +1.39% | 30d +1.54% | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.8",
+        "score": 2.82,
         "direction": "bullish",
         "confidence": 0.8,
         "dimension": "ml_auxiliary",
         "details": {
-          "probability": 0.2803,
-          "expected_3d": 0.95,
-          "expected_7d": 1.34,
-          "expected_30d": 1.51
+          "probability": 0.2821,
+          "expected_3d": 1.0,
+          "expected_7d": 1.39,
+          "expected_30d": 1.54
+        }
+      },
+      "OracleBeeEcho": {
+        "discovery": "\u68c0\u6d4b\u5230 9 \u4e2a\u770b\u6da8\u5f02\u52a8 | $197.2 | \u9884\u6d4b\u5e02\u573a\u770b\u7a7a\uff08\u9690\u542b\u6982\u7387 99%\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.8",
+        "score": 5.6,
+        "direction": "bullish",
+        "confidence": 1.0,
+        "dimension": "odds",
+        "details": {
+          "ticker": "NVDA",
+          "timestamp": "2026-02-25T11:26:53.316047",
+          "iv_rank": 38.03,
+          "iv_percentile": 85.34,
+          "iv_current": 61.72,
+          "put_call_ratio": 0.7,
+          "total_oi": 1366331,
+          "gamma_exposure": 0.0,
+          "gamma_squeeze_risk": "medium",
+          "unusual_activity": [
+            {
+              "type": "large_call_volume",
+              "strike": 200.0,
+              "volume": 88158.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 215.0,
+              "volume": 78806.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 210.0,
+              "volume": 70342.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 195.0,
+              "volume": 54076.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 205.0,
+              "volume": 45853.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 220.0,
+              "volume": 43151.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 207.5,
+              "volume": 32928.0,
+              "bullish": true
+            },
+            {
+              "type": "large_put_volume",
+              "strike": 185.0,
+              "volume": 32198.0,
+              "bullish": false
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 197.5,
+              "volume": 32193.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 220.0,
+              "volume": 30243.0,
+              "bullish": true
+            }
+          ],
+          "key_levels": {
+            "support": [
+              {
+                "strike": 190.0,
+                "oi": 36950,
+                "iv": 0.867188828125
+              },
+              {
+                "strike": 105.0,
+                "oi": 34118,
+                "iv": 2.1875045312499997
+              },
+              {
+                "strike": 180.0,
+                "oi": 30026,
+                "iv": 0.9091805957031249
+              }
+            ],
+            "resistance": [
+              {
+                "strike": 200.0,
+                "oi": 109267,
+                "iv": 0.7722190747070312
+              },
+              {
+                "strike": 195.0,
+                "oi": 98625,
+                "iv": 0.780275634765625
+              },
+              {
+                "strike": 202.5,
+                "oi": 66913,
+                "iv": 0.7587914746093751
+              }
+            ]
+          },
+          "flow_direction": "bullish",
+          "options_score": 7.0,
+          "signal_summary": "\u68c0\u6d4b\u5230 9 \u4e2a\u770b\u6da8\u5f02\u52a8",
+          "expiration_dates": [
+            "2026-02-27",
+            "2026-03-02",
+            "2026-03-04"
+          ]
+        }
+      },
+      "GuardBeeSentinel": {
+        "discovery": "\u4fe1\u53f7\u5206\u6563 | \u5747\u5206 5.0 | \u4e00\u81f4\u6027 0% | \u98ce\u9669\u8c03\u6574 0.95 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.8",
+        "score": 3.8,
+        "direction": "neutral",
+        "confidence": 0.4,
+        "dimension": "risk_adj",
+        "details": {
+          "resonance": {
+            "resonance_detected": false,
+            "direction": "bullish",
+            "supporting_agents": 0,
+            "confidence_boost": 0
+          },
+          "top_signals_count": 0,
+          "consistency": 0,
+          "adjustment_factor": 0.95
+        }
+      },
+      "BuzzBeeWhisper": {
+        "discovery": "\u60c5\u7eea 70% | \u52a8\u91cf +5.0% | \u91cf\u6bd4 0.8x | Reddit #1(hot,810\u63d0\u53ca) | \u65b0\u95fb\u504f\u591a\uff0812\u591a/2\u7a7a\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.8",
+        "score": 7.03,
+        "direction": "bullish",
+        "confidence": 0.9,
+        "dimension": "sentiment",
+        "details": {
+          "sentiment_pct": 70,
+          "momentum_5d": 4.965359543045134,
+          "volume_ratio": 0.7791209125163242,
+          "volatility_20d": 39.05241135318274,
+          "reddit": {
+            "rank": 1,
+            "mentions": 810,
+            "mention_delta": 528,
+            "buzz": "hot",
+            "score": 8.5
+          },
+          "components": {
+            "momentum_signal": 74.8,
+            "volume_signal": 35,
+            "volatility_signal": 60,
+            "reddit_signal": 85.0
+          }
         }
       },
       "ChronosBeeHorizon": {
-        "discovery": "\u50ac\u5316\u5242 3 \u4e2a | \u6700\u8fd1\uff1aEx-Dividend Date\uff080\u5929\u540e\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
+        "discovery": "\u50ac\u5316\u5242 3 \u4e2a | \u6700\u8fd1\uff1aEx-Dividend Date\uff080\u5929\u540e\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.8",
         "score": 7.8,
         "direction": "bullish",
         "confidence": 0.8,
@@ -348,133 +516,9 @@
         "dimension": "unknown",
         "details": {}
       },
-      "OracleBeeEcho": {
-        "discovery": "IV \u5904\u4e8e\u7406\u60f3\u6c34\u4f4d | \u68c0\u6d4b\u5230 9 \u4e2a\u770b\u6da8\u5f02\u52a8 | $196.7 | \u9884\u6d4b\u5e02\u573a\u770b\u7a7a\uff08\u9690\u542b\u6982\u7387 99%\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
-        "score": 6.2,
-        "direction": "bullish",
-        "confidence": 1.0,
-        "dimension": "odds",
-        "details": {
-          "ticker": "NVDA",
-          "timestamp": "2026-02-25T10:56:03.844438",
-          "iv_rank": 54.02,
-          "iv_percentile": 90.09,
-          "iv_current": 76.03,
-          "put_call_ratio": 0.7,
-          "total_oi": 1366331,
-          "gamma_exposure": 0.0,
-          "gamma_squeeze_risk": "medium",
-          "unusual_activity": [
-            {
-              "type": "large_call_volume",
-              "strike": 200.0,
-              "volume": 82548.0,
-              "bullish": true
-            },
-            {
-              "type": "large_call_volume",
-              "strike": 215.0,
-              "volume": 76597.0,
-              "bullish": true
-            },
-            {
-              "type": "large_call_volume",
-              "strike": 210.0,
-              "volume": 61540.0,
-              "bullish": true
-            },
-            {
-              "type": "large_call_volume",
-              "strike": 195.0,
-              "volume": 52736.0,
-              "bullish": true
-            },
-            {
-              "type": "large_call_volume",
-              "strike": 220.0,
-              "volume": 38298.0,
-              "bullish": true
-            },
-            {
-              "type": "large_call_volume",
-              "strike": 205.0,
-              "volume": 38144.0,
-              "bullish": true
-            },
-            {
-              "type": "large_call_volume",
-              "strike": 207.5,
-              "volume": 32267.0,
-              "bullish": true
-            },
-            {
-              "type": "large_call_volume",
-              "strike": 197.5,
-              "volume": 30062.0,
-              "bullish": true
-            },
-            {
-              "type": "large_call_volume",
-              "strike": 220.0,
-              "volume": 29629.0,
-              "bullish": true
-            },
-            {
-              "type": "large_put_volume",
-              "strike": 185.0,
-              "volume": 27971.0,
-              "bullish": false
-            }
-          ],
-          "key_levels": {
-            "support": [
-              {
-                "strike": 190.0,
-                "oi": 36950,
-                "iv": 0.8332536206054686
-              },
-              {
-                "strike": 105.0,
-                "oi": 34118,
-                "iv": 2.1250046874999997
-              },
-              {
-                "strike": 180.0,
-                "oi": 30026,
-                "iv": 0.8828136718749999
-              }
-            ],
-            "resistance": [
-              {
-                "strike": 200.0,
-                "oi": 109267,
-                "iv": 0.804689453125
-              },
-              {
-                "strike": 195.0,
-                "oi": 98625,
-                "iv": 0.8266618896484373
-              },
-              {
-                "strike": 202.5,
-                "oi": 66913,
-                "iv": 0.7949239257812499
-              }
-            ]
-          },
-          "flow_direction": "bullish",
-          "options_score": 8.0,
-          "signal_summary": "IV \u5904\u4e8e\u7406\u60f3\u6c34\u4f4d | \u68c0\u6d4b\u5230 9 \u4e2a\u770b\u6da8\u5f02\u52a8",
-          "expiration_dates": [
-            "2026-02-27",
-            "2026-03-02",
-            "2026-03-04"
-          ]
-        }
-      },
       "ScoutBeeNova": {
-        "discovery": "\u5185\u5e55\u5356\u51fa $150,452,443 | STEVENS MARK A \u5356\u51fa 222,500\u80a1 | \u62e5\u6324\u5ea6 54/100\uff08\u4e2d\u7b49\u62e5\u6324\u5ea6\uff09 | \u52a8\u91cf +4.7% | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
-        "score": 2.45,
+        "discovery": "\u5185\u5e55\u5356\u51fa $150,452,443 | STEVENS MARK A \u5356\u51fa 222,500\u80a1 | \u62e5\u6324\u5ea6 58/100\uff08\u4e2d\u7b49\u62e5\u6324\u5ea6\uff09 | \u52a8\u91cf +5.0% | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.8",
+        "score": 2.28,
         "direction": "bearish",
         "confidence": 0.96,
         "dimension": "signal",
@@ -527,70 +571,26 @@
               }
             ]
           },
-          "crowding_score": 53.66,
-          "crowding_signal": 4.63,
+          "crowding_score": 58.06666666666666,
+          "crowding_signal": 4.19,
           "components": {
             "stocktwits_volume": 80.26,
-            "google_trends": 27.3,
-            "consensus_strength": 50.0,
+            "google_trends": 28.9,
+            "consensus_strength": 66.66666666666666,
             "polymarket_volatility": 40,
             "seeking_alpha_views": 80,
             "short_squeeze_risk": 30
           },
           "adjustment_factor": 0.95,
-          "momentum_5d": 4.68861431188381,
-          "price": 196.70989990234375
-        }
-      },
-      "GuardBeeSentinel": {
-        "discovery": "\u4fe1\u53f7\u5206\u6563 | \u5747\u5206 5.0 | \u4e00\u81f4\u6027 0% | \u98ce\u9669\u8c03\u6574 0.95 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
-        "score": 3.8,
-        "direction": "neutral",
-        "confidence": 0.4,
-        "dimension": "risk_adj",
-        "details": {
-          "resonance": {
-            "resonance_detected": false,
-            "direction": "bullish",
-            "supporting_agents": 0,
-            "confidence_boost": 0
-          },
-          "top_signals_count": 0,
-          "consistency": 0,
-          "adjustment_factor": 0.95
-        }
-      },
-      "BuzzBeeWhisper": {
-        "discovery": "\u60c5\u7eea 69% | \u52a8\u91cf +4.7% | \u91cf\u6bd4 0.7x | Reddit #1(hot,763\u63d0\u53ca) | \u65b0\u95fb\u504f\u591a\uff0812\u591a/3\u7a7a\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
-        "score": 6.91,
-        "direction": "bullish",
-        "confidence": 0.9,
-        "dimension": "sentiment",
-        "details": {
-          "sentiment_pct": 69,
-          "momentum_5d": 4.68861431188381,
-          "volume_ratio": 0.7287957699598518,
-          "volatility_20d": 38.89139652598341,
-          "reddit": {
-            "rank": 1,
-            "mentions": 763,
-            "mention_delta": 486,
-            "buzz": "hot",
-            "score": 8.5
-          },
-          "components": {
-            "momentum_signal": 73.4,
-            "volume_signal": 35,
-            "volatility_signal": 60,
-            "reddit_signal": 85.0
-          }
+          "momentum_5d": 4.965359543045134,
+          "price": 197.2299041748047
         }
       },
       "BearBeeContrarian": {
-        "discovery": "\u5185\u5e55\u5927\u989d\u629b\u552e $150,452,443\uff08\u4e70\u5165\u4ec5 $0\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
+        "discovery": "\u5185\u5e55\u5927\u989d\u629b\u552e $150,452,443\uff08\u4e70\u5165\u4ec5 $0\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.8",
         "score": 8.0,
         "direction": "bullish",
-        "confidence": 0.6,
+        "confidence": 0.4,
         "dimension": "contrarian",
         "details": {
           "bear_score": 2.0,
@@ -603,9 +603,9 @@
           "momentum_bear": 0.0,
           "news_bear": 0.0,
           "data_sources": {
-            "insider": "pheromone_board",
+            "insider": "real",
             "valuation": "yfinance",
-            "options": "pheromone_board",
+            "options": "real",
             "momentum": "yfinance",
             "news": "finviz_api"
           }
@@ -613,18 +613,18 @@
       }
     },
     "dimension_scores": {
-      "catalyst": 7.8,
-      "odds": 6.2,
-      "signal": 2.45,
+      "odds": 5.6,
       "risk_adj": 3.8,
-      "sentiment": 6.91
+      "sentiment": 7.03,
+      "catalyst": 7.8,
+      "signal": 2.28
     },
     "dimension_confidence": {
-      "catalyst": 0.8,
       "odds": 1.0,
-      "signal": 0.96,
       "risk_adj": 0.4,
-      "sentiment": 0.9
+      "sentiment": 0.9,
+      "catalyst": 0.8,
+      "signal": 0.96
     },
     "dimension_weights": {
       "signal": 0.098,
@@ -633,8 +633,8 @@
       "odds": 0.22,
       "risk_adj": 0.22
     },
-    "ml_adjustment": -0.176,
-    "base_score_before_resonance": 5.65,
+    "ml_adjustment": -0.174,
+    "base_score_before_resonance": 5.53,
     "pheromone_compact": [
       {
         "a": "CodeExec",
@@ -649,39 +649,15 @@
         "t": "NVDA",
         "d": "b",
         "s": 2.8,
-        "p": 1.0,
+        "p": 0.9,
         "c": 4
-      },
-      {
-        "a": "ChronosB",
-        "t": "NVDA",
-        "d": "b",
-        "s": 7.8,
-        "p": 0.4,
-        "c": 0
-      },
-      {
-        "a": "CodeExec",
-        "t": "NVDA",
-        "d": "n",
-        "s": 2.0,
-        "p": 0.5,
-        "c": 0
       },
       {
         "a": "OracleBe",
         "t": "NVDA",
         "d": "b",
-        "s": 6.2,
-        "p": 0.6,
-        "c": 0
-      },
-      {
-        "a": "ScoutBee",
-        "t": "NVDA",
-        "d": "b",
-        "s": 2.5,
-        "p": 0.7,
+        "s": 5.6,
+        "p": 0.4,
         "c": 0
       },
       {
@@ -689,14 +665,38 @@
         "t": "NVDA",
         "d": "n",
         "s": 3.8,
-        "p": 0.8,
+        "p": 0.5,
         "c": 0
       },
       {
         "a": "BuzzBeeW",
         "t": "NVDA",
         "d": "b",
-        "s": 6.9,
+        "s": 7.0,
+        "p": 0.6,
+        "c": 0
+      },
+      {
+        "a": "ChronosB",
+        "t": "NVDA",
+        "d": "b",
+        "s": 7.8,
+        "p": 0.7,
+        "c": 0
+      },
+      {
+        "a": "CodeExec",
+        "t": "NVDA",
+        "d": "n",
+        "s": 2.0,
+        "p": 0.8,
+        "c": 0
+      },
+      {
+        "a": "ScoutBee",
+        "t": "NVDA",
+        "d": "b",
+        "s": 2.3,
         "p": 0.9,
         "c": 0
       },
@@ -713,22 +713,9 @@
       "RivalBeeVanguard": {
         "ml_prediction": "real"
       },
-      "ChronosBeeHorizon": {
-        "yfinance_calendar": "real",
-        "catalyst_refinement": "real"
-      },
       "OracleBeeEcho": {
         "options": "real",
         "polymarket": "real"
-      },
-      "ScoutBeeNova": {
-        "social_buzz": "real",
-        "google_trends": "proxy_volume",
-        "bullish_agents": "real",
-        "polymarket": "proxy_momentum",
-        "seeking_alpha": "proxy_social",
-        "short_interest": "real",
-        "momentum": "real"
       },
       "GuardBeeSentinel": {
         "pheromone_board": "real",
@@ -741,21 +728,34 @@
         "reddit": "real",
         "finviz_news": "keyword"
       },
+      "ChronosBeeHorizon": {
+        "yfinance_calendar": "real",
+        "catalyst_refinement": "real"
+      },
+      "ScoutBeeNova": {
+        "social_buzz": "real",
+        "google_trends": "proxy_volume",
+        "bullish_agents": "real",
+        "polymarket": "proxy_momentum",
+        "seeking_alpha": "proxy_social",
+        "short_interest": "real",
+        "momentum": "real"
+      },
       "BearBeeContrarian": {
-        "insider": "pheromone_board",
+        "insider": "real",
         "valuation": "yfinance",
-        "options": "pheromone_board",
+        "options": "real",
         "momentum": "yfinance",
         "news": "finviz_api"
       }
     },
-    "data_real_pct": 62.5,
+    "data_real_pct": 96.2,
     "distill_mode": "rule_engine",
     "reasoning": "",
     "key_insight": "",
     "risk_flag": "",
     "llm_confidence": 0.0,
-    "rule_score": 6.79,
+    "rule_score": 6.64,
     "rule_direction": "bullish"
   }
 }

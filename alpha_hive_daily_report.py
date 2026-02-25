@@ -425,7 +425,14 @@ class AlphaHiveDailyReporter:
             except Exception:
                 pass
 
-        # 扫描完成，清理 checkpoint
+        # 扫描完成，保存蜂群结果供 ML 报告同步使用
+        try:
+            swarm_json = self.report_dir / f".swarm_results_{self.date_str}.json"
+            with open(swarm_json, "w") as f:
+                json.dump(swarm_results, f, default=str, ensure_ascii=False)
+        except Exception:
+            pass
+        # 清理 checkpoint
         try:
             checkpoint_file.unlink(missing_ok=True)
         except Exception:

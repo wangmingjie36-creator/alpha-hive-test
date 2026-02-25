@@ -1,9 +1,9 @@
 {
   "ticker": "VKTX",
-  "timestamp": "2026-02-25T10:54:23.390700",
+  "timestamp": "2026-02-25T10:56:27.234173",
   "advanced_analysis": {
     "ticker": "VKTX",
-    "timestamp": "2026-02-25T10:54:24.155505",
+    "timestamp": "2026-02-25T10:56:27.951788",
     "overview": "GLP-1 \u9886\u5148\u8005\uff0c\u4e34\u5e8a\u8fdb\u5c55\u826f\u597d\uff0c\u4f46\u8d22\u52a1\u538b\u529b\u5927\uff0c\u5931\u8d25\u98ce\u9669\u9700\u9632\u8303",
     "industry_comparison": {
       "industry": "Biotech",
@@ -123,10 +123,10 @@
     },
     "options_analysis": {
       "ticker": "VKTX",
-      "timestamp": "2026-02-25T10:54:24.157737",
-      "iv_rank": 20.16,
+      "timestamp": "2026-02-25T10:56:27.954206",
+      "iv_rank": 20.22,
       "iv_percentile": 38.79,
-      "iv_current": 77.83,
+      "iv_current": 77.93,
       "put_call_ratio": 0.13,
       "total_oi": 16879,
       "gamma_exposure": 0.0,
@@ -151,19 +151,19 @@
           {
             "strike": 32.0,
             "oi": 243,
-            "iv": 0.6875031250000001
+            "iv": 0.6835969140625001
           },
           {
             "strike": 25.0,
             "oi": 196,
-            "iv": 1.9062504687500001
+            "iv": 1.8984380078125
           }
         ],
         "resistance": [
           {
             "strike": 35.0,
             "oi": 2798,
-            "iv": 0.7324245507812499
+            "iv": 0.7128934960937501
           },
           {
             "strike": 50.0,
@@ -173,7 +173,7 @@
           {
             "strike": 32.0,
             "oi": 1062,
-            "iv": 0.9648441015625
+            "iv": 0.9726565234375
           }
         ]
       },
@@ -189,7 +189,7 @@
   },
   "ml_prediction": {
     "ticker": "VKTX",
-    "date": "2026-02-25T10:54:24.157792",
+    "date": "2026-02-25T10:56:27.954270",
     "input": {
       "crowding_score": 63.5,
       "catalyst_quality": "A+",
@@ -216,7 +216,7 @@
   },
   "swarm_results": {
     "ticker": "VKTX",
-    "final_score": 4.65,
+    "final_score": 4.76,
     "direction": "neutral",
     "resonance": {
       "resonance_detected": false,
@@ -232,12 +232,12 @@
     },
     "agent_directions": {
       "RivalBeeVanguard": "neutral",
-      "BuzzBeeWhisper": "neutral",
       "GuardBeeSentinel": "neutral",
-      "ScoutBeeNova": "neutral",
-      "OracleBeeEcho": "bullish",
       "ChronosBeeHorizon": "neutral",
+      "OracleBeeEcho": "bullish",
       "CodeExecutorAgent": "neutral",
+      "ScoutBeeNova": "neutral",
+      "BuzzBeeWhisper": "neutral",
       "BearBeeContrarian": "bullish"
     },
     "agent_details": {
@@ -252,32 +252,6 @@
           "expected_3d": 0,
           "expected_7d": 0,
           "expected_30d": 0
-        }
-      },
-      "BuzzBeeWhisper": {
-        "discovery": "\u60c5\u7eea 55% | \u52a8\u91cf +8.3% | \u91cf\u6bd4 0.2x | Reddit \u65e0\u70ed\u5ea6 | \u65b0\u95fb\u4e2d\u6027\uff089\u591a/5\u7a7a/16\u4e2d\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.0",
-        "score": 5.55,
-        "direction": "neutral",
-        "confidence": 0.7,
-        "dimension": "sentiment",
-        "details": {
-          "sentiment_pct": 55,
-          "momentum_5d": 8.279738983942519,
-          "volume_ratio": 0.24953761167533028,
-          "volatility_20d": 77.0394358897039,
-          "reddit": {
-            "rank": null,
-            "mentions": 0,
-            "mention_delta": 0,
-            "buzz": "quiet",
-            "score": 5.0
-          },
-          "components": {
-            "momentum_signal": 91.4,
-            "volume_signal": 20,
-            "volatility_signal": 25,
-            "reddit_signal": 50.0
-          }
         }
       },
       "GuardBeeSentinel": {
@@ -298,9 +272,107 @@
           "adjustment_factor": 1.2
         }
       },
+      "ChronosBeeHorizon": {
+        "discovery": "\u50ac\u5316\u5242 1 \u4e2a | \u6700\u8fd1\uff1a\u8d22\u62a5\u53d1\u5e03\uff0862\u5929\u540e\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.0",
+        "score": 5.5,
+        "direction": "neutral",
+        "confidence": 0.6,
+        "dimension": "catalyst",
+        "details": {
+          "catalysts": [
+            {
+              "event": "\u8d22\u62a5\u53d1\u5e03",
+              "date": "2026-04-29",
+              "days_until": 62,
+              "type": "earnings",
+              "severity": "high"
+            }
+          ]
+        }
+      },
+      "OracleBeeEcho": {
+        "discovery": "\u505a\u591a\u6c14\u6c1b\u6d53\u539a\uff08P/C\u4f4e\uff09 | \u68c0\u6d4b\u5230 1 \u4e2a\u770b\u6da8\u5f02\u52a8 | $33.7 | \u9884\u6d4b\u5e02\u573a\u770b\u7a7a\uff08\u9690\u542b\u6982\u7387 99%\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.0",
+        "score": 5.3,
+        "direction": "bullish",
+        "confidence": 1.0,
+        "dimension": "odds",
+        "details": {
+          "ticker": "VKTX",
+          "timestamp": "2026-02-25T10:56:18.544516",
+          "iv_rank": 20.22,
+          "iv_percentile": 38.79,
+          "iv_current": 77.93,
+          "put_call_ratio": 0.13,
+          "total_oi": 16879,
+          "gamma_exposure": 0.0,
+          "gamma_squeeze_risk": "medium",
+          "unusual_activity": [
+            {
+              "type": "call_sweep",
+              "strike": 40.0,
+              "volume": 348.0,
+              "oi": 67,
+              "ratio": 5.19,
+              "bullish": true
+            }
+          ],
+          "key_levels": {
+            "support": [
+              {
+                "strike": 30.0,
+                "oi": 283,
+                "iv": 0.79101771484375
+              },
+              {
+                "strike": 32.0,
+                "oi": 243,
+                "iv": 0.6835969140625001
+              },
+              {
+                "strike": 25.0,
+                "oi": 196,
+                "iv": 1.8984380078125
+              }
+            ],
+            "resistance": [
+              {
+                "strike": 35.0,
+                "oi": 2798,
+                "iv": 0.7128934960937501
+              },
+              {
+                "strike": 50.0,
+                "oi": 1572,
+                "iv": 1.96875015625
+              },
+              {
+                "strike": 32.0,
+                "oi": 1062,
+                "iv": 0.9726565234375
+              }
+            ]
+          },
+          "flow_direction": "bullish",
+          "options_score": 6.5,
+          "signal_summary": "\u505a\u591a\u6c14\u6c1b\u6d53\u539a\uff08P/C\u4f4e\uff09 | \u68c0\u6d4b\u5230 1 \u4e2a\u770b\u6da8\u5f02\u52a8",
+          "expiration_dates": [
+            "2026-02-27",
+            "2026-03-06",
+            "2026-03-13"
+          ]
+        }
+      },
+      "CodeExecutorAgent": {
+        "discovery": "\u274c \u6570\u636e\u722c\u53d6\u5931\u8d25: ConnectionError",
+        "score": 2.0,
+        "direction": "neutral",
+        "confidence": 0.5,
+        "dimension": "unknown",
+        "details": {}
+      },
       "ScoutBeeNova": {
-        "discovery": "\u5185\u5e55\u5356\u51fa $12,052,190 | Lian Brian \u5356\u51fa 132,454\u80a1 | \u62e5\u6324\u5ea6 20/100\uff08\u4f4e\u62e5\u6324\u5ea6\uff09 | \u52a8\u91cf +8.3% | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.0",
-        "score": 3.81,
+        "discovery": "\u5185\u5e55\u5356\u51fa $12,052,190 | Lian Brian \u5356\u51fa 132,454\u80a1 | \u62e5\u6324\u5ea6 24/100\uff08\u4f4e\u62e5\u6324\u5ea6\uff09 | \u52a8\u91cf +8.3% | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.0",
+        "score": 3.63,
         "direction": "neutral",
         "confidence": 0.92,
         "dimension": "signal",
@@ -353,12 +425,12 @@
               }
             ]
           },
-          "crowding_score": 19.8,
-          "crowding_signal": 8.02,
+          "crowding_score": 24.131666666666668,
+          "crowding_signal": 7.59,
           "components": {
             "stocktwits_volume": 0.0,
-            "google_trends": 12.0,
-            "consensus_strength": 0.0,
+            "google_trends": 13.1,
+            "consensus_strength": 16.666666666666664,
             "polymarket_volatility": 60,
             "seeking_alpha_views": 20,
             "short_squeeze_risk": 70
@@ -368,106 +440,34 @@
           "price": 33.67499923706055
         }
       },
-      "OracleBeeEcho": {
-        "discovery": "\u505a\u591a\u6c14\u6c1b\u6d53\u539a\uff08P/C\u4f4e\uff09 | \u68c0\u6d4b\u5230 1 \u4e2a\u770b\u6da8\u5f02\u52a8 | $33.7 | \u9884\u6d4b\u5e02\u573a\u770b\u7a7a\uff08\u9690\u542b\u6982\u7387 99%\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.0",
-        "score": 4.7,
-        "direction": "bullish",
-        "confidence": 1.0,
-        "dimension": "odds",
+      "BuzzBeeWhisper": {
+        "discovery": "\u60c5\u7eea 55% | \u52a8\u91cf +8.3% | \u91cf\u6bd4 0.3x | Reddit \u65e0\u70ed\u5ea6 | \u65b0\u95fb\u4e2d\u6027\uff089\u591a/5\u7a7a/16\u4e2d\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.0",
+        "score": 5.55,
+        "direction": "neutral",
+        "confidence": 0.7,
+        "dimension": "sentiment",
         "details": {
-          "ticker": "VKTX",
-          "timestamp": "2026-02-25T09:56:58.044628",
-          "iv_rank": 0,
-          "iv_percentile": 0.0,
-          "iv_current": 1.13,
-          "put_call_ratio": 0.13,
-          "total_oi": 16879,
-          "gamma_exposure": 0.0,
-          "gamma_squeeze_risk": "medium",
-          "unusual_activity": [
-            {
-              "type": "call_sweep",
-              "strike": 40.0,
-              "volume": 348.0,
-              "oi": 67,
-              "ratio": 5.19,
-              "bullish": true
-            }
-          ],
-          "key_levels": {
-            "support": [
-              {
-                "strike": 30.0,
-                "oi": 283,
-                "iv": 0.7919942675781251
-              },
-              {
-                "strike": 32.0,
-                "oi": 243,
-                "iv": 0.6875031250000001
-              },
-              {
-                "strike": 25.0,
-                "oi": 196,
-                "iv": 1.9062504687500001
-              }
-            ],
-            "resistance": [
-              {
-                "strike": 35.0,
-                "oi": 2798,
-                "iv": 0.77929908203125
-              },
-              {
-                "strike": 50.0,
-                "oi": 1572,
-                "iv": 1.96875015625
-              },
-              {
-                "strike": 32.0,
-                "oi": 1062,
-                "iv": 0.9609378906249999
-              }
-            ]
+          "sentiment_pct": 55,
+          "momentum_5d": 8.279738983942519,
+          "volume_ratio": 0.284193929249094,
+          "volatility_20d": 77.0394358897039,
+          "reddit": {
+            "rank": null,
+            "mentions": 0,
+            "mention_delta": 0,
+            "buzz": "quiet",
+            "score": 5.0
           },
-          "flow_direction": "bullish",
-          "options_score": 5.5,
-          "signal_summary": "\u505a\u591a\u6c14\u6c1b\u6d53\u539a\uff08P/C\u4f4e\uff09 | \u68c0\u6d4b\u5230 1 \u4e2a\u770b\u6da8\u5f02\u52a8",
-          "expiration_dates": [
-            "2026-02-27",
-            "2026-03-06",
-            "2026-03-13"
-          ]
+          "components": {
+            "momentum_signal": 91.4,
+            "volume_signal": 20,
+            "volatility_signal": 25,
+            "reddit_signal": 50.0
+          }
         }
-      },
-      "ChronosBeeHorizon": {
-        "discovery": "\u50ac\u5316\u5242 1 \u4e2a | \u6700\u8fd1\uff1a\u8d22\u62a5\u53d1\u5e03\uff0862\u5929\u540e\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.0",
-        "score": 5.5,
-        "direction": "neutral",
-        "confidence": 0.6,
-        "dimension": "catalyst",
-        "details": {
-          "catalysts": [
-            {
-              "event": "\u8d22\u62a5\u53d1\u5e03",
-              "date": "2026-04-29",
-              "days_until": 62,
-              "type": "earnings",
-              "severity": "high"
-            }
-          ]
-        }
-      },
-      "CodeExecutorAgent": {
-        "discovery": "\u274c \u6570\u636e\u722c\u53d6\u5931\u8d25: ConnectionError",
-        "score": 2.0,
-        "direction": "neutral",
-        "confidence": 0.5,
-        "dimension": "unknown",
-        "details": {}
       },
       "BearBeeContrarian": {
-        "discovery": "\u5185\u5e55\u5927\u989d\u629b\u552e $12,052,190\uff08\u4e70\u5165\u4ec5 $0\uff09 | 5\u65e5\u6da8\u5e45\u8fc7\u5927 +8.3% | \u91cf\u80fd\u840e\u7f29 0.2x\uff08\u53c2\u4e0e\u5ea6\u4e0b\u964d\uff09 | \u9ad8\u6ce2\u52a8\u7387 77%\uff08\u5e74\u5316\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.0",
+        "discovery": "\u5185\u5e55\u5927\u989d\u629b\u552e $12,052,190\uff08\u4e70\u5165\u4ec5 $0\uff09 | 5\u65e5\u6da8\u5e45\u8fc7\u5927 +8.3% | \u91cf\u80fd\u840e\u7f29 0.3x\uff08\u53c2\u4e0e\u5ea6\u4e0b\u964d\uff09 | \u9ad8\u6ce2\u52a8\u7387 77%\uff08\u5e74\u5316\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.0",
         "score": 5.97,
         "direction": "bullish",
         "confidence": 0.9,
@@ -477,7 +477,7 @@
           "bearish_signals": [
             "\u5185\u5e55\u5927\u989d\u629b\u552e $12,052,190\uff08\u4e70\u5165\u4ec5 $0\uff09",
             "5\u65e5\u6da8\u5e45\u8fc7\u5927 +8.3%",
-            "\u91cf\u80fd\u840e\u7f29 0.2x\uff08\u53c2\u4e0e\u5ea6\u4e0b\u964d\uff09",
+            "\u91cf\u80fd\u840e\u7f29 0.3x\uff08\u53c2\u4e0e\u5ea6\u4e0b\u964d\uff09",
             "\u9ad8\u6ce2\u52a8\u7387 77%\uff08\u5e74\u5316\uff09"
           ],
           "insider_bear": 8.0,
@@ -496,18 +496,18 @@
       }
     },
     "dimension_scores": {
-      "sentiment": 5.55,
       "risk_adj": 4.8,
-      "signal": 3.81,
-      "odds": 4.7,
-      "catalyst": 5.5
+      "catalyst": 5.5,
+      "odds": 5.3,
+      "signal": 3.63,
+      "sentiment": 5.55
     },
     "dimension_confidence": {
-      "sentiment": 0.7,
       "risk_adj": 0.4,
-      "signal": 0.92,
+      "catalyst": 0.6,
       "odds": 1.0,
-      "catalyst": 0.6
+      "signal": 0.92,
+      "sentiment": 0.7
     },
     "dimension_weights": {
       "signal": 0.098,
@@ -517,7 +517,7 @@
       "risk_adj": 0.22
     },
     "ml_adjustment": -0.32,
-    "base_score_before_resonance": 4.65,
+    "base_score_before_resonance": 4.76,
     "pheromone_compact": [
       {
         "a": "CodeExec",
@@ -536,50 +536,50 @@
         "c": 0
       },
       {
-        "a": "BuzzBeeW",
-        "t": "VKTX",
-        "d": "n",
-        "s": 5.6,
-        "p": 0.4,
-        "c": 0
-      },
-      {
         "a": "GuardBee",
         "t": "VKTX",
         "d": "n",
         "s": 4.8,
-        "p": 0.5,
+        "p": 0.4,
         "c": 0
-      },
-      {
-        "a": "ScoutBee",
-        "t": "VKTX",
-        "d": "n",
-        "s": 3.8,
-        "p": 0.6,
-        "c": 0
-      },
-      {
-        "a": "OracleBe",
-        "t": "VKTX",
-        "d": "b",
-        "s": 4.7,
-        "p": 0.9,
-        "c": 1
       },
       {
         "a": "ChronosB",
         "t": "VKTX",
         "d": "n",
         "s": 5.5,
-        "p": 0.8,
+        "p": 0.5,
         "c": 0
+      },
+      {
+        "a": "OracleBe",
+        "t": "VKTX",
+        "d": "b",
+        "s": 5.3,
+        "p": 0.8,
+        "c": 1
       },
       {
         "a": "CodeExec",
         "t": "VKTX",
         "d": "n",
         "s": 2.0,
+        "p": 0.7,
+        "c": 0
+      },
+      {
+        "a": "ScoutBee",
+        "t": "VKTX",
+        "d": "n",
+        "s": 3.6,
+        "p": 0.8,
+        "c": 0
+      },
+      {
+        "a": "BuzzBeeW",
+        "t": "VKTX",
+        "d": "n",
+        "s": 5.6,
         "p": 0.9,
         "c": 0
       },
@@ -596,16 +596,17 @@
       "RivalBeeVanguard": {
         "ml_prediction": "real"
       },
-      "BuzzBeeWhisper": {
-        "momentum": "real",
-        "volume": "real",
-        "volatility": "real",
-        "reddit": "fallback",
-        "finviz_news": "keyword"
-      },
       "GuardBeeSentinel": {
         "pheromone_board": "real",
         "crowding": "real"
+      },
+      "ChronosBeeHorizon": {
+        "yfinance_calendar": "real",
+        "catalyst_refinement": "real"
+      },
+      "OracleBeeEcho": {
+        "options": "real",
+        "polymarket": "real"
       },
       "ScoutBeeNova": {
         "social_buzz": "fallback",
@@ -616,13 +617,12 @@
         "short_interest": "real",
         "momentum": "real"
       },
-      "OracleBeeEcho": {
-        "options": "real",
-        "polymarket": "real"
-      },
-      "ChronosBeeHorizon": {
-        "yfinance_calendar": "real",
-        "catalyst_refinement": "real"
+      "BuzzBeeWhisper": {
+        "momentum": "real",
+        "volume": "real",
+        "volatility": "real",
+        "reddit": "fallback",
+        "finviz_news": "keyword"
       },
       "BearBeeContrarian": {
         "insider": "pheromone_board",
@@ -638,7 +638,7 @@
     "key_insight": "",
     "risk_flag": "",
     "llm_confidence": 0.0,
-    "rule_score": 4.65,
+    "rule_score": 4.76,
     "rule_direction": "neutral"
   }
 }

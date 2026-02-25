@@ -385,6 +385,84 @@ class MLEnhancedReportGenerator:
             "reasoning": f"人工分析 {human_prob:.1f}% + ML 预测 {ml_prob:.1f}% = 综合 {combined_prob:.1f}%",
         }
 
+    def _generate_swarm_section_html(self, swarm: dict) -> str:
+        """从蜂群扫描结果生成 HTML 版块（与 markdown 报告同步）"""
+        if not swarm:
+            return ""
+
+        agent_details = swarm.get("agent_details", {})
+        final_score = swarm.get("final_score", 0)
+        direction = swarm.get("direction", "neutral")
+        resonance = swarm.get("resonance", {})
+        ab = swarm.get("agent_breakdown", {})
+
+        dir_cn = {"bullish": "看多", "bearish": "看空", "neutral": "中性"}.get(direction, direction)
+        dir_color = {"bullish": "#28a745", "bearish": "#dc3545"}.get(direction, "#ffc107")
+
+        # 各 Agent 摘要
+        rows = ""
+        agent_map = {
+            "ScoutBeeNova": ("聪明钱侦察", "signal"),
+            "OracleBeeEcho": ("期权 & 赔率", "odds"),
+            "BuzzBeeWhisper": ("市场情绪", "sentiment"),
+            "ChronosBeeHorizon": ("催化剂 & 时间线", "catalyst"),
+            "RivalBeeVanguard": ("竞争格局 / ML", "ml"),
+            "GuardBeeSentinel": ("交叉验证", "risk_adj"),
+            "BearBeeContrarian": ("看空对冲", "contrarian"),
+        }
+        for agent_name, (label, dim) in agent_map.items():
+            ad = agent_details.get(agent_name, {})
+            if not ad:
+                continue
+            a_score = ad.get("score", 5.0)
+            a_dir = ad.get("direction", "neutral")
+            a_disc = ad.get("discovery", "")[:120]
+            a_dir_cn = {"bullish": "看多", "bearish": "看空", "neutral": "中性"}.get(a_dir, a_dir)
+            a_color = {"bullish": "#28a745", "bearish": "#dc3545"}.get(a_dir, "#888")
+            rows += f"""<tr>
+                <td><strong>{label}</strong></td>
+                <td style="color:{a_color}">{a_dir_cn}</td>
+                <td>{a_score:.1f}</td>
+                <td style="font-size:0.85em;color:#555">{a_disc}</td>
+            </tr>"""
+
+        # 看空蜂独立摘要
+        bear = agent_details.get("BearBeeContrarian", {})
+        bear_html = ""
+        if bear:
+            bd = bear.get("details", {})
+            signals = bd.get("bearish_signals", [])
+            if signals:
+                sigs_li = "".join(f"<li>{s}</li>" for s in signals[:5])
+                bear_html = f"""
+                <div style="margin-top:15px;padding:12px;background:#fff5f5;border-left:4px solid #dc3545;border-radius:4px;">
+                    <strong style="color:#dc3545;">看空对冲观点（看空强度 {bd.get('bear_score', 0):.1f}/10）</strong>
+                    <ul style="margin:8px 0 0 15px;color:#555">{sigs_li}</ul>
+                </div>"""
+
+        res_html = ""
+        if resonance.get("resonance_detected"):
+            res_html = f"""<span style="background:#28a745;color:white;padding:3px 10px;border-radius:12px;font-size:0.85em;margin-left:8px;">{resonance.get('supporting_agents', 0)} Agent 共振</span>"""
+
+        return f"""
+        <div class="section">
+            <h2>蜂群智能分析</h2>
+            <div style="text-align:center;margin-bottom:18px;">
+                <span style="font-size:2.5em;font-weight:bold;color:{dir_color};">{final_score:.1f}</span>
+                <span style="font-size:1.2em;color:#888;">/10</span>
+                <div style="margin-top:6px;">
+                    <span style="background:{dir_color};color:white;padding:4px 18px;border-radius:15px;font-weight:bold;">{dir_cn}</span>
+                    {res_html}
+                </div>
+                <div style="margin-top:8px;color:#888;font-size:0.9em;">投票：{ab.get('bullish',0)}多 / {ab.get('bearish',0)}空 / {ab.get('neutral',0)}中</div>
+            </div>
+            <table>
+                <tr><th>Agent</th><th>方向</th><th>评分</th><th>发现摘要</th></tr>
+                {rows}
+            </table>
+            {bear_html}
+        </div>"""
+
     def generate_html_report(
         self, ticker: str, enhanced_report: dict
     ) -> str:
@@ -395,6 +473,7 @@ class MLEnhancedReportGenerator:
         options = analysis.get('options_analysis') or {}
         recommendation = analysis.get('recommendation', {})
         prob = analysis.get('probability_analysis', {})
+        swarm = enhanced_report.get('swarm_results', {})
 
         # 评级颜色
         rating = combined.get('rating', 'HOLD')
@@ -406,6 +485,9 @@ class MLEnhancedReportGenerator:
             rating_color = '#dc3545'
         else:
             rating_color = '#ffc107'
+
+        # 蜂群智能部分
+        swarm_html = self._generate_swarm_section_html(swarm)
 
         # 期权部分
         options_html = self._generate_options_section_html(options) if options else ""
@@ -448,11 +530,18 @@ class MLEnhancedReportGenerator:
             tp_rows = ""
             if isinstance(take_profit, dict):
                 for k, v in take_profit.items():
-                    tp_rows += f"<tr><td>{k}</td><td>${v:.2f}</td></tr>" if isinstance(v, (int, float)) else f"<tr><td>{k}</td><td>{v}</td></tr>"
+                    if isinstance(v, dict):
+                        tp_price = v.get('price', 0)
+                        tp_gain = v.get('gain_pct', 0)
+                        tp_ratio = v.get('sell_ratio', 0)
+                        tp_reason = v.get('reason', '')
+                        tp_rows += f"<tr><td>{k}</td><td>${tp_price:.2f}</td><td>+{tp_gain:.0f}%</td><td>{tp_ratio:.0%} | {tp_reason}</td></tr>"
+                    elif isinstance(v, (int, float)):
+                        tp_rows += f"<tr><td>{k}</td><td>${v:.2f}</td><td></td><td></td></tr>"
             elif isinstance(take_profit, list):
                 for item in take_profit:
                     if isinstance(item, dict):
-                        tp_rows += f"<tr><td>{item.get('level','')}</td><td>${item.get('price',0):.2f}</td></tr>"
+                        tp_rows += f"<tr><td>{item.get('level','')}</td><td>${item.get('price',0):.2f}</td><td></td><td></td></tr>"
             position_html = f"""
             <div class="section">
                 <h2>止损 / 止盈位</h2>
@@ -466,7 +555,7 @@ class MLEnhancedReportGenerator:
                         <table>{tp_rows}</table>
                     </div>
                 </div>
-                {f'<p style="margin-top:15px;">最佳持仓周期：<strong>{holding}</strong></p>' if holding else ''}
+                {f'<p style="margin-top:15px;">最佳持仓周期：<strong>{holding.get("note", holding) if isinstance(holding, dict) else holding}</strong></p>' if holding else ''}
             </div>"""
 
         # 投资建议详情
@@ -594,6 +683,9 @@ class MLEnhancedReportGenerator:
         </div>
     </div>
 
+    <!-- 蜂群智能 -->
+    {swarm_html}
+
     <!-- 期权信号 -->
     {options_html}
 
@@ -676,6 +768,30 @@ def main():
     # 创建生成器
     report_gen = MLEnhancedReportGenerator()
 
+    # 加载今日蜂群扫描结果（与 markdown 报告同步）
+    swarm_data = {}
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    swarm_json = report_dir / f".swarm_results_{today_str}.json"
+    if swarm_json.exists():
+        try:
+            with open(swarm_json) as f:
+                swarm_data = json.load(f)
+            _log.info("已加载蜂群扫描数据: %d 标的", len(swarm_data))
+        except Exception:
+            pass
+    if not swarm_data:
+        # 尝试从 checkpoint 恢复
+        for ckpt in report_dir.glob(".checkpoint_*.json"):
+            try:
+                with open(ckpt) as f:
+                    ckpt_data = json.load(f)
+                    swarm_data = ckpt_data.get("results", {})
+                    if swarm_data:
+                        _log.info("从 checkpoint 加载蜂群数据: %d 标的", len(swarm_data))
+                        break
+            except Exception:
+                pass
+
     _log.info("生成 ML 增强报告...")
     _log.info("=" * 60)
 
@@ -685,21 +801,41 @@ def main():
         try:
             _log.info("生成 %s ML 增强报告...", ticker)
 
-            # 获取该标的的数据（如果没有则使用样本）
-            ticker_data = metrics.get(ticker, {
-                "ticker": ticker,
-                "sources": {
-                    "yahoo_finance": {
-                        "current_price": 100.0,
-                        "change_pct": 2.5
+            # 获取该标的的数据（优先 realtime_metrics，回退 yfinance 实时）
+            ticker_data = metrics.get(ticker)
+            if not ticker_data or not ticker_data.get("sources", {}).get("yahoo_finance", {}).get("current_price"):
+                # 从 yfinance 获取真实价格
+                _real_price = 100.0
+                _real_change = 0.0
+                try:
+                    import yfinance as _yf
+                    _t = _yf.Ticker(ticker)
+                    _hist = _t.history(period="5d")
+                    if not _hist.empty:
+                        _real_price = float(_hist["Close"].iloc[-1])
+                        if len(_hist) >= 2:
+                            _real_change = (_hist["Close"].iloc[-1] / _hist["Close"].iloc[-2] - 1) * 100
+                except Exception:
+                    pass
+                ticker_data = {
+                    "ticker": ticker,
+                    "sources": {
+                        "yahoo_finance": {
+                            "current_price": _real_price,
+                            "price_change_5d": _real_change,
+                            "change_pct": _real_change,
+                        }
                     }
                 }
-            })
 
             # 生成分析
             enhanced_report = report_gen.generate_ml_enhanced_report(
                 ticker, ticker_data
             )
+
+            # 注入蜂群数据到报告
+            if ticker in swarm_data:
+                enhanced_report["swarm_results"] = swarm_data[ticker]
 
             # 生成 HTML
             html = report_gen.generate_html_report(ticker, enhanced_report)

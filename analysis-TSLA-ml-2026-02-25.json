@@ -1,9 +1,9 @@
 {
   "ticker": "TSLA",
-  "timestamp": "2026-02-25T10:54:23.390700",
+  "timestamp": "2026-02-25T10:56:27.234173",
   "advanced_analysis": {
     "ticker": "TSLA",
-    "timestamp": "2026-02-25T10:54:23.393185",
+    "timestamp": "2026-02-25T10:56:27.236509",
     "overview": "EV \u6210\u672c\u9886\u5bfc\u8005\uff0c\u4ea7\u80fd\u6269\u5f20\u5feb\uff0c\u4f46\u7ade\u4e89\u52a0\u5267\uff0c\u5229\u6da6\u7387\u627f\u538b",
     "industry_comparison": {
       "industry": "EV",
@@ -102,10 +102,10 @@
     },
     "options_analysis": {
       "ticker": "TSLA",
-      "timestamp": "2026-02-25T10:54:23.394402",
+      "timestamp": "2026-02-25T10:56:27.238360",
       "iv_rank": 0,
       "iv_percentile": 0.0,
-      "iv_current": 34.86,
+      "iv_current": 37.78,
       "put_call_ratio": 0.98,
       "total_oi": 845134,
       "gamma_exposure": 0.0,
@@ -114,77 +114,77 @@
         {
           "type": "call_sweep",
           "strike": 420.0,
-          "volume": 123596.0,
+          "volume": 124491.0,
           "oi": 8421,
-          "ratio": 14.68,
+          "ratio": 14.78,
           "bullish": true
         },
         {
           "type": "call_sweep",
           "strike": 415.0,
-          "volume": 120499.0,
+          "volume": 121448.0,
           "oi": 13657,
-          "ratio": 8.82,
+          "ratio": 8.89,
           "bullish": true
         },
         {
           "type": "call_sweep",
           "strike": 417.5,
-          "volume": 85763.0,
+          "volume": 86105.0,
           "oi": 4272,
-          "ratio": 20.08,
+          "ratio": 20.16,
           "bullish": true
         },
         {
           "type": "put_sweep",
           "strike": 415.0,
-          "volume": 73770.0,
+          "volume": 74095.0,
           "oi": 900,
-          "ratio": 81.97,
+          "ratio": 82.33,
           "bullish": false
         },
         {
           "type": "put_sweep",
           "strike": 410.0,
-          "volume": 69133.0,
+          "volume": 69429.0,
           "oi": 4121,
-          "ratio": 16.78,
+          "ratio": 16.85,
           "bullish": false
         },
         {
           "type": "put_sweep",
           "strike": 412.5,
-          "volume": 67947.0,
+          "volume": 68367.0,
           "oi": 594,
-          "ratio": 114.39,
+          "ratio": 115.1,
           "bullish": false
         },
         {
           "type": "large_call_volume",
           "strike": 420.0,
-          "volume": 43730.0,
+          "volume": 43857.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 400.0,
-          "volume": 39654.0,
+          "volume": 39796.0,
           "bullish": true
         },
         {
           "type": "call_sweep",
           "strike": 425.0,
-          "volume": 39540.0,
+          "volume": 39764.0,
           "oi": 4608,
-          "ratio": 8.58,
+          "ratio": 8.63,
           "bullish": true
         },
         {
           "type": "call_sweep",
           "strike": 422.5,
-          "volume": 38188.0,
+          "volume": 38601.0,
           "oi": 2941,
-          "ratio": 12.98,
+          "ratio": 13.13,
           "bullish": true
         }
       ],
@@ -198,7 +198,7 @@
           {
             "strike": 375.0,
             "oi": 22173,
-            "iv": 0.5830119824218749
+            "iv": 0.5751995605468749
           },
           {
             "strike": 315.0,
@@ -220,7 +220,7 @@
           {
             "strike": 435.0,
             "oi": 18853,
-            "iv": 0.3178779150390625
+            "iv": 0.32080757324218745
           }
         ]
       },
@@ -236,7 +236,7 @@
   },
   "ml_prediction": {
     "ticker": "TSLA",
-    "date": "2026-02-25T10:54:23.394454",
+    "date": "2026-02-25T10:56:27.238410",
     "input": {
       "crowding_score": 63.5,
       "catalyst_quality": "A",
@@ -279,52 +279,26 @@
     },
     "agent_directions": {
       "RivalBeeVanguard": "bullish",
-      "BuzzBeeWhisper": "neutral",
       "GuardBeeSentinel": "neutral",
-      "OracleBeeEcho": "bullish",
-      "ScoutBeeNova": "neutral",
       "ChronosBeeHorizon": "neutral",
       "CodeExecutorAgent": "neutral",
+      "OracleBeeEcho": "bullish",
+      "ScoutBeeNova": "neutral",
+      "BuzzBeeWhisper": "neutral",
       "BearBeeContrarian": "bullish"
     },
     "agent_details": {
       "RivalBeeVanguard": {
-        "discovery": "ML \u80dc\u7387 29% | 7d +0.81% | 30d +1.26% | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52065.6",
-        "score": 2.86,
+        "discovery": "ML \u80dc\u7387 29% | 7d +0.84% | 30d +1.28% | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52065.6",
+        "score": 2.87,
         "direction": "bullish",
         "confidence": 0.8,
         "dimension": "ml_auxiliary",
         "details": {
-          "probability": 0.2859,
-          "expected_3d": 0.41,
-          "expected_7d": 0.81,
-          "expected_30d": 1.26
-        }
-      },
-      "BuzzBeeWhisper": {
-        "discovery": "\u60c5\u7eea 54% | \u52a8\u91cf +0.8% | \u91cf\u6bd4 0.5x | Reddit #18(cooling,49\u63d0\u53ca) | \u65b0\u95fb\u504f\u591a\uff083\u591a/1\u7a7a\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52065.6",
-        "score": 5.43,
-        "direction": "neutral",
-        "confidence": 0.9,
-        "dimension": "sentiment",
-        "details": {
-          "sentiment_pct": 54,
-          "momentum_5d": 0.7918218729896287,
-          "volume_ratio": 0.5492457526827202,
-          "volatility_20d": 33.728101400598966,
-          "reddit": {
-            "rank": 18,
-            "mentions": 49,
-            "mention_delta": -46,
-            "buzz": "cooling",
-            "score": 4.5
-          },
-          "components": {
-            "momentum_signal": 54.0,
-            "volume_signal": 35,
-            "volatility_signal": 60,
-            "reddit_signal": 45.0
-          }
+          "probability": 0.2871,
+          "expected_3d": 0.44,
+          "expected_7d": 0.84,
+          "expected_30d": 1.28
         }
       },
       "GuardBeeSentinel": {
@@ -345,18 +319,44 @@
           "adjustment_factor": 1.2
         }
       },
+      "ChronosBeeHorizon": {
+        "discovery": "\u50ac\u5316\u5242 1 \u4e2a | \u6700\u8fd1\uff1a\u8d22\u62a5\u53d1\u5e03\uff0854\u5929\u540e\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52065.6",
+        "score": 5.5,
+        "direction": "neutral",
+        "confidence": 0.6,
+        "dimension": "catalyst",
+        "details": {
+          "catalysts": [
+            {
+              "event": "\u8d22\u62a5\u53d1\u5e03",
+              "date": "2026-04-21",
+              "days_until": 54,
+              "type": "earnings",
+              "severity": "high"
+            }
+          ]
+        }
+      },
+      "CodeExecutorAgent": {
+        "discovery": "\u274c \u6570\u636e\u722c\u53d6\u5931\u8d25: ConnectionError",
+        "score": 2.0,
+        "direction": "neutral",
+        "confidence": 0.5,
+        "dimension": "unknown",
+        "details": {}
+      },
       "OracleBeeEcho": {
-        "discovery": "\u68c0\u6d4b\u5230 7 \u4e2a\u770b\u6da8\u5f02\u52a8 | $415.0 | \u9884\u6d4b\u5e02\u573a\u770b\u7a7a\uff08\u9690\u542b\u6982\u7387 99%\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52065.6",
+        "discovery": "\u68c0\u6d4b\u5230 7 \u4e2a\u770b\u6da8\u5f02\u52a8 | $415.8 | \u9884\u6d4b\u5e02\u573a\u770b\u7a7a\uff08\u9690\u542b\u6982\u7387 99%\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52065.6",
         "score": 5.0,
         "direction": "bullish",
         "confidence": 1.0,
         "dimension": "odds",
         "details": {
           "ticker": "TSLA",
-          "timestamp": "2026-02-25T09:56:55.594230",
-          "iv_rank": 0,
-          "iv_percentile": 0.0,
-          "iv_current": 1.02,
+          "timestamp": "2026-02-25T10:56:10.705318",
+          "iv_rank": 0.79,
+          "iv_percentile": 0.86,
+          "iv_current": 39.45,
           "put_call_ratio": 0.98,
           "total_oi": 845134,
           "gamma_exposure": 0.0,
@@ -365,77 +365,77 @@
             {
               "type": "call_sweep",
               "strike": 420.0,
-              "volume": 113168.0,
+              "volume": 124491.0,
               "oi": 8421,
-              "ratio": 13.44,
+              "ratio": 14.78,
               "bullish": true
             },
             {
               "type": "call_sweep",
               "strike": 415.0,
-              "volume": 95748.0,
+              "volume": 121448.0,
               "oi": 13657,
-              "ratio": 7.01,
+              "ratio": 8.89,
               "bullish": true
             },
             {
               "type": "call_sweep",
               "strike": 417.5,
-              "volume": 70567.0,
+              "volume": 86105.0,
               "oi": 4272,
-              "ratio": 16.52,
+              "ratio": 20.16,
               "bullish": true
             },
             {
               "type": "put_sweep",
-              "strike": 410.0,
-              "volume": 62772.0,
-              "oi": 4121,
-              "ratio": 15.23,
+              "strike": 415.0,
+              "volume": 74095.0,
+              "oi": 900,
+              "ratio": 82.33,
               "bullish": false
             },
             {
               "type": "put_sweep",
-              "strike": 415.0,
-              "volume": 60511.0,
-              "oi": 900,
-              "ratio": 67.23,
+              "strike": 410.0,
+              "volume": 69429.0,
+              "oi": 4121,
+              "ratio": 16.85,
               "bullish": false
             },
             {
               "type": "put_sweep",
               "strike": 412.5,
-              "volume": 53731.0,
+              "volume": 68367.0,
               "oi": 594,
-              "ratio": 90.46,
+              "ratio": 115.1,
               "bullish": false
             },
             {
               "type": "large_call_volume",
               "strike": 420.0,
-              "volume": 39813.0,
-              "bullish": true
-            },
-            {
-              "type": "call_sweep",
-              "strike": 425.0,
-              "volume": 37077.0,
-              "oi": 4608,
-              "ratio": 8.05,
+              "volume": 43857.0,
               "bullish": true
             },
             {
               "type": "large_call_volume",
               "strike": 400.0,
-              "volume": 35820.0,
+              "volume": 39796.0,
+              "bullish": true
+            },
+            {
+              "type": "call_sweep",
+              "strike": 425.0,
+              "volume": 39764.0,
+              "oi": 4608,
+              "ratio": 8.63,
               "bullish": true
             },
             {
               "type": "call_sweep",
               "strike": 422.5,
-              "volume": 35603.0,
+              "volume": 38601.0,
               "oi": 2941,
-              "ratio": 12.11,
+              "ratio": 13.13,
               "bullish": true
             }
           ],
@@ -449,29 +449,29 @@
               {
                 "strike": 375.0,
                 "oi": 22173,
-                "iv": 0.57617611328125
+                "iv": 0.5751995605468749
               },
               {
                 "strike": 315.0,
                 "oi": 14531,
-                "iv": 1.140629296875
+                "iv": 1.1640666796875
               }
             ],
             "resistance": [
               {
                 "strike": 660.0,
                 "oi": 30414,
-                "iv": 1.5000025
+                "iv": 1.46875265625
               },
               {
                 "strike": 620.0,
                 "oi": 20313,
-                "iv": 1.3125034374999998
+                "iv": 1.2812535937499998
               },
               {
                 "strike": 435.0,
                 "oi": 18853,
-                "iv": 0.3398503515625
+                "iv": 0.32080757324218745
               }
             ]
           },
@@ -486,8 +486,8 @@
         }
       },
       "ScoutBeeNova": {
-        "discovery": "\u5185\u5e55\u5356\u51fa $53,500,918 | Musk Kimbal \u5356\u51fa 56,820\u80a1 | \u62e5\u6324\u5ea6 23/100\uff08\u4f4e\u62e5\u6324\u5ea6\uff09 | \u52a8\u91cf +0.8% | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52065.6",
-        "score": 3.67,
+        "discovery": "\u5185\u5e55\u5356\u51fa $53,500,918 | Musk Kimbal \u5356\u51fa 56,820\u80a1 | \u62e5\u6324\u5ea6 24/100\uff08\u4f4e\u62e5\u6324\u5ea6\uff09 | \u52a8\u91cf +1.0% | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52065.6",
+        "score": 3.65,
         "direction": "neutral",
         "confidence": 0.96,
         "dimension": "signal",
@@ -540,46 +540,46 @@
               }
             ]
           },
-          "crowding_score": 23.32333333333333,
-          "crowding_signal": 7.67,
+          "crowding_score": 23.638333333333332,
+          "crowding_signal": 7.64,
           "components": {
             "stocktwits_volume": 15.0,
-            "google_trends": 21.6,
+            "google_trends": 23.7,
             "consensus_strength": 33.33333333333333,
             "polymarket_volatility": 20,
             "seeking_alpha_views": 20,
             "short_squeeze_risk": 30
           },
           "adjustment_factor": 1.2,
-          "momentum_5d": 0.7918218729896287,
-          "price": 414.9700012207031
+          "momentum_5d": 0.9861304420242023,
+          "price": 415.7699890136719
         }
       },
-      "ChronosBeeHorizon": {
-        "discovery": "\u50ac\u5316\u5242 1 \u4e2a | \u6700\u8fd1\uff1a\u8d22\u62a5\u53d1\u5e03\uff0854\u5929\u540e\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52065.6",
-        "score": 5.5,
+      "BuzzBeeWhisper": {
+        "discovery": "\u60c5\u7eea 54% | \u52a8\u91cf +1.0% | \u91cf\u6bd4 0.6x | Reddit #18(cooling,51\u63d0\u53ca) | \u65b0\u95fb\u504f\u591a\uff083\u591a/1\u7a7a\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52065.6",
+        "score": 5.45,
         "direction": "neutral",
-        "confidence": 0.6,
-        "dimension": "catalyst",
+        "confidence": 0.9,
+        "dimension": "sentiment",
         "details": {
-          "catalysts": [
-            {
-              "event": "\u8d22\u62a5\u53d1\u5e03",
-              "date": "2026-04-21",
-              "days_until": 54,
-              "type": "earnings",
-              "severity": "high"
-            }
-          ]
+          "sentiment_pct": 54,
+          "momentum_5d": 0.9861304420242023,
+          "volume_ratio": 0.6141112137907505,
+          "volatility_20d": 33.849314859723584,
+          "reddit": {
+            "rank": 18,
+            "mentions": 51,
+            "mention_delta": -36,
+            "buzz": "cooling",
+            "score": 4.5
+          },
+          "components": {
+            "momentum_signal": 54.9,
+            "volume_signal": 35,
+            "volatility_signal": 60,
+            "reddit_signal": 45.0
+          }
         }
-      },
-      "CodeExecutorAgent": {
-        "discovery": "\u274c \u6570\u636e\u722c\u53d6\u5931\u8d25: ConnectionError",
-        "score": 2.0,
-        "direction": "neutral",
-        "confidence": 0.5,
-        "dimension": "unknown",
-        "details": {}
       },
       "BearBeeContrarian": {
         "discovery": "\u5185\u5e55\u5927\u989d\u629b\u552e $53,500,918\uff08\u4e70\u5165\u4ec5 $0\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52065.6",
@@ -608,18 +608,18 @@
       }
     },
     "dimension_scores": {
-      "sentiment": 5.43,
       "risk_adj": 4.8,
+      "catalyst": 5.5,
       "odds": 5.0,
-      "signal": 3.67,
-      "catalyst": 5.5
+      "signal": 3.65,
+      "sentiment": 5.45
     },
     "dimension_confidence": {
-      "sentiment": 0.9,
       "risk_adj": 0.4,
+      "catalyst": 0.6,
       "odds": 1.0,
       "signal": 0.96,
-      "catalyst": 0.6
+      "sentiment": 0.9
     },
     "dimension_weights": {
       "signal": 0.098,
@@ -628,17 +628,9 @@
       "odds": 0.22,
       "risk_adj": 0.22
     },
-    "ml_adjustment": -0.171,
-    "base_score_before_resonance": 4.84,
+    "ml_adjustment": -0.17,
+    "base_score_before_resonance": 4.85,
     "pheromone_compact": [
-      {
-        "a": "RivalBee",
-        "t": "TSLA",
-        "d": "b",
-        "s": 2.9,
-        "p": 0.6,
-        "c": 2
-      },
       {
         "a": "CodeExec",
         "t": "TSLA",
@@ -648,35 +640,19 @@
         "c": 5
       },
       {
-        "a": "BuzzBeeW",
+        "a": "RivalBee",
         "t": "TSLA",
-        "d": "n",
-        "s": 5.4,
-        "p": 0.4,
-        "c": 0
+        "d": "b",
+        "s": 2.9,
+        "p": 0.7,
+        "c": 2
       },
       {
         "a": "GuardBee",
         "t": "TSLA",
         "d": "n",
         "s": 4.8,
-        "p": 0.5,
-        "c": 0
-      },
-      {
-        "a": "OracleBe",
-        "t": "TSLA",
-        "d": "b",
-        "s": 5.0,
-        "p": 0.6,
-        "c": 0
-      },
-      {
-        "a": "ScoutBee",
-        "t": "TSLA",
-        "d": "n",
-        "s": 3.7,
-        "p": 0.7,
+        "p": 0.4,
         "c": 0
       },
       {
@@ -684,7 +660,7 @@
         "t": "TSLA",
         "d": "n",
         "s": 5.5,
-        "p": 0.8,
+        "p": 0.5,
         "c": 0
       },
       {
@@ -692,6 +668,30 @@
         "t": "TSLA",
         "d": "n",
         "s": 2.0,
+        "p": 0.6,
+        "c": 0
+      },
+      {
+        "a": "OracleBe",
+        "t": "TSLA",
+        "d": "b",
+        "s": 5.0,
+        "p": 0.7,
+        "c": 0
+      },
+      {
+        "a": "ScoutBee",
+        "t": "TSLA",
+        "d": "n",
+        "s": 3.7,
+        "p": 0.8,
+        "c": 0
+      },
+      {
+        "a": "BuzzBeeW",
+        "t": "TSLA",
+        "d": "n",
+        "s": 5.4,
         "p": 0.9,
         "c": 0
       },
@@ -708,16 +708,13 @@
       "RivalBeeVanguard": {
         "ml_prediction": "real"
       },
-      "BuzzBeeWhisper": {
-        "momentum": "real",
-        "volume": "real",
-        "volatility": "real",
-        "reddit": "real",
-        "finviz_news": "keyword"
-      },
       "GuardBeeSentinel": {
         "pheromone_board": "real",
         "crowding": "real"
+      },
+      "ChronosBeeHorizon": {
+        "yfinance_calendar": "real",
+        "catalyst_refinement": "real"
       },
       "OracleBeeEcho": {
         "options": "real",
@@ -732,9 +729,12 @@
         "short_interest": "real",
         "momentum": "real"
       },
-      "ChronosBeeHorizon": {
-        "yfinance_calendar": "real",
-        "catalyst_refinement": "real"
+      "BuzzBeeWhisper": {
+        "momentum": "real",
+        "volume": "real",
+        "volatility": "real",
+        "reddit": "real",
+        "finviz_news": "keyword"
       },
       "BearBeeContrarian": {
         "insider": "pheromone_board",

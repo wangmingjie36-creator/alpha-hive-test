@@ -153,10 +153,14 @@ class OptionsDataFetcher:
             return self._get_sample_options_chain(ticker)
 
     def fetch_historical_iv(self, ticker: str, days: int = 252) -> List[float]:
-        """获取历史 IV 数据 - 用历史波动率代替"""
-        cached = self._read_cache(ticker, "hist_iv")
+        """获取历史 IV 数据 - 用历史已实现波动率 + IV 溢价估算
+
+        IV 通常比 HV 高 20-40%（Volatility Risk Premium），
+        直接用 HV 会导致 IV Rank 严重偏高。
+        修正：HV * 1.25 作为历史 IV 代理。
+        """
+        cached = self._read_cache(ticker, "hist_iv_v2")
         if cached:
-            pass  # {ticker} 历史 IV 来自缓存")
             return cached
 
         if yf is None:
@@ -171,18 +175,18 @@ class OptionsDataFetcher:
                 _log.warning("%s 历史数据不可用，使用样本数据", ticker)
                 return self._get_sample_historical_iv(ticker)
 
-            # 计算历史波动率（近端期权的隐含波动率代理）
+            # 计算历史已实现波动率（20日滚动）
             returns = hist["Close"].pct_change().dropna()
             rolling_vol = returns.rolling(window=20).std() * 100 * (252 ** 0.5)
 
-            # 转换为 IV（假设 IV ≈ Historical Vol）
-            iv_list = rolling_vol.dropna().tolist()
+            # 修正：加上典型的 IV premium（HV * 1.25），使历史 IV 与当前隐含 IV 量级匹配
+            iv_premium = 1.25
+            iv_list = [v * iv_premium for v in rolling_vol.dropna().tolist()]
 
             # 保留最后 252 个数据点
             iv_list = iv_list[-days:]
 
-            self._write_cache(ticker, "hist_iv", iv_list)
-            pass  # {ticker} 历史 IV 来自 yfinance")
+            self._write_cache(ticker, "hist_iv_v2", iv_list)
             return iv_list
 
         except Exception as e:
@@ -618,17 +622,51 @@ class OptionsAgent:
         hist_iv = self.fetcher.fetch_historical_iv(ticker)
 
         # 计算当前 IV（从期权链中获取）
-        # yfinance 返回小数格式 (0.285 = 28.5%)，需要转换为百分比格式以匹配历史 IV
-        # 过滤掉深度 ITM/OTM 的 IV ≈ 0 噪音（< 0.005 = 0.5%）
-        raw_ivs = [
-            c.get("impliedVolatility") for c in calls_df
-            if c.get("impliedVolatility") and c.get("impliedVolatility") > 0.005
-        ]
+        # 关键修复：
+        # 1. 只用 ATM 附近（±20%）的期权
+        # 2. 过滤 <7 天到期的期权（临近到期 IV 被 Theta 衰减人为放大）
+        # 3. 用中位数代替均值，抗极端值
+        atm_price = stock_price
+        if not atm_price:
+            all_strikes = [c.get("strike", 0) for c in calls_df if c.get("openInterest", 0) > 100]
+            atm_price = statistics.median(all_strikes) if all_strikes else 145.0
+        atm_lower = atm_price * 0.80
+        atm_upper = atm_price * 1.20
+
+        # 判断到期日是否 >= 7 天
+        min_expiry_days = 7
+        today = datetime.now()
+        def _expiry_ok(expiry_str):
+            """过滤 <7 天到期的期权"""
+            if not expiry_str:
+                return True  # 无到期日信息时不过滤
+            try:
+                exp_date = datetime.strptime(str(expiry_str)[:10], "%Y-%m-%d")
+                return (exp_date - today).days >= min_expiry_days
+            except Exception:
+                return True
+
+        raw_ivs = []
+        for c in calls_df:
+            iv = c.get("impliedVolatility")
+            strike = c.get("strike", 0)
+            expiry = c.get("expiry", "")
+            if iv and iv > 0.005 and atm_lower <= strike <= atm_upper and _expiry_ok(expiry):
+                raw_ivs.append(iv)
+
+        # 如果过滤后无数据，放宽到包含短期到期
+        if not raw_ivs:
+            for c in calls_df:
+                iv = c.get("impliedVolatility")
+                strike = c.get("strike", 0)
+                if iv and iv > 0.005 and atm_lower <= strike <= atm_upper:
+                    raw_ivs.append(iv)
+
         if raw_ivs:
-            current_iv = statistics.mean(raw_ivs)
-            # 自动检测并统一为百分比格式（>1 已是百分比，<1 是小数需×100）
-            if current_iv < 1.0:
-                current_iv *= 100
+            # 用中位数代替均值，更抗极端值干扰
+            current_iv = statistics.median(raw_ivs)
+            # yfinance impliedVolatility 是小数格式（0.285 = 28.5%），一律 ×100 转百分比
+            current_iv *= 100
         else:
             current_iv = 25.0
 
@@ -636,8 +674,12 @@ class OptionsAgent:
         iv_rank, iv_current = self.analyzer.calculate_iv_rank(current_iv, hist_iv)
         iv_percentile = self.analyzer.calculate_iv_percentile(current_iv, hist_iv)
         put_call_ratio = self.analyzer.calculate_put_call_ratio(calls_df, puts_df)
+        # 估算股价（如果未提供，从期权链 ATM strike 推测）
+        if not stock_price:
+            all_strikes = [c.get("strike", 0) for c in calls_df if c.get("openInterest", 0) > 100]
+            stock_price = statistics.median(all_strikes) if all_strikes else 145.0
         gex = self.analyzer.calculate_gamma_exposure(
-            calls_df, puts_df, stock_price or 145.0
+            calls_df, puts_df, stock_price
         )
         unusual_activity = self.analyzer.detect_unusual_activity(calls_df, puts_df)
         key_levels = self.analyzer.find_key_levels(calls_df, puts_df)

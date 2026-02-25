@@ -1,0 +1,69 @@
+# ==================== Python ====================
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ==================== Runtime Data ====================
+# 数据库
+*.db
+*.sqlite3
+
+# ML 模型
+ml_model*.pkl
+ml_model*.json
+
+# 日志
+*.log
+logs/*.log
+logs/*.jsonl
+
+# ==================== Cache Directories ====================
+cache/
+data_cache/
+sec_cache/
+polymarket_cache/
+finviz_cache/
+reddit_cache/
+earnings_cache/
+chroma_db/
+backups/
+
+# ==================== Temp / Internal ====================
+.swarm_results_*.json
+.checkpoint_*.json
+realtime_metrics.json
+status.json
+training_data_extended.json
+
+# ==================== Config Backups ====================
+*.backup.*
+
+# ==================== Environment ====================
+.env
+*.pem
+*.key
+*credentials*.json
+*token*.json
+
+# ==================== Analysis Output (Regenerated) ====================
+analysis-*.json
+
+# ==================== IDE ====================
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ==================== macOS ====================
+AppIcon.icns
+bee_icon_*.png
+
+# ==================== Test Artifacts ====================
+.pytest_cache/
+htmlcov/
+.coverage
+test_report_*.html

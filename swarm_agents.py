@@ -1139,6 +1139,19 @@ class QueenDistiller:
                     # LLM 高置信度时覆盖规则引擎方向
                     final_direction = llm_direction
 
+        # 保留各 Agent 的原始分析内容（discovery + details）
+        agent_details = {}
+        for r in all_results:
+            src = r.get("source", "unknown")
+            agent_details[src] = {
+                "discovery": r.get("discovery", ""),
+                "score": r.get("score", 5.0),
+                "direction": r.get("direction", "neutral"),
+                "confidence": r.get("confidence", 0.5),
+                "dimension": r.get("dimension", ""),
+                "details": r.get("details") or {},
+            }
+
         return {
             "ticker": ticker,
             "final_score": final_score,
@@ -1151,6 +1164,7 @@ class QueenDistiller:
                 "neutral": neutral_count,
             },
             "agent_directions": per_agent_directions,
+            "agent_details": agent_details,
             "dimension_scores": dim_scores,
             "dimension_confidence": dim_confidence,
             "dimension_weights": dict(self.DIMENSION_WEIGHTS),

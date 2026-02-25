@@ -742,25 +742,13 @@ class AlphaHiveDailyReporter:
         return report
 
     def _generate_swarm_markdown_report(self, swarm_results: Dict) -> str:
-        """生成蜂群模式的 Markdown 报告"""
+        """生成蜂群模式的 Markdown 报告（8 版块完整结构）"""
 
         md = []
         md.append(f"# 【{self.date_str}】Alpha Hive 蜂群协作日报")
         md.append("")
         md.append(f"**自动生成于**：{self.timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
-        md.append(f"**系统模式**：🐝 完全去中心化蜂群协作 | 6 个自治 Agent")
-        md.append("")
-
-        # 蜂群统计
-        md.append("## 🐝 蜂群协作统计")
-        md.append("")
-        resonances = sum(1 for r in swarm_results.values() if r["resonance"]["resonance_detected"])
-        md.append(f"- **检测到的共振信号**：{resonances}/{len(swarm_results)}")
-        md.append(f"- **高置信度机会**（共振✅）：{resonances} 个")
-        md.append("")
-
-        # 今日摘要（Top 3）
-        md.append("## 📊 今日摘要（Top 3）")
+        md.append(f"**系统模式**：完全去中心化蜂群协作 | 6 个自治 Agent")
         md.append("")
 
         sorted_results = sorted(
@@ -769,63 +757,196 @@ class AlphaHiveDailyReporter:
             reverse=True
         )
 
+        # ====== 版块 1：今日摘要 ======
+        resonances = sum(1 for r in swarm_results.values() if r["resonance"]["resonance_detected"])
+        md.append("## 1) 今日摘要")
+        md.append("")
+        md.append(f"- 扫描标的：{len(swarm_results)} 个 | 共振信号：{resonances}/{len(swarm_results)}")
         for i, (ticker, data) in enumerate(sorted_results[:3], 1):
-            resonance_emoji = "✅" if data["resonance"]["resonance_detected"] else "❌"
-            distill_mode = data.get("distill_mode", "rule_engine")
-            mode_label = "AI推理" if distill_mode == "llm_enhanced" else "规则引擎"
+            res = "共振" if data["resonance"]["resonance_detected"] else ""
+            md.append(f"- **{ticker}** {data['direction'].upper()} {data['final_score']:.1f}/10 {res}")
+        md.append("")
 
-            md.append(f"### {i}. **{ticker}** - {data['direction'].upper()}")
-            md.append(f"- **蜂群评分**：{data['final_score']:.1f}/10（{mode_label}）")
-            md.append(f"- **信号共振**：{resonance_emoji} ({data['resonance']['supporting_agents']} Agent)")
-            md.append(f"- **Agent 投票**：看多 {data['agent_breakdown']['bullish']} | "
-                     f"看空 {data['agent_breakdown']['bearish']} | "
-                     f"中性 {data['agent_breakdown']['neutral']}")
-
-            # LLM 推理链（有则显示）
-            reasoning = data.get("reasoning", "")
-            key_insight = data.get("key_insight", "")
-            risk_flag = data.get("risk_flag", "")
-            if reasoning:
-                md.append(f"- **AI推理**：{reasoning}")
-            if key_insight:
-                md.append(f"- **核心洞察**：{key_insight}")
-            if risk_flag:
-                md.append(f"- **风险标记**：{risk_flag}")
-
-            # 数据真实度
-            data_pct = data.get("data_real_pct", 0)
-            if data_pct > 0:
-                md.append(f"- **数据真实度**：{data_pct:.0f}%")
+        # ====== 版块 2：今日聪明钱动向（ScoutBeeNova） ======
+        md.append("## 2) 今日聪明钱动向")
+        md.append("")
+        for ticker, data in sorted_results:
+            agent = data.get("agent_details", {}).get("ScoutBeeNova", {})
+            discovery = agent.get("discovery", "")
+            details = agent.get("details", {})
+            insider = details.get("insider", {})
+            md.append(f"### {ticker}")
+            if discovery:
+                md.append(f"- {discovery}")
+            if insider:
+                sentiment = insider.get("sentiment", "unknown")
+                bought = insider.get("dollar_bought", 0)
+                sold = insider.get("dollar_sold", 0)
+                filings = insider.get("filings", 0)
+                md.append(f"- 内幕交易情绪：**{sentiment}** | 申报数：{filings}")
+                if bought > 0:
+                    md.append(f"- 内幕买入金额：${bought:,.0f}")
+                if sold > 0:
+                    md.append(f"- 内幕卖出金额：${sold:,.0f}")
+                notable = insider.get("notable_trades", [])
+                for t in notable[:2]:
+                    if isinstance(t, dict):
+                        md.append(f"  - {t.get('insider', '?')}：{t.get('code_desc', '?')} {t.get('shares', 0):,.0f} 股")
+            crowding = details.get("crowding_score", "")
+            if crowding:
+                md.append(f"- 拥挤度：{crowding:.0f}/100")
             md.append("")
 
-        # 完整机会清单
-        md.append("## 🎯 完整机会清单")
+        # ====== 版块 3：市场隐含预期（OracleBeeEcho） ======
+        md.append("## 3) 市场隐含预期")
         md.append("")
-        md.append("| 排序 | 标的 | 方向 | 综合分 | 共振 | Agent | 数据% | 模式 |")
-        md.append("|------|------|------|--------|------|-------|-------|------|")
+        for ticker, data in sorted_results:
+            agent = data.get("agent_details", {}).get("OracleBeeEcho", {})
+            discovery = agent.get("discovery", "")
+            details = agent.get("details", {})
+            md.append(f"### {ticker}")
+            if discovery:
+                md.append(f"- {discovery}")
+            if isinstance(details, dict) and details:
+                iv = details.get("iv_rank")
+                pc = details.get("put_call_ratio")
+                gamma = details.get("gamma_exposure")
+                if iv is not None:
+                    md.append(f"- IV Rank：{iv}")
+                if pc is not None:
+                    pc_val = pc if isinstance(pc, (int, float)) else pc
+                    md.append(f"- Put/Call Ratio：{pc_val}")
+                if gamma is not None:
+                    md.append(f"- Gamma Exposure：{gamma}")
+                # 异常活动
+                unusual = details.get("unusual_activity", [])
+                if unusual:
+                    md.append(f"- 异常活动：{len(unusual)} 个信号")
+                    for u in unusual[:3]:
+                        if isinstance(u, dict):
+                            utype = u.get("type", "unknown").replace("_", " ")
+                            strike = u.get("strike", "")
+                            vol = u.get("volume", 0)
+                            bull = "看涨" if u.get("bullish") else "看跌"
+                            md.append(f"  - {bull} {utype} ${strike} ({vol:,.0f}手)")
+                        elif isinstance(u, str):
+                            md.append(f"  - {u}")
+            md.append("")
 
-        for i, (ticker, data) in enumerate(sorted_results[:5], 1):
-            resonance_emoji = "✅" if data["resonance"]["resonance_detected"] else "❌"
-            mode = "AI" if data.get("distill_mode") == "llm_enhanced" else "规则"
+        # ====== 版块 4：X 情绪汇总（BuzzBeeWhisper） ======
+        md.append("## 4) X 情绪汇总")
+        md.append("")
+        for ticker, data in sorted_results:
+            agent = data.get("agent_details", {}).get("BuzzBeeWhisper", {})
+            discovery = agent.get("discovery", "")
+            details = agent.get("details", {})
+            md.append(f"### {ticker}")
+            if discovery:
+                md.append(f"- {discovery}")
+            if isinstance(details, dict) and details:
+                sent_pct = details.get("sentiment_pct")
+                mom = details.get("momentum_5d")
+                vol = details.get("volume_ratio")
+                if sent_pct is not None:
+                    md.append(f"- 看多情绪：{sent_pct}%")
+                if mom is not None:
+                    md.append(f"- 5 日动量：{mom:+.1f}%")
+                if vol is not None:
+                    md.append(f"- 量比：{vol:.1f}x")
+                reddit = details.get("reddit_mentions") or details.get("reddit_rank")
+                if reddit:
+                    md.append(f"- Reddit 热度：{reddit}")
+            md.append("")
+
+        # ====== 版块 5：财报/事件催化剂（ChronosBeeHorizon） ======
+        md.append("## 5) 财报/事件催化剂")
+        md.append("")
+        for ticker, data in sorted_results:
+            agent = data.get("agent_details", {}).get("ChronosBeeHorizon", {})
+            discovery = agent.get("discovery", "")
+            details = agent.get("details", {})
+            md.append(f"### {ticker}")
+            if discovery:
+                md.append(f"- {discovery}")
+            if isinstance(details, dict) and details:
+                earnings = details.get("next_earnings") or details.get("earnings_date")
+                if earnings:
+                    md.append(f"- 下次财报：{earnings}")
+                events = details.get("upcoming_events") or details.get("catalysts", [])
+                if isinstance(events, list):
+                    for ev in events[:3]:
+                        if isinstance(ev, dict):
+                            md.append(f"  - {ev.get('date', '?')}：{ev.get('event', ev.get('description', '?'))}")
+                        elif isinstance(ev, str):
+                            md.append(f"  - {ev}")
+                past = details.get("recent_events", [])
+                if isinstance(past, list):
+                    for ev in past[:2]:
+                        if isinstance(ev, dict):
+                            md.append(f"  - [已发生] {ev.get('description', ev)}")
+            md.append("")
+
+        # ====== 版块 6：竞争格局分析（RivalBeeVanguard） ======
+        md.append("## 6) 竞争格局分析")
+        md.append("")
+        for ticker, data in sorted_results:
+            agent = data.get("agent_details", {}).get("RivalBeeVanguard", {})
+            discovery = agent.get("discovery", "")
+            details = agent.get("details", {})
+            md.append(f"### {ticker}")
+            if discovery:
+                md.append(f"- {discovery}")
+            if isinstance(details, dict) and details:
+                ml_pred = details.get("ml_prediction") or details.get("prediction")
+                if isinstance(ml_pred, dict):
+                    md.append(f"- ML 预测方向：{ml_pred.get('direction', '?')}")
+                    md.append(f"- ML 置信度：{ml_pred.get('confidence', '?')}")
+                peers = details.get("peer_comparison") or details.get("peers", [])
+                if isinstance(peers, list) and peers:
+                    md.append(f"- 同业对标：{', '.join(str(p) for p in peers[:5])}")
+            md.append("")
+
+        # ====== 版块 7：综合判断 & 信号强度（GuardBeeSentinel + 全体投票） ======
+        md.append("## 7) 综合判断 & 信号强度")
+        md.append("")
+        md.append("| 标的 | 方向 | 综合分 | 共振 | 投票(多/空/中) | 数据% | 失效条件 |")
+        md.append("|------|------|--------|------|---------------|-------|---------|")
+        for ticker, data in sorted_results:
+            res = "Y" if data["resonance"]["resonance_detected"] else "N"
+            ab = data["agent_breakdown"]
             data_pct = data.get("data_real_pct", 0)
+            # 从 GuardBeeSentinel 获取交叉验证信息
+            guard = data.get("agent_details", {}).get("GuardBeeSentinel", {})
+            guard_discovery = guard.get("discovery", "")
+            thesis_break = "信号分散" if not guard_discovery else guard_discovery[:30]
             md.append(
-                f"| {i} | **{ticker}** | {data['direction'].upper()} | "
-                f"{data['final_score']:.1f} | {resonance_emoji} | "
-                f"{data['supporting_agents']}/6 | {data_pct:.0f}% | {mode} |"
+                f"| **{ticker}** | {data['direction'].upper()} | "
+                f"{data['final_score']:.1f} | {res} | "
+                f"{ab['bullish']}/{ab['bearish']}/{ab['neutral']} | "
+                f"{data_pct:.0f}% | {thesis_break} |"
             )
-
         md.append("")
 
-        # 数据来源与免责
-        md.append("## 📝 蜂群信息源 & 免责声明")
+        # GuardBeeSentinel 详细交叉验证
+        md.append("### 交叉验证详情")
+        md.append("")
+        for ticker, data in sorted_results:
+            guard = data.get("agent_details", {}).get("GuardBeeSentinel", {})
+            discovery = guard.get("discovery", "")
+            if discovery:
+                md.append(f"- **{ticker}**：{discovery}")
+        md.append("")
+
+        # ====== 版块 8：数据来源 & 免责声明 ======
+        md.append("## 8) 数据来源 & 免责声明")
         md.append("")
         md.append("**蜂群分工**：")
-        md.append("- 🔍 **ScoutBeeNova**：聪明钱侦察（拥挤度）")
-        md.append("- 🎲 **OracleBeeEcho**：市场预期（期权 IV/P/C/Gamma）")
-        md.append("- 💬 **BuzzBeeWhisper**：社交情绪（X/StockTwits）")
-        md.append("- ⏰ **ChronosBeeHorizon**：催化剂追踪（财报/事件）")
-        md.append("- 🤖 **RivalBeeVanguard**：ML 预测（行业对标）")
-        md.append("- 🛡️ **GuardBeeSentinel**：交叉验证（共振检测）")
+        md.append("- ScoutBeeNova：聪明钱侦察（SEC Form 4/13F + 拥挤度）")
+        md.append("- OracleBeeEcho：市场预期（期权 IV/P-C Ratio/Gamma）")
+        md.append("- BuzzBeeWhisper：社交情绪（X/Reddit/Finviz）")
+        md.append("- ChronosBeeHorizon：催化剂追踪（财报/事件日历）")
+        md.append("- RivalBeeVanguard：竞争格局（ML 预测 + 行业对标）")
+        md.append("- GuardBeeSentinel：交叉验证（共振检测 + 风险调整）")
         md.append("")
         md.append("**免责声明**：")
         md.append(DISCLAIMER_FULL)

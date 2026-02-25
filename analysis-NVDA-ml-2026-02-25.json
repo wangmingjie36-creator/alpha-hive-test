@@ -1,9 +1,9 @@
 {
   "ticker": "NVDA",
-  "timestamp": "2026-02-25T09:57:06.371996",
+  "timestamp": "2026-02-25T10:54:23.390700",
   "advanced_analysis": {
     "ticker": "NVDA",
-    "timestamp": "2026-02-25T09:57:06.372697",
+    "timestamp": "2026-02-25T10:54:23.391911",
     "overview": "AI \u82af\u7247\u9f99\u5934\uff0cCUDA \u751f\u6001\u62a4\u57ce\u6cb3\u6df1\u539a\uff0c\u4f46\u4f30\u503c\u5df2\u9ad8\uff0c\u76d1\u7ba1\u98ce\u9669\u9700\u5173\u6ce8",
     "industry_comparison": {
       "industry": "GPU",
@@ -125,10 +125,10 @@
     },
     "options_analysis": {
       "ticker": "NVDA",
-      "timestamp": "2026-02-25T09:57:06.373617",
-      "iv_rank": 0,
-      "iv_percentile": 0.0,
-      "iv_current": 1.5,
+      "timestamp": "2026-02-25T10:54:23.392787",
+      "iv_rank": 54.77,
+      "iv_percentile": 90.09,
+      "iv_current": 76.7,
       "put_call_ratio": 0.7,
       "total_oi": 1366331,
       "gamma_exposure": 0.0,
@@ -137,62 +137,62 @@
         {
           "type": "large_call_volume",
           "strike": 200.0,
-          "volume": 71725.0,
+          "volume": 82206.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 215.0,
-          "volume": 61161.0,
+          "volume": 76529.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 210.0,
-          "volume": 52966.0,
+          "volume": 61192.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 195.0,
-          "volume": 46984.0,
+          "volume": 52600.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 205.0,
-          "volume": 33233.0,
+          "volume": 37997.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 220.0,
-          "volume": 30464.0,
+          "volume": 37954.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 207.5,
-          "volume": 30149.0,
-          "bullish": true
-        },
-        {
-          "type": "large_call_volume",
-          "strike": 220.0,
-          "volume": 28551.0,
+          "volume": 32194.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 197.5,
-          "volume": 25740.0,
+          "volume": 29953.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
-          "strike": 230.0,
-          "volume": 24530.0,
+          "strike": 220.0,
+          "volume": 29602.0,
           "bullish": true
+        },
+        {
+          "type": "large_put_volume",
+          "strike": 185.0,
+          "volume": 27801.0,
+          "bullish": false
         }
       ],
       "key_levels": {
@@ -200,40 +200,40 @@
           {
             "strike": 190.0,
             "oi": 36950,
-            "iv": 0.8303239624023437
+            "iv": 0.8325212060546874
           },
           {
             "strike": 105.0,
             "oi": 34118,
-            "iv": 2.1875045312499997
+            "iv": 2.1250046874999997
           },
           {
             "strike": 180.0,
             "oi": 30026,
-            "iv": 0.8901378173828124
+            "iv": 0.8798840136718749
           }
         ],
         "resistance": [
           {
             "strike": 200.0,
             "oi": 109267,
-            "iv": 0.8308122387695311
+            "iv": 0.7983418603515625
           },
           {
             "strike": 195.0,
             "oi": 98625,
-            "iv": 0.8540053662109376
+            "iv": 0.8208025732421874
           },
           {
             "strike": 202.5,
             "oi": 66913,
-            "iv": 0.8159198095703124
+            "iv": 0.7917501293945313
           }
         ]
       },
       "flow_direction": "bullish",
-      "options_score": 6.0,
-      "signal_summary": "\u68c0\u6d4b\u5230 10 \u4e2a\u770b\u6da8\u5f02\u52a8",
+      "options_score": 8.0,
+      "signal_summary": "IV \u5904\u4e8e\u7406\u60f3\u6c34\u4f4d | \u68c0\u6d4b\u5230 9 \u4e2a\u770b\u6da8\u5f02\u52a8",
       "expiration_dates": [
         "2026-02-27",
         "2026-03-02",
@@ -243,7 +243,7 @@
   },
   "ml_prediction": {
     "ticker": "NVDA",
-    "date": "2026-02-25T09:57:06.373649",
+    "date": "2026-02-25T10:54:23.392817",
     "input": {
       "crowding_score": 63.5,
       "catalyst_quality": "A",

@@ -1,9 +1,9 @@
 {
   "ticker": "TSLA",
-  "timestamp": "2026-02-25T09:57:06.371996",
+  "timestamp": "2026-02-25T10:54:23.390700",
   "advanced_analysis": {
     "ticker": "TSLA",
-    "timestamp": "2026-02-25T09:57:06.373945",
+    "timestamp": "2026-02-25T10:54:23.393185",
     "overview": "EV \u6210\u672c\u9886\u5bfc\u8005\uff0c\u4ea7\u80fd\u6269\u5f20\u5feb\uff0c\u4f46\u7ade\u4e89\u52a0\u5267\uff0c\u5229\u6da6\u7387\u627f\u538b",
     "industry_comparison": {
       "industry": "EV",
@@ -102,10 +102,10 @@
     },
     "options_analysis": {
       "ticker": "TSLA",
-      "timestamp": "2026-02-25T09:57:06.375483",
+      "timestamp": "2026-02-25T10:54:23.394402",
       "iv_rank": 0,
       "iv_percentile": 0.0,
-      "iv_current": 1.02,
+      "iv_current": 34.86,
       "put_call_ratio": 0.98,
       "total_oi": 845134,
       "gamma_exposure": 0.0,
@@ -114,77 +114,77 @@
         {
           "type": "call_sweep",
           "strike": 420.0,
-          "volume": 113168.0,
+          "volume": 123596.0,
           "oi": 8421,
-          "ratio": 13.44,
+          "ratio": 14.68,
           "bullish": true
         },
         {
           "type": "call_sweep",
           "strike": 415.0,
-          "volume": 95748.0,
+          "volume": 120499.0,
           "oi": 13657,
-          "ratio": 7.01,
+          "ratio": 8.82,
           "bullish": true
         },
         {
           "type": "call_sweep",
           "strike": 417.5,
-          "volume": 70567.0,
+          "volume": 85763.0,
           "oi": 4272,
-          "ratio": 16.52,
+          "ratio": 20.08,
           "bullish": true
         },
         {
           "type": "put_sweep",
-          "strike": 410.0,
-          "volume": 62772.0,
-          "oi": 4121,
-          "ratio": 15.23,
+          "strike": 415.0,
+          "volume": 73770.0,
+          "oi": 900,
+          "ratio": 81.97,
           "bullish": false
         },
         {
           "type": "put_sweep",
-          "strike": 415.0,
-          "volume": 60511.0,
-          "oi": 900,
-          "ratio": 67.23,
+          "strike": 410.0,
+          "volume": 69133.0,
+          "oi": 4121,
+          "ratio": 16.78,
           "bullish": false
         },
         {
           "type": "put_sweep",
           "strike": 412.5,
-          "volume": 53731.0,
+          "volume": 67947.0,
           "oi": 594,
-          "ratio": 90.46,
+          "ratio": 114.39,
           "bullish": false
         },
         {
           "type": "large_call_volume",
           "strike": 420.0,
-          "volume": 39813.0,
-          "bullish": true
-        },
-        {
-          "type": "call_sweep",
-          "strike": 425.0,
-          "volume": 37077.0,
-          "oi": 4608,
-          "ratio": 8.05,
+          "volume": 43730.0,
           "bullish": true
         },
         {
           "type": "large_call_volume",
           "strike": 400.0,
-          "volume": 35820.0,
+          "volume": 39654.0,
+          "bullish": true
+        },
+        {
+          "type": "call_sweep",
+          "strike": 425.0,
+          "volume": 39540.0,
+          "oi": 4608,
+          "ratio": 8.58,
           "bullish": true
         },
         {
           "type": "call_sweep",
           "strike": 422.5,
-          "volume": 35603.0,
+          "volume": 38188.0,
           "oi": 2941,
-          "ratio": 12.11,
+          "ratio": 12.98,
           "bullish": true
         }
       ],
@@ -198,29 +198,29 @@
           {
             "strike": 375.0,
             "oi": 22173,
-            "iv": 0.57617611328125
+            "iv": 0.5830119824218749
           },
           {
             "strike": 315.0,
             "oi": 14531,
-            "iv": 1.140629296875
+            "iv": 1.1640666796875
           }
         ],
         "resistance": [
           {
             "strike": 660.0,
             "oi": 30414,
-            "iv": 1.5000025
+            "iv": 1.46875265625
           },
           {
             "strike": 620.0,
             "oi": 20313,
-            "iv": 1.3125034374999998
+            "iv": 1.2812535937499998
           },
           {
             "strike": 435.0,
             "oi": 18853,
-            "iv": 0.3398503515625
+            "iv": 0.3178779150390625
           }
         ]
       },
@@ -236,7 +236,7 @@
   },
   "ml_prediction": {
     "ticker": "TSLA",
-    "date": "2026-02-25T09:57:06.375539",
+    "date": "2026-02-25T10:54:23.394454",
     "input": {
       "crowding_score": 63.5,
       "catalyst_quality": "A",

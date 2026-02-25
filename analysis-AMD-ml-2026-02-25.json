@@ -1,9 +1,9 @@
 {
   "ticker": "AMD",
-  "timestamp": "2026-02-25T09:52:31.468745",
+  "timestamp": "2026-02-25T09:57:06.371996",
   "advanced_analysis": {
     "ticker": "AMD",
-    "timestamp": "2026-02-25T09:52:33.632529",
+    "timestamp": "2026-02-25T09:57:06.877000",
     "overview": "GPU \u8ffd\u8d76\u8005\uff0c\u6027\u4ef7\u6bd4\u4f18\u52bf\uff0c\u4f46\u9ad8\u7aef\u5e02\u573a\u4efd\u989d\u4ecd\u4f4e",
     "industry_comparison": {
       "industry": "GPU",
@@ -40,25 +40,25 @@
     },
     "position_management": {
       "stop_loss": {
-        "conservative": 98.0,
-        "moderate": 95.0,
-        "aggressive": 92.0
+        "conservative": 208.08,
+        "moderate": 201.71,
+        "aggressive": 195.34
       },
       "take_profit": {
         "level_1": {
-          "price": 106.0,
+          "price": 225.07,
           "gain_pct": 30,
           "sell_ratio": 0.33,
           "reason": "\u9501\u5b9a\u521d\u6b65\u6536\u76ca"
         },
         "level_2": {
-          "price": 112.0,
+          "price": 237.81,
           "gain_pct": 60,
           "sell_ratio": 0.33,
           "reason": "\u8ffd\u8e2a\u6b62\u635f\uff0c\u4fdd\u62a4\u5229\u6da6"
         },
         "level_3": {
-          "price": 120.0,
+          "price": 254.8,
           "gain_pct": 20.0,
           "sell_ratio": 0.34,
           "reason": "\u8fbe\u5230\u76ee\u6807\u6536\u76ca\uff0c\u5168\u90e8\u6e05\u4ed3"
@@ -76,7 +76,7 @@
     },
     "options_analysis": {
       "ticker": "AMD",
-      "timestamp": "2026-02-25T09:52:34.205703",
+      "timestamp": "2026-02-25T09:57:06.879817",
       "iv_rank": 0,
       "iv_percentile": 0.0,
       "iv_current": 1.17,
@@ -158,29 +158,477 @@
   },
   "ml_prediction": {
     "ticker": "AMD",
-    "date": "2026-02-25T09:52:34.205784",
+    "date": "2026-02-25T09:57:06.879974",
     "input": {
       "crowding_score": 63.5,
       "catalyst_quality": "A",
-      "momentum_5d": 0,
+      "momentum_5d": -0.7061328716307935,
       "volatility": 5.0,
       "market_sentiment": 45
     },
     "prediction": {
-      "probability": 0.8792195174112427,
-      "expected_3d": 4.095,
-      "expected_7d": 10.92,
-      "expected_30d": 16.38
+      "probability": 0.8743971032232776,
+      "expected_3d": 3.8831601385107617,
+      "expected_7d": 10.355093702695365,
+      "expected_30d": 15.532640554043047
     },
     "recommendation": "STRONG BUY - \u9ad8\u6982\u7387\u673a\u4f1a"
   },
   "combined_recommendation": {
     "human_probability": 65.0,
-    "ml_probability": 87.9,
-    "combined_probability": 71.9,
+    "ml_probability": 87.4,
+    "combined_probability": 71.7,
     "rating": "BUY",
     "action": "\u5206\u6279\u5efa\u4ed3",
-    "confidence": "71.9%",
-    "reasoning": "\u4eba\u5de5\u5206\u6790 65.0% + ML \u9884\u6d4b 87.9% = \u7efc\u5408 71.9%"
+    "confidence": "71.7%",
+    "reasoning": "\u4eba\u5de5\u5206\u6790 65.0% + ML \u9884\u6d4b 87.4% = \u7efc\u5408 71.7%"
+  },
+  "swarm_results": {
+    "ticker": "AMD",
+    "final_score": 4.44,
+    "direction": "neutral",
+    "resonance": {
+      "resonance_detected": false,
+      "direction": "bullish",
+      "supporting_agents": 2,
+      "confidence_boost": 10
+    },
+    "supporting_agents": 7,
+    "agent_breakdown": {
+      "bullish": 2,
+      "bearish": 0,
+      "neutral": 5
+    },
+    "agent_directions": {
+      "RivalBeeVanguard": "neutral",
+      "BuzzBeeWhisper": "neutral",
+      "GuardBeeSentinel": "neutral",
+      "ScoutBeeNova": "neutral",
+      "OracleBeeEcho": "bullish",
+      "ChronosBeeHorizon": "neutral",
+      "CodeExecutorAgent": "neutral",
+      "BearBeeContrarian": "bullish"
+    },
+    "agent_details": {
+      "RivalBeeVanguard": {
+        "discovery": "ML \u80dc\u7387 0% | 7d +0.00% | 30d +0.00%",
+        "score": 1.0,
+        "direction": "neutral",
+        "confidence": 0.8,
+        "dimension": "ml_auxiliary",
+        "details": {
+          "probability": 0.0,
+          "expected_3d": 0,
+          "expected_7d": 0,
+          "expected_30d": 0
+        }
+      },
+      "BuzzBeeWhisper": {
+        "discovery": "\u60c5\u7eea 56% | \u52a8\u91cf +4.4% | \u91cf\u6bd4 0.6x | Reddit #4(hot,124\u63d0\u53ca) | \u65b0\u95fb\u504f\u591a\uff085\u591a/2\u7a7a\uff09",
+        "score": 5.63,
+        "direction": "neutral",
+        "confidence": 0.9,
+        "dimension": "sentiment",
+        "details": {
+          "sentiment_pct": 56,
+          "momentum_5d": 4.433789894040063,
+          "volume_ratio": 0.6180721113790718,
+          "volatility_20d": 83.2786936221074,
+          "reddit": {
+            "rank": 4,
+            "mentions": 124,
+            "mention_delta": -120,
+            "buzz": "hot",
+            "score": 5.5
+          },
+          "components": {
+            "momentum_signal": 72.2,
+            "volume_signal": 35,
+            "volatility_signal": 25,
+            "reddit_signal": 55.0
+          }
+        }
+      },
+      "GuardBeeSentinel": {
+        "discovery": "\u4fe1\u53f7\u5206\u6563 | \u5747\u5206 5.0 | \u4e00\u81f4\u6027 0% | \u98ce\u9669\u8c03\u6574 0.95",
+        "score": 3.8,
+        "direction": "neutral",
+        "confidence": 0.4,
+        "dimension": "risk_adj",
+        "details": {
+          "resonance": {
+            "resonance_detected": false,
+            "direction": "bullish",
+            "supporting_agents": 0,
+            "confidence_boost": 0
+          },
+          "top_signals_count": 0,
+          "consistency": 0,
+          "adjustment_factor": 0.95
+        }
+      },
+      "ScoutBeeNova": {
+        "discovery": "\u5185\u5e55\u5356\u51fa $35,664,692 | Norrod Forrest Eugene \u7a0e\u8d39\u6263\u80a1 30,287\u80a1 | \u62e5\u6324\u5ea6 36/100\uff08\u4e2d\u7b49\u62e5\u6324\u5ea6\uff09 | \u52a8\u91cf +4.4%",
+        "score": 3.16,
+        "direction": "neutral",
+        "confidence": 0.96,
+        "dimension": "signal",
+        "details": {
+          "insider": {
+            "sentiment": "bearish",
+            "score": 1.0,
+            "filings": 10,
+            "dollar_bought": 0.0,
+            "dollar_sold": 35664692.06,
+            "notable_trades": [
+              {
+                "insider": "Norrod Forrest Eugene",
+                "title": "EVP & GM DESG",
+                "is_officer": true,
+                "is_director": false,
+                "code": "F",
+                "code_desc": "\u7a0e\u8d39\u6263\u80a1",
+                "shares": 30287.0,
+                "price": 207.32,
+                "date": "2026-02-15",
+                "total_value": 6279100.84,
+                "security": "Common Stock"
+              },
+              {
+                "insider": "Su Lisa T",
+                "title": "Chair, President & CEO",
+                "is_officer": true,
+                "is_director": true,
+                "code": "S",
+                "code_desc": "\u5356\u51fa",
+                "shares": 20988.0,
+                "price": 217.75,
+                "date": "2026-02-11",
+                "total_value": 4570137.0,
+                "security": "Common Stock"
+              },
+              {
+                "insider": "Su Lisa T",
+                "title": "Chair, President & CEO",
+                "is_officer": true,
+                "is_director": true,
+                "code": "S",
+                "code_desc": "\u5356\u51fa",
+                "shares": 19103.0,
+                "price": 213.08,
+                "date": "2026-02-11",
+                "total_value": 4070467.24,
+                "security": "Common Stock"
+              }
+            ]
+          },
+          "crowding_score": 36.07,
+          "crowding_signal": 6.39,
+          "components": {
+            "stocktwits_volume": 70.0,
+            "google_trends": 23.8,
+            "consensus_strength": 0.0,
+            "polymarket_volatility": 40,
+            "seeking_alpha_views": 60,
+            "short_squeeze_risk": 30
+          },
+          "adjustment_factor": 0.95,
+          "momentum_5d": 4.433789894040063,
+          "price": 212.38699340820312
+        }
+      },
+      "OracleBeeEcho": {
+        "discovery": "\u68c0\u6d4b\u5230 3 \u4e2a\u770b\u6da8\u5f02\u52a8 | $212.4 | \u9884\u6d4b\u5e02\u573a\u770b\u7a7a\uff08\u9690\u542b\u6982\u7387 99%\uff09",
+        "score": 3.5,
+        "direction": "bullish",
+        "confidence": 1.0,
+        "dimension": "odds",
+        "details": {
+          "ticker": "AMD",
+          "timestamp": "2026-02-25T09:56:56.822789",
+          "iv_rank": 0,
+          "iv_percentile": 0.0,
+          "iv_current": 1.17,
+          "put_call_ratio": 1.81,
+          "total_oi": 634066,
+          "gamma_exposure": 0.0,
+          "gamma_squeeze_risk": "medium",
+          "unusual_activity": [
+            {
+              "type": "large_call_volume",
+              "strike": 215.0,
+              "volume": 20165.0,
+              "bullish": true
+            },
+            {
+              "type": "large_put_volume",
+              "strike": 210.0,
+              "volume": 13523.0,
+              "bullish": false
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 212.5,
+              "volume": 11093.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 220.0,
+              "volume": 10798.0,
+              "bullish": true
+            }
+          ],
+          "key_levels": {
+            "support": [
+              {
+                "strike": 192.5,
+                "oi": 73028,
+                "iv": 0.788088056640625
+              },
+              {
+                "strike": 170.0,
+                "oi": 46195,
+                "iv": 1.0078174609375
+              },
+              {
+                "strike": 167.5,
+                "oi": 28234,
+                "iv": 1.015629921875
+              }
+            ],
+            "resistance": [
+              {
+                "strike": 230.0,
+                "oi": 12688,
+                "iv": 0.6171913281250001
+              },
+              {
+                "strike": 210.0,
+                "oi": 10203,
+                "iv": 0.6469761865234375
+              },
+              {
+                "strike": 220.0,
+                "oi": 8845,
+                "iv": 0.6247596118164063
+              }
+            ]
+          },
+          "flow_direction": "bearish",
+          "options_score": 3.5,
+          "signal_summary": "\u68c0\u6d4b\u5230 3 \u4e2a\u770b\u6da8\u5f02\u52a8",
+          "expiration_dates": [
+            "2026-02-27",
+            "2026-03-06",
+            "2026-03-13"
+          ]
+        }
+      },
+      "ChronosBeeHorizon": {
+        "discovery": "\u50ac\u5316\u5242 2 \u4e2a | \u6700\u8fd1\uff1aEx-Dividend Date\uff080\u5929\u540e\uff09",
+        "score": 6.5,
+        "direction": "neutral",
+        "confidence": 0.7,
+        "dimension": "catalyst",
+        "details": {
+          "catalysts": [
+            {
+              "event": "Ex-Dividend Date",
+              "date": "1995-04-26",
+              "days_until": 0,
+              "type": "dividend",
+              "severity": "medium"
+            },
+            {
+              "event": "\u8d22\u62a5\u53d1\u5e03",
+              "date": "2026-05-05",
+              "days_until": 68,
+              "type": "earnings",
+              "severity": "high"
+            }
+          ]
+        }
+      },
+      "CodeExecutorAgent": {
+        "discovery": "\u274c \u6570\u636e\u722c\u53d6\u5931\u8d25: ConnectionError",
+        "score": 2.0,
+        "direction": "neutral",
+        "confidence": 0.5,
+        "dimension": "unknown",
+        "details": {}
+      },
+      "BearBeeContrarian": {
+        "discovery": "\u5185\u5e55\u5927\u989d\u629b\u552e $35,664,692\uff08\u4e70\u5165\u4ec5 $0\uff09 | \u9ad8\u6ce2\u52a8\u7387 83%\uff08\u5e74\u5316\uff09",
+        "score": 7.17,
+        "direction": "bullish",
+        "confidence": 0.7,
+        "dimension": "contrarian",
+        "details": {
+          "bear_score": 2.83,
+          "bearish_signals": [
+            "\u5185\u5e55\u5927\u989d\u629b\u552e $35,664,692\uff08\u4e70\u5165\u4ec5 $0\uff09",
+            "\u9ad8\u6ce2\u52a8\u7387 83%\uff08\u5e74\u5316\uff09"
+          ],
+          "insider_bear": 8.0,
+          "overval_bear": 0.0,
+          "options_bear": 0.0,
+          "momentum_bear": 5.5,
+          "news_bear": 0.0,
+          "data_sources": {
+            "insider": "pheromone_board",
+            "valuation": "yfinance",
+            "options": "pheromone_board",
+            "momentum": "yfinance",
+            "news": "finviz_api"
+          }
+        }
+      }
+    },
+    "dimension_scores": {
+      "sentiment": 5.63,
+      "risk_adj": 3.8,
+      "signal": 3.16,
+      "odds": 3.5,
+      "catalyst": 6.5
+    },
+    "dimension_confidence": {
+      "sentiment": 0.9,
+      "risk_adj": 0.4,
+      "signal": 0.96,
+      "odds": 1.0,
+      "catalyst": 0.7
+    },
+    "dimension_weights": {
+      "signal": 0.098,
+      "catalyst": 0.23,
+      "sentiment": 0.23,
+      "odds": 0.22,
+      "risk_adj": 0.22
+    },
+    "ml_adjustment": -0.32,
+    "base_score_before_resonance": 4.44,
+    "pheromone_compact": [
+      {
+        "a": "CodeExec",
+        "t": "AMD",
+        "d": "n",
+        "s": 5.0,
+        "p": 0.9,
+        "c": 6
+      },
+      {
+        "a": "RivalBee",
+        "t": "AMD",
+        "d": "n",
+        "s": 1.0,
+        "p": 0.3,
+        "c": 0
+      },
+      {
+        "a": "BuzzBeeW",
+        "t": "AMD",
+        "d": "n",
+        "s": 5.6,
+        "p": 0.4,
+        "c": 0
+      },
+      {
+        "a": "GuardBee",
+        "t": "AMD",
+        "d": "n",
+        "s": 3.8,
+        "p": 0.5,
+        "c": 0
+      },
+      {
+        "a": "ScoutBee",
+        "t": "AMD",
+        "d": "n",
+        "s": 3.2,
+        "p": 0.6,
+        "c": 0
+      },
+      {
+        "a": "OracleBe",
+        "t": "AMD",
+        "d": "b",
+        "s": 3.5,
+        "p": 0.9,
+        "c": 1
+      },
+      {
+        "a": "ChronosB",
+        "t": "AMD",
+        "d": "n",
+        "s": 6.5,
+        "p": 0.8,
+        "c": 0
+      },
+      {
+        "a": "CodeExec",
+        "t": "AMD",
+        "d": "n",
+        "s": 2.0,
+        "p": 0.9,
+        "c": 0
+      },
+      {
+        "a": "BearBeeC",
+        "t": "AMD",
+        "d": "b",
+        "s": 7.2,
+        "p": 1.0,
+        "c": 0
+      }
+    ],
+    "data_quality": {
+      "RivalBeeVanguard": {
+        "ml_prediction": "real"
+      },
+      "BuzzBeeWhisper": {
+        "momentum": "real",
+        "volume": "real",
+        "volatility": "real",
+        "reddit": "real",
+        "finviz_news": "keyword"
+      },
+      "GuardBeeSentinel": {
+        "pheromone_board": "real",
+        "crowding": "real"
+      },
+      "ScoutBeeNova": {
+        "social_buzz": "real",
+        "google_trends": "proxy_volume",
+        "bullish_agents": "real",
+        "polymarket": "proxy_momentum",
+        "seeking_alpha": "proxy_social",
+        "short_interest": "real",
+        "momentum": "real"
+      },
+      "OracleBeeEcho": {
+        "options": "real",
+        "polymarket": "real"
+      },
+      "ChronosBeeHorizon": {
+        "yfinance_calendar": "real",
+        "catalyst_refinement": "real"
+      },
+      "BearBeeContrarian": {
+        "insider": "pheromone_board",
+        "valuation": "yfinance",
+        "options": "pheromone_board",
+        "momentum": "yfinance",
+        "news": "finviz_api"
+      }
+    },
+    "data_real_pct": 62.5,
+    "distill_mode": "rule_engine",
+    "reasoning": "",
+    "key_insight": "",
+    "risk_flag": "",
+    "llm_confidence": 0.0,
+    "rule_score": 4.44,
+    "rule_direction": "neutral"
   }
 }

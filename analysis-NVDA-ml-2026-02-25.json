@@ -1,9 +1,9 @@
 {
   "ticker": "NVDA",
-  "timestamp": "2026-02-25T09:52:31.468745",
+  "timestamp": "2026-02-25T09:57:06.371996",
   "advanced_analysis": {
     "ticker": "NVDA",
-    "timestamp": "2026-02-25T09:52:31.469126",
+    "timestamp": "2026-02-25T09:57:06.372697",
     "overview": "AI \u82af\u7247\u9f99\u5934\uff0cCUDA \u751f\u6001\u62a4\u57ce\u6cb3\u6df1\u539a\uff0c\u4f46\u4f30\u503c\u5df2\u9ad8\uff0c\u76d1\u7ba1\u98ce\u9669\u9700\u5173\u6ce8",
     "industry_comparison": {
       "industry": "GPU",
@@ -125,7 +125,7 @@
     },
     "options_analysis": {
       "ticker": "NVDA",
-      "timestamp": "2026-02-25T09:52:32.419134",
+      "timestamp": "2026-02-25T09:57:06.373617",
       "iv_rank": 0,
       "iv_percentile": 0.0,
       "iv_current": 1.5,
@@ -243,7 +243,7 @@
   },
   "ml_prediction": {
     "ticker": "NVDA",
-    "date": "2026-02-25T09:52:32.419244",
+    "date": "2026-02-25T09:57:06.373649",
     "input": {
       "crowding_score": 63.5,
       "catalyst_quality": "A",
@@ -267,5 +267,495 @@
     "action": "\u5206\u6279\u5efa\u4ed3",
     "confidence": "72.4%",
     "reasoning": "\u4eba\u5de5\u5206\u6790 65.0% + ML \u9884\u6d4b 89.7% = \u7efc\u5408 72.4%"
+  },
+  "swarm_results": {
+    "ticker": "NVDA",
+    "final_score": 6.52,
+    "direction": "bullish",
+    "resonance": {
+      "resonance_detected": true,
+      "direction": "bullish",
+      "supporting_agents": 5,
+      "confidence_boost": 20
+    },
+    "supporting_agents": 7,
+    "agent_breakdown": {
+      "bullish": 5,
+      "bearish": 0,
+      "neutral": 2
+    },
+    "agent_directions": {
+      "RivalBeeVanguard": "bullish",
+      "GuardBeeSentinel": "neutral",
+      "OracleBeeEcho": "bullish",
+      "ScoutBeeNova": "neutral",
+      "ChronosBeeHorizon": "bullish",
+      "CodeExecutorAgent": "neutral",
+      "BuzzBeeWhisper": "bullish",
+      "BearBeeContrarian": "bullish"
+    },
+    "agent_details": {
+      "RivalBeeVanguard": {
+        "discovery": "ML \u80dc\u7387 28% | 7d +1.38% | 30d +1.53% | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
+        "score": 2.82,
+        "direction": "bullish",
+        "confidence": 0.8,
+        "dimension": "ml_auxiliary",
+        "details": {
+          "probability": 0.2817,
+          "expected_3d": 0.99,
+          "expected_7d": 1.38,
+          "expected_30d": 1.53
+        }
+      },
+      "GuardBeeSentinel": {
+        "discovery": "\u4fe1\u53f7\u5206\u6563 | \u5747\u5206 5.0 | \u4e00\u81f4\u6027 0% | \u98ce\u9669\u8c03\u6574 0.95 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
+        "score": 3.8,
+        "direction": "neutral",
+        "confidence": 0.4,
+        "dimension": "risk_adj",
+        "details": {
+          "resonance": {
+            "resonance_detected": false,
+            "direction": "bullish",
+            "supporting_agents": 0,
+            "confidence_boost": 0
+          },
+          "top_signals_count": 0,
+          "consistency": 0,
+          "adjustment_factor": 0.95
+        }
+      },
+      "OracleBeeEcho": {
+        "discovery": "\u68c0\u6d4b\u5230 10 \u4e2a\u770b\u6da8\u5f02\u52a8 | $197.1 | \u9884\u6d4b\u5e02\u573a\u770b\u7a7a\uff08\u9690\u542b\u6982\u7387 99%\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
+        "score": 5.0,
+        "direction": "bullish",
+        "confidence": 1.0,
+        "dimension": "odds",
+        "details": {
+          "ticker": "NVDA",
+          "timestamp": "2026-02-25T09:56:49.245613",
+          "iv_rank": 0,
+          "iv_percentile": 0.0,
+          "iv_current": 1.5,
+          "put_call_ratio": 0.7,
+          "total_oi": 1366331,
+          "gamma_exposure": 0.0,
+          "gamma_squeeze_risk": "medium",
+          "unusual_activity": [
+            {
+              "type": "large_call_volume",
+              "strike": 200.0,
+              "volume": 71725.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 215.0,
+              "volume": 61161.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 210.0,
+              "volume": 52966.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 195.0,
+              "volume": 46984.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 205.0,
+              "volume": 33233.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 220.0,
+              "volume": 30464.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 207.5,
+              "volume": 30149.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 220.0,
+              "volume": 28551.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 197.5,
+              "volume": 25740.0,
+              "bullish": true
+            },
+            {
+              "type": "large_call_volume",
+              "strike": 230.0,
+              "volume": 24530.0,
+              "bullish": true
+            }
+          ],
+          "key_levels": {
+            "support": [
+              {
+                "strike": 190.0,
+                "oi": 36950,
+                "iv": 0.8303239624023437
+              },
+              {
+                "strike": 105.0,
+                "oi": 34118,
+                "iv": 2.1875045312499997
+              },
+              {
+                "strike": 180.0,
+                "oi": 30026,
+                "iv": 0.8901378173828124
+              }
+            ],
+            "resistance": [
+              {
+                "strike": 200.0,
+                "oi": 109267,
+                "iv": 0.8308122387695311
+              },
+              {
+                "strike": 195.0,
+                "oi": 98625,
+                "iv": 0.8540053662109376
+              },
+              {
+                "strike": 202.5,
+                "oi": 66913,
+                "iv": 0.8159198095703124
+              }
+            ]
+          },
+          "flow_direction": "bullish",
+          "options_score": 6.0,
+          "signal_summary": "\u68c0\u6d4b\u5230 10 \u4e2a\u770b\u6da8\u5f02\u52a8",
+          "expiration_dates": [
+            "2026-02-27",
+            "2026-03-02",
+            "2026-03-04"
+          ]
+        }
+      },
+      "ScoutBeeNova": {
+        "discovery": "\u5185\u5e55\u5356\u51fa $150,452,443 | STEVENS MARK A \u5356\u51fa 222,500\u80a1 | \u62e5\u6324\u5ea6 49/100\uff08\u4e2d\u7b49\u62e5\u6324\u5ea6\uff09 | \u52a8\u91cf +4.9% | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
+        "score": 2.65,
+        "direction": "neutral",
+        "confidence": 0.96,
+        "dimension": "signal",
+        "details": {
+          "insider": {
+            "sentiment": "bearish",
+            "score": 1.0,
+            "filings": 10,
+            "dollar_bought": 0.0,
+            "dollar_sold": 150452443.4,
+            "notable_trades": [
+              {
+                "insider": "STEVENS MARK A",
+                "title": "",
+                "is_officer": false,
+                "is_director": true,
+                "code": "S",
+                "code_desc": "\u5356\u51fa",
+                "shares": 222500.0,
+                "price": 180.168,
+                "date": "2025-12-19",
+                "total_value": 40087380.0,
+                "security": "Common Stock"
+              },
+              {
+                "insider": "Puri Ajay K",
+                "title": "EVP, Worldwide Field Ops",
+                "is_officer": true,
+                "is_director": false,
+                "code": "S",
+                "code_desc": "\u5356\u51fa",
+                "shares": 200000.0,
+                "price": 180.0358,
+                "date": "2026-01-21",
+                "total_value": 36007160.0,
+                "security": "Common Stock"
+              },
+              {
+                "insider": "Puri Ajay K",
+                "title": "EVP, Worldwide Field Ops",
+                "is_officer": true,
+                "is_director": false,
+                "code": "S",
+                "code_desc": "\u5356\u51fa",
+                "shares": 128793.0,
+                "price": 188.1294,
+                "date": "2026-01-07",
+                "total_value": 24229749.81,
+                "security": "Common Stock"
+              }
+            ]
+          },
+          "crowding_score": 48.638333333333335,
+          "crowding_signal": 5.14,
+          "components": {
+            "stocktwits_volume": 78.34,
+            "google_trends": 24.8,
+            "consensus_strength": 33.33333333333333,
+            "polymarket_volatility": 40,
+            "seeking_alpha_views": 80,
+            "short_squeeze_risk": 30
+          },
+          "adjustment_factor": 0.95,
+          "momentum_5d": 4.89888351785992,
+          "price": 197.10499572753906
+        }
+      },
+      "ChronosBeeHorizon": {
+        "discovery": "\u50ac\u5316\u5242 3 \u4e2a | \u6700\u8fd1\uff1aEx-Dividend Date\uff080\u5929\u540e\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
+        "score": 7.8,
+        "direction": "bullish",
+        "confidence": 0.8,
+        "dimension": "catalyst",
+        "details": {
+          "catalysts": [
+            {
+              "event": "Ex-Dividend Date",
+              "date": "2025-12-03",
+              "days_until": 0,
+              "type": "dividend",
+              "severity": "medium"
+            },
+            {
+              "event": "Dividend Date",
+              "date": "2025-12-25",
+              "days_until": 0,
+              "type": "dividend",
+              "severity": "medium"
+            },
+            {
+              "event": "Q4 FY2026 \u8d22\u62a5\u53d1\u5e03",
+              "date": "2026-03-15",
+              "days_until": 17,
+              "type": "earnings",
+              "severity": "critical"
+            }
+          ]
+        }
+      },
+      "CodeExecutorAgent": {
+        "discovery": "\u274c \u6570\u636e\u722c\u53d6\u5931\u8d25: ConnectionError",
+        "score": 2.0,
+        "direction": "neutral",
+        "confidence": 0.5,
+        "dimension": "unknown",
+        "details": {}
+      },
+      "BuzzBeeWhisper": {
+        "discovery": "\u60c5\u7eea 70% | \u52a8\u91cf +4.9% | \u91cf\u6bd4 0.7x | Reddit #1(hot,701\u63d0\u53ca) | \u65b0\u95fb\u504f\u591a\uff0811\u591a/2\u7a7a\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
+        "score": 7.02,
+        "direction": "bullish",
+        "confidence": 0.9,
+        "dimension": "sentiment",
+        "details": {
+          "sentiment_pct": 70,
+          "momentum_5d": 4.89888351785992,
+          "volume_ratio": 0.6511947654162455,
+          "volatility_20d": 39.011754378279946,
+          "reddit": {
+            "rank": 1,
+            "mentions": 701,
+            "mention_delta": 425,
+            "buzz": "hot",
+            "score": 8.5
+          },
+          "components": {
+            "momentum_signal": 74.5,
+            "volume_signal": 35,
+            "volatility_signal": 60,
+            "reddit_signal": 85.0
+          }
+        }
+      },
+      "BearBeeContrarian": {
+        "discovery": "\u5185\u5e55\u5927\u989d\u629b\u552e $150,452,443\uff08\u4e70\u5165\u4ec5 $0\uff09 | \u5386\u53f25\u6761:\u591a5/\u7a7a0,\u5747\u52066.7",
+        "score": 8.0,
+        "direction": "bullish",
+        "confidence": 0.6,
+        "dimension": "contrarian",
+        "details": {
+          "bear_score": 2.0,
+          "bearish_signals": [
+            "\u5185\u5e55\u5927\u989d\u629b\u552e $150,452,443\uff08\u4e70\u5165\u4ec5 $0\uff09"
+          ],
+          "insider_bear": 8.0,
+          "overval_bear": 0.0,
+          "options_bear": 0.0,
+          "momentum_bear": 0.0,
+          "news_bear": 0.0,
+          "data_sources": {
+            "insider": "pheromone_board",
+            "valuation": "yfinance",
+            "options": "pheromone_board",
+            "momentum": "yfinance",
+            "news": "finviz_api"
+          }
+        }
+      }
+    },
+    "dimension_scores": {
+      "risk_adj": 3.8,
+      "odds": 5.0,
+      "signal": 2.65,
+      "catalyst": 7.8,
+      "sentiment": 7.02
+    },
+    "dimension_confidence": {
+      "risk_adj": 0.4,
+      "odds": 1.0,
+      "signal": 0.96,
+      "catalyst": 0.8,
+      "sentiment": 0.9
+    },
+    "dimension_weights": {
+      "signal": 0.098,
+      "catalyst": 0.23,
+      "sentiment": 0.23,
+      "odds": 0.22,
+      "risk_adj": 0.22
+    },
+    "ml_adjustment": -0.174,
+    "base_score_before_resonance": 5.43,
+    "pheromone_compact": [
+      {
+        "a": "CodeExec",
+        "t": "NVDA",
+        "d": "n",
+        "s": 5.0,
+        "p": 0.8,
+        "c": 3
+      },
+      {
+        "a": "RivalBee",
+        "t": "NVDA",
+        "d": "b",
+        "s": 2.8,
+        "p": 1.0,
+        "c": 4
+      },
+      {
+        "a": "GuardBee",
+        "t": "NVDA",
+        "d": "n",
+        "s": 3.8,
+        "p": 0.4,
+        "c": 0
+      },
+      {
+        "a": "OracleBe",
+        "t": "NVDA",
+        "d": "b",
+        "s": 5.0,
+        "p": 0.5,
+        "c": 0
+      },
+      {
+        "a": "ScoutBee",
+        "t": "NVDA",
+        "d": "n",
+        "s": 2.7,
+        "p": 0.6,
+        "c": 0
+      },
+      {
+        "a": "ChronosB",
+        "t": "NVDA",
+        "d": "b",
+        "s": 7.8,
+        "p": 0.7,
+        "c": 0
+      },
+      {
+        "a": "CodeExec",
+        "t": "NVDA",
+        "d": "n",
+        "s": 2.0,
+        "p": 0.8,
+        "c": 0
+      },
+      {
+        "a": "BuzzBeeW",
+        "t": "NVDA",
+        "d": "b",
+        "s": 7.0,
+        "p": 0.9,
+        "c": 0
+      },
+      {
+        "a": "BearBeeC",
+        "t": "NVDA",
+        "d": "b",
+        "s": 8.0,
+        "p": 1.0,
+        "c": 0
+      }
+    ],
+    "data_quality": {
+      "RivalBeeVanguard": {
+        "ml_prediction": "real"
+      },
+      "GuardBeeSentinel": {
+        "pheromone_board": "real",
+        "crowding": "real"
+      },
+      "OracleBeeEcho": {
+        "options": "real",
+        "polymarket": "real"
+      },
+      "ScoutBeeNova": {
+        "social_buzz": "real",
+        "google_trends": "proxy_volume",
+        "bullish_agents": "real",
+        "polymarket": "proxy_momentum",
+        "seeking_alpha": "proxy_social",
+        "short_interest": "real",
+        "momentum": "real"
+      },
+      "ChronosBeeHorizon": {
+        "yfinance_calendar": "real",
+        "catalyst_refinement": "real"
+      },
+      "BuzzBeeWhisper": {
+        "momentum": "real",
+        "volume": "real",
+        "volatility": "real",
+        "reddit": "real",
+        "finviz_news": "keyword"
+      },
+      "BearBeeContrarian": {
+        "insider": "pheromone_board",
+        "valuation": "yfinance",
+        "options": "pheromone_board",
+        "momentum": "yfinance",
+        "news": "finviz_api"
+      }
+    },
+    "data_real_pct": 62.5,
+    "distill_mode": "rule_engine",
+    "reasoning": "",
+    "key_insight": "",
+    "risk_flag": "",
+    "llm_confidence": 0.0,
+    "rule_score": 6.52,
+    "rule_direction": "bullish"
   }
 }

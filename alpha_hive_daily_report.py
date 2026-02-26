@@ -1542,11 +1542,6 @@ class AlphaHiveDailyReporter:
 
     def _generate_ml_reports(self, report: Dict) -> List[str]:
         """为扫描标的批量生成 ML 增强 HTML 报告（同步写入，供 _generate_index_html 检测到文件后添加链接）"""
-        opps = report.get("opportunities", [])
-        tickers = [o.get("ticker") for o in opps if o.get("ticker")]
-        if not tickers:
-            return []
-
         # 加载蜂群详细数据（save_report 已写入 .swarm_results_*.json）
         swarm_data: Dict = {}
         sr_path = self.report_dir / f".swarm_results_{self.date_str}.json"
@@ -1556,6 +1551,14 @@ class AlphaHiveDailyReporter:
                     swarm_data = json.load(f)
             except (OSError, json.JSONDecodeError):
                 pass
+
+        # 用 swarm_data 所有标的（而非仅 opportunities 前几名），确保每个扫描标的都有 ML 报告
+        opps = report.get("opportunities", [])
+        opp_tickers = [o.get("ticker") for o in opps if o.get("ticker")]
+        extra = [t for t in swarm_data if t not in opp_tickers]
+        tickers = opp_tickers + extra
+        if not tickers:
+            return []
 
         generated = []
         for ticker in tickers:
@@ -1802,6 +1805,181 @@ class AlphaHiveDailyReporter:
                     <td>{ml_td}</td>
                 </tr>"""
 
+        # ── Phase 3 增强：宏观面板 + 深度卡片 + Markdown 渲染 ──
+        import re as _re
+
+        # extra_css：用普通字符串（不用 f-string），避免 CSS 大括号转义问题
+        extra_css = """
+        .reports-list { display: flex; flex-direction: column; gap: 12px; }
+        .report-item { border: 1px solid #eee; border-radius: 8px; padding: 12px; }
+        .report-date { font-size: 0.85em; color: #666; margin-bottom: 8px; }
+        .report-links { display: flex; flex-wrap: wrap; gap: 8px; }
+        .rl { display: inline-block; padding: 5px 12px; border-radius: 15px; font-size: 0.82em;
+              font-weight: bold; text-decoration: none; transition: opacity 0.2s; }
+        .rl:hover { opacity: 0.85; }
+        .rl.md { background: #667eea; color: white; }
+        .rl.json { background: #764ba2; color: white; }
+        .rl.ml-rl { background: #17a2b8; color: white; font-size: 0.78em; padding: 4px 10px; }
+        .company-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px; }
+        .company-card { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.09); }
+        .cc-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; color: white; }
+        .cc-ticker { font-size: 1.4em; font-weight: bold; }
+        .cc-dir { font-size: 0.88em; background: rgba(255,255,255,0.22); padding: 3px 12px; border-radius: 12px; }
+        .cc-score { font-size: 1.1em; font-weight: bold; }
+        .cc-score.sc-h { color: #90EE90; } .cc-score.sc-m { color: #FFD700; } .cc-score.sc-l { color: #FFB6C1; }
+        .cc-body { padding: 16px 20px; background: white; }
+        .cc-metrics { display: flex; gap: 12px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
+        .cc-metric { flex: 1; text-align: center; background: #f8f9fa; border-radius: 8px; padding: 8px 4px; }
+        .cm-l { display: block; font-size: 0.75em; color: #888; }
+        .cm-v { display: block; font-size: 1em; font-weight: bold; color: #333; margin-top: 3px; }
+        .cc-signals { list-style: none; padding: 0; margin: 0 0 14px 0; }
+        .cc-signals li { padding: 5px 0; border-bottom: 1px dashed #f5f5f5; font-size: 0.87em; color: #444; line-height: 1.5; }
+        .cc-signals li:last-child { border-bottom: none; }
+        .cc-footer { text-align: right; margin-top: 4px; }
+        .ml-btn { display: inline-block; padding: 6px 16px; background: linear-gradient(135deg,#667eea,#764ba2);
+                  color: white; border-radius: 15px; font-size: 0.82em; font-weight: bold; text-decoration: none; }
+        .ml-btn:hover { opacity: 0.88; }
+        .ml-btn-na { font-size: 0.82em; color: #bbb; font-style: italic; }
+        .report-body { font-size: 0.92em; line-height: 1.8; color: #333; max-height: 900px; overflow-y: auto; padding-right: 8px; }
+        .report-body h1 { font-size: 1.5em; color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin: 20px 0 12px; }
+        .report-body h2 { font-size: 1.2em; color: #667eea; border-left: 4px solid #667eea; padding-left: 10px; margin: 16px 0 8px; }
+        .report-body h3 { font-size: 1.05em; color: #764ba2; font-weight: bold; margin: 12px 0 5px; }
+        .report-body h4 { font-size: 0.97em; color: #555; margin: 8px 0 4px; }
+        .report-body ul { margin: 4px 0 8px 18px; }
+        .report-body .sub-ul { margin-top: 4px; padding-left: 16px; }
+        .report-body li { margin: 2px 0; }
+        .report-body p { margin: 2px 0; }
+        .report-body hr { border: none; border-top: 1px solid #eee; margin: 14px 0; }
+        """
+
+        # F&G 指数 + 平均情绪
+        _fg_val = None
+        _avg_sent, _sent_cnt = 0.0, 0
+        for _t3 in all_tickers_sorted:
+            _b3 = swarm_detail.get(_t3, {}).get("agent_details", {}).get("BuzzBeeWhisper", {}).get("discovery", "")
+            if _fg_val is None:
+                _m3 = _re.search(r'F&G\s*(\d+)', _b3)
+                if _m3:
+                    _fg_val = int(_m3.group(1))
+            _s3 = _re.search(r'情绪\s*([\d.]+)%', _b3)
+            if _s3:
+                _avg_sent += float(_s3.group(1))
+                _sent_cnt += 1
+        _fv3 = _fg_val if _fg_val is not None else 50
+        _fg_color = "#dc3545" if _fv3 <= 45 else ("#ffc107" if _fv3 <= 55 else "#28a745")
+        _fg_label = (("极度恐惧" if _fv3 <= 25 else "恐惧") if _fv3 <= 45
+                     else (("中性" if _fv3 <= 55 else "贪婪") if _fv3 <= 75 else "极度贪婪"))
+        _fg_str = str(_fg_val) if _fg_val is not None else "?"
+        _avg_sent_str = f"{_avg_sent/_sent_cnt:.0f}%" if _sent_cnt else "-"
+
+        # ML 快捷链接
+        _ml_ql = ""
+        for _t3 in all_tickers_sorted:
+            if _Path(self.report_dir / f"alpha-hive-{_t3}-ml-enhanced-{date_str}.html").exists():
+                _ml_ql += (f'<a href="alpha-hive-{_t3}-ml-enhanced-{date_str}.html"'
+                           f' class="rl ml-rl">{_html.escape(_t3)}</a> ')
+
+        # 个股深度分析卡片
+        _dir_hdr = {"bullish": "#28a745", "bearish": "#dc3545", "neutral": "#e67e22"}
+        company_cards_html = ""
+        for _tkr3 in all_tickers_sorted:
+            _sd3 = swarm_detail.get(_tkr3, {})
+            _ad3 = _sd3.get("agent_details", {})
+            _sc3 = float(opp_by_ticker.get(_tkr3, {}).get("opp_score") or _sd3.get("final_score", 0))
+            _dr3 = str(opp_by_ticker.get(_tkr3, {}).get("direction") or _sd3.get("direction", "neutral")).lower()
+            if _dr3 not in dir_map:
+                _dr3 = "bullish" if "多" in _dr3 else ("bearish" if "空" in _dr3 else "neutral")
+            _dlbl3, _, _ = dir_map[_dr3]
+            _hc3 = _dir_hdr.get(_dr3, "#667eea")
+            _scls3 = sc_cls(_sc3)
+            _det3 = _detail(_tkr3)
+            _blist = []
+            for _disc3, _ico3, _lb3 in [
+                (_ad3.get("ScoutBeeNova", {}).get("discovery", ""), "📋", "内幕"),
+                (_ad3.get("OracleBeeEcho", {}).get("discovery", ""), "📊", "期权"),
+                (_ad3.get("BuzzBeeWhisper", {}).get("discovery", ""), "💬", "情绪"),
+                (_ad3.get("ChronosBeeHorizon", {}).get("discovery", ""), "📅", "催化剂"),
+                (_ad3.get("BearBeeContrarian", {}).get("discovery", ""), "🐻", "风险"),
+            ]:
+                _f3 = _disc3.split("|")[0].strip()[:90] if _disc3 else ""
+                if _f3:
+                    _blist.append(f'<li>{_ico3} <strong>{_lb3}：</strong>{_html.escape(_f3)}</li>')
+            _bhtml3 = "\n                        ".join(_blist) if _blist else "<li>数据采集中...</li>"
+            _ml3ex = _Path(self.report_dir / f"alpha-hive-{_tkr3}-ml-enhanced-{date_str}.html").exists()
+            _mlbtn3 = (f'<a href="alpha-hive-{_tkr3}-ml-enhanced-{date_str}.html" class="ml-btn">ML 增强分析 →</a>'
+                       if _ml3ex else '<span class="ml-btn-na">ML 报告生成中</span>')
+            company_cards_html += f"""
+            <div class="company-card">
+                <div class="cc-header" style="background:{_hc3};">
+                    <span class="cc-ticker">{_html.escape(_tkr3)}</span>
+                    <span class="cc-dir">{_dlbl3}</span>
+                    <span class="cc-score {_scls3}">{_sc3:.1f}/10</span>
+                </div>
+                <div class="cc-body">
+                    <div class="cc-metrics">
+                        <div class="cc-metric"><span class="cm-l">IV Rank</span><span class="cm-v">{_det3['iv_rank']}</span></div>
+                        <div class="cc-metric"><span class="cm-l">P/C Ratio</span><span class="cm-v">{_det3['pc']}</span></div>
+                        <div class="cc-metric"><span class="cm-l">看空强度</span><span class="cm-v">{_det3['bear_score']:.1f}/10</span></div>
+                    </div>
+                    <ul class="cc-signals">
+                        {_bhtml3}
+                    </ul>
+                    <div class="cc-footer">{_mlbtn3}</div>
+                </div>
+            </div>"""
+
+        # Markdown → HTML 轻量渲染
+        def _md2html(md_text: str) -> str:
+            lines = md_text.split('\n')
+            out, in_ul, in_sub = [], False, False
+            for ln in lines:
+                if ln.startswith('  - ') or ln.startswith('    - '):
+                    if not in_sub:
+                        out.append('<ul class="sub-ul">')
+                        in_sub = True
+                    out.append('<li>' + _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', ln.lstrip('- ').strip()) + '</li>')
+                    continue
+                if in_sub:
+                    out.append('</ul>')
+                    in_sub = False
+                if ln.startswith('- '):
+                    if not in_ul:
+                        out.append('<ul>')
+                        in_ul = True
+                    out.append('<li>' + _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', ln[2:]) + '</li>')
+                    continue
+                if in_ul and not ln.startswith(' '):
+                    out.append('</ul>')
+                    in_ul = False
+                if ln.startswith('#### '):
+                    out.append('<h4>' + _html.escape(ln[5:]) + '</h4>')
+                elif ln.startswith('### '):
+                    out.append('<h3>' + _html.escape(ln[4:]) + '</h3>')
+                elif ln.startswith('## '):
+                    out.append('<h2>' + _html.escape(ln[3:]) + '</h2>')
+                elif ln.startswith('# '):
+                    out.append('<h1>' + _html.escape(ln[2:]) + '</h1>')
+                elif ln.startswith('---'):
+                    out.append('<hr>')
+                elif not ln.strip():
+                    if not (in_ul or in_sub):
+                        out.append('<br>')
+                else:
+                    out.append('<p>' + _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', _html.escape(ln)) + '</p>')
+            if in_sub:
+                out.append('</ul>')
+            if in_ul:
+                out.append('</ul>')
+            return '\n'.join(out)
+
+        _rpt_body = ""
+        _md_path3 = _Path(self.report_dir) / f"alpha-hive-daily-{date_str}.md"
+        if _md_path3.exists():
+            try:
+                _rpt_body = _md2html(_md_path3.read_text(encoding='utf-8'))
+            except Exception:
+                _rpt_body = "<p>报告加载失败</p>"
+
         return f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -1870,7 +2048,9 @@ class AlphaHiveDailyReporter:
             .header {{ padding: 20px; }} .header h1 {{ font-size: 1.8em; }}
             .opp-grid {{ grid-template-columns: 1fr; }}
             .full-table {{ font-size: 0.82em; }} .full-table th, .full-table td {{ padding: 8px 6px; }}
+            .company-grid {{ grid-template-columns: 1fr; }}
         }}
+    {extra_css}
     </style>
 </head>
 <body>
@@ -1904,6 +2084,19 @@ class AlphaHiveDailyReporter:
                     </div>
                 </div>
             </div>
+            <div class="section" style="margin-bottom: 30px;">
+                <h2>宏观环境</h2>
+                <div class="si">
+                    <div class="sr"><span class="sl">恐贪指数 F&G</span>
+                        <span class="sv" style="color:{_fg_color};">{_fg_str} {_fg_label}</span></div>
+                    <div class="sr"><span class="sl">平均多头情绪</span>
+                        <span class="sv">{_avg_sent_str}</span></div>
+                    <div class="sr"><span class="sl">共振标的</span>
+                        <span class="sv" style="color:#28a745;">{n_resonance}/{n_tickers}</span></div>
+                    <div class="sr"><span class="sl">数据来源</span>
+                        <span class="sv" style="color:#28a745;">EDGAR API</span></div>
+                </div>
+            </div>
             <div class="section">
                 <h2>今日报告</h2>
                 <div class="reports-list">
@@ -1911,9 +2104,10 @@ class AlphaHiveDailyReporter:
                         <div class="report-date">{now_str} - 蜂群扫描 ({n_tickers}标的)</div>
                         <div class="report-links">
                             <a href="alpha-hive-daily-{date_str}.md" class="rl md">完整简报</a>
-                            <a href="alpha-hive-daily-{date_str}.json" class="rl" style="background:#764ba2;color:white;">JSON</a>
+                            <a href="alpha-hive-daily-{date_str}.json" class="rl json">JSON</a>
                         </div>
                     </div>
+                    {f'<div class="report-item"><div class="report-date">ML 增强分析</div><div class="report-links">{_ml_ql}</div></div>' if _ml_ql else ''}
                 </div>
             </div>
         </div>
@@ -1930,6 +2124,16 @@ class AlphaHiveDailyReporter:
             <tbody>{rows_html}
             </tbody>
         </table>
+    </div>
+    <div class="section" style="margin-bottom: 30px;">
+        <h2>个股深度分析</h2>
+        <div class="company-grid">{company_cards_html}
+        </div>
+    </div>
+    <div class="section" style="margin-bottom: 30px;">
+        <h2>完整蜂群简报</h2>
+        <div class="report-body">{_rpt_body}
+        </div>
     </div>
     <div class="footer">
         <p>Alpha Hive - 完全自动化蜂群智能投资研究平台</p>

@@ -626,13 +626,9 @@ class AlphaHiveDailyReporter:
             if stored > 0:
                 _log.info("已存入 %d 条长期记忆 (Chroma)", stored)
 
-        # Slack 推送
-        if self.slack_notifier and self.slack_notifier.enabled:
-            try:
-                self.slack_notifier.send_daily_report(report)
-                _log.info("Slack 日报已发送")
-            except (ConnectionError, TimeoutError, OSError, ValueError) as e:
-                _log.error("Slack 日报发送失败: %s", e, exc_info=True)
+        # Slack 推送：webhook 日报已禁用，由 Claude Code 会话在下午2点 PST 通过用户账号推送
+        # 实时高分/风险预警（上方 send_opportunity_alert/send_risk_alert）仍正常发送
+        self._write_slack_pending(report)
 
         return report
 
@@ -705,13 +701,8 @@ class AlphaHiveDailyReporter:
                 targets, swarm_results, snapshot, elapsed
             )
 
-        # Slack 推送
-        if self.slack_notifier and self.slack_notifier.enabled:
-            try:
-                self.slack_notifier.send_daily_report(report)
-                _log.info("Slack 日报已发送")
-            except (ConnectionError, TimeoutError, OSError, ValueError) as e:
-                _log.error("Slack 日报发送失败: %s", e, exc_info=True)
+        # Slack 推送：webhook 日报已禁用，由 Claude Code 会话在下午2点 PST 通过用户账号推送
+        self._write_slack_pending(report)
 
         return report
 
@@ -1392,6 +1383,66 @@ class AlphaHiveDailyReporter:
 
         return threads
 
+    def _write_slack_pending(self, report: Dict) -> None:
+        """
+        将今日日报格式化为 Slack 消息，写入待推送文件。
+        Claude Code 会话读取该文件后通过 Slack MCP 安排下午2点（温哥华 PST）发送。
+        """
+        try:
+            opps = report.get("opportunities", [])
+            date_str = report.get("date", self.date_str)
+            total = report.get("total_scanned", len(opps))
+            resonance = report.get("resonance_count", sum(1 for o in opps if o.get("resonance")))
+
+            # 按分类组织
+            high = [o for o in opps if o.get("score", 0) >= 7.5]
+            watch = [o for o in opps if 6.0 <= o.get("score", 0) < 7.5]
+            hold = [o for o in opps if o.get("score", 0) < 6.0]
+
+            lines = [
+                f"📊 *Alpha Hive 日报 {date_str}* | {total}只扫描完成，{resonance}/{total}共振（非投资建议）",
+                "",
+            ]
+            if high:
+                lines.append("*🔥 高优先级（≥7.5 进入主简报）*")
+                for o in high:
+                    tick = o.get("ticker", "")
+                    sc = o.get("score", 0)
+                    disc = o.get("discovery", "")[:60]
+                    lines.append(f"• *{tick}* {sc:.1f}/10 ✅共振 | {disc}")
+            if watch:
+                lines.append("")
+                lines.append("*👀 观察名单（需补充验证）*")
+                for o in watch:
+                    tick = o.get("ticker", "")
+                    sc = o.get("score", 0)
+                    disc = o.get("discovery", "")[:60]
+                    lines.append(f"• *{tick}* {sc:.1f}/10 | {disc}")
+            if hold:
+                lines.append("")
+                lines.append("*📋 暂不行动*")
+                parts = [f"{o.get('ticker','')} {o.get('score',0):.1f}/10" for o in hold]
+                lines.append("• " + " | ".join(parts))
+
+            lines += [
+                "",
+                "📈 完整报告：https://wangmingjie36-creator.github.io/alpha-hive-deploy/",
+                "T+1 追踪：明日验证高优先级动能延续性",
+            ]
+
+            pending = {
+                "date": date_str,
+                "channel_id": "C0AGUUWJXJS",
+                "message": "\n".join(lines),
+                "schedule_time_pst": f"{date_str}T14:00:00-08:00",
+            }
+            pending_path = Path(os.path.expanduser("~")) / ".alpha_hive_slack_pending.json"
+            with open(pending_path, "w", encoding="utf-8") as f:
+                json.dump(pending, f, ensure_ascii=False, indent=2)
+            _log.info("Slack 待推送消息已写入 %s", pending_path)
+        except Exception as e:
+            _log.warning("_write_slack_pending 失败: %s", e)
+
     def auto_commit_and_notify(self, report: Dict) -> Dict:
         """
         自动提交报告到 Git + Slack 通知（Agent Toolbox 演示）
@@ -1956,19 +2007,21 @@ def main():
     report_path = reporter.save_report(report)
     _log.info("报告已保存：%s", report_path)
 
-    # 三端同步：GitHub 提交推送 + Slack 总结通知
-    # （Slack 日报正文已在 run_swarm_scan/run_daily_scan 内推送；此处补发精简摘要+触发 GitHub 同步）
+    # 三端同步：GitHub 提交推送 + Hive App + Slack 下午2点（温哥华 PST）
     print("\n📡 同步三端：GitHub / Hive App / Slack...")
     try:
         sync_results = reporter.auto_commit_and_notify(report)
         git_ok = sync_results.get("git_push", {}).get("success", False)
-        slack_ok = sync_results.get("slack_notification", {}).get("success", False)
         print(f"   GitHub push : {'✅' if git_ok else '⚠️  失败（见日志）'}")
         print(f"   Hive App    : ✅ .swarm_results 已落盘，下次启动自动加载")
-        print(f"   Slack 摘要  : {'✅' if slack_ok else '⚠️  失败（日报正文已在扫描期间推送）'}")
     except (OSError, ValueError, KeyError, RuntimeError) as e:
         _log.warning("三端同步部分失败: %s", e)
         print(f"   ⚠️  三端同步出错：{e}")
+
+    # Slack 2pm PST 调度（由 Claude Code 会话读取待推送文件并调用 Slack MCP）
+    pending_path = Path(os.path.expanduser("~")) / ".alpha_hive_slack_pending.json"
+    if pending_path.exists():
+        print(f"   Slack 摘要  : ✅ 消息已准备，Claude Code 将安排下午2点（温哥华）推送")
 
     return report
 

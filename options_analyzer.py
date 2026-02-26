@@ -74,6 +74,33 @@ class OptionsDataFetcher:
         except (OSError, TypeError, ValueError) as e:
             _log.warning("缓存写入失败：%s", e)
 
+    _LAST_VALID_IV_TTL = 172800  # 48 小时：覆盖周末 + 收市后整晚
+
+    def _read_last_valid_iv(self, ticker: str) -> Optional[float]:
+        """读取上次有效 IV（48 小时内），用于收市/数据缺失时降级"""
+        cache_path = self._get_cache_path(ticker, "last_valid_iv")
+        try:
+            if not os.path.exists(cache_path):
+                return None
+            with open(cache_path) as f:
+                data = json.load(f)
+            ts = data.get("timestamp", "")
+            if ts:
+                age = (datetime.now() - datetime.fromisoformat(ts)).total_seconds()
+                if age > self._LAST_VALID_IV_TTL:
+                    return None
+            return float(data["iv"])
+        except Exception:
+            return None
+
+    def _save_last_valid_iv(self, ticker: str, iv: float) -> None:
+        """保存当前有效 IV，供收市后降级使用"""
+        try:
+            cache_path = self._get_cache_path(ticker, "last_valid_iv")
+            atomic_json_write(cache_path, {"iv": iv, "timestamp": datetime.now().isoformat()})
+        except Exception:
+            pass
+
     def fetch_options_chain(self, ticker: str) -> Dict:
         """获取期权链数据 - 支持多源降级（yfinance > 样本数据）"""
         # 尝试读取缓存
@@ -95,8 +122,16 @@ class OptionsDataFetcher:
                 _log.warning("%s 期权数据不可用，使用样本数据", ticker)
                 return self._get_sample_options_chain(ticker)
 
-            # 获取最近的两个到期日
-            expirations = list(stock.options)[:3]  # 前 3 个到期日
+            # 获取 DTE ≥ 7 的前 3 个到期日（避免 gamma 膨胀的超短期 IV 干扰 IV Rank）
+            # 若不足则降级为最近的 3 个（保证至少有数据可用）
+            all_expirations = list(stock.options)
+            today_dt = datetime.now()
+            expirations = [
+                e for e in all_expirations
+                if (datetime.strptime(e, "%Y-%m-%d") - today_dt).days >= 7
+            ][:3]
+            if not expirations:
+                expirations = all_expirations[:3]
 
             calls_list = []
             puts_list = []
@@ -781,13 +816,39 @@ class OptionsAgent:
                 if iv and iv > 0.005 and atm_lower <= strike <= atm_upper:
                     raw_ivs.append(iv)
 
+        _MIN_VALID_IV = 5.0  # IV < 5% 视为无效
+
         if raw_ivs:
-            # 用中位数代替均值，更抗极端值干扰
-            current_iv = statistics.median(raw_ivs)
-            # yfinance impliedVolatility 是小数格式（0.285 = 28.5%），一律 ×100 转百分比
-            current_iv *= 100
+            current_iv = statistics.median(raw_ivs) * 100  # 小数 → 百分比
         else:
-            current_iv = 25.0
+            current_iv = 0.0
+
+        # 判断当前是否在美股交易时段（ET 9:30-16:00，周一到周五）
+        from datetime import timezone, timedelta as _td, time as _dtime
+        _utc = datetime.now(timezone.utc)
+        # 夏令时：3月第二个周日 ~ 11月第一个周日（粗略：3-11月 ET=UTC-4，其余 UTC-5）
+        _et = _utc + _td(hours=-4 if 3 <= _utc.month <= 11 else -5)
+        _market_open = (_et.weekday() < 5 and
+                        _dtime(9, 30) <= _et.time() < _dtime(16, 0))
+
+        # 两种情况使用缓存（48 小时内的上次有效值）：
+        #   1. 非交易时段 —— yfinance IV 不可信（stale quotes / near-zero）
+        #   2. IV 过低 —— 即使在开市时段也视为异常数据
+        if not _market_open or current_iv < _MIN_VALID_IV:
+            last_valid = self.fetcher._read_last_valid_iv(ticker)
+            if last_valid:
+                _log.debug(
+                    "%s IV 降级→缓存 %.2f%% (市场%s, raw_iv=%.2f%%)",
+                    ticker, last_valid,
+                    "已关闭" if not _market_open else "异常数据", current_iv
+                )
+                current_iv = last_valid
+            elif current_iv < _MIN_VALID_IV:
+                current_iv = 25.0  # 无缓存兜底
+            # else: 收市但无缓存，保留 raw data（优于硬编码）
+        else:
+            # 开市且 IV 有效 → 保存供收市后使用
+            self.fetcher._save_last_valid_iv(ticker, current_iv)
 
         # 3. 计算各项指标
         iv_rank, iv_current = self.analyzer.calculate_iv_rank(current_iv, hist_iv)

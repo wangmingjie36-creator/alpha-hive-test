@@ -1431,25 +1431,9 @@ class AlphaHiveDailyReporter:
         else:
             _log.warning("Git push 失败")
 
-        # 3. Slack 通知
-        _log.info("发送 Slack 通知...")
-        top_opp = self.opportunities[0] if self.opportunities else None
-        if top_opp:
-            message = (
-                f"📊 *蜂群日报 {self.date_str}*\n"
-                f"🎯 Top 机会：{top_opp.ticker} {top_opp.direction}\n"
-                f"📈 综合分：{top_opp.opportunity_score:.1f}/10\n"
-                f"🔗 报告：`{self.report_dir / f'alpha-hive-daily-{self.date_str}.md'}`"
-            )
-            slack_result = self.agent_helper.notify.send_slack_message(
-                "#alpha-hive",
-                message
-            )
-            results["slack_notification"] = slack_result
-            if slack_result.get("success"):
-                _log.info("Slack 通知已发送")
-            else:
-                _log.warning("Slack 通知失败：%s", slack_result.get('error'))
+        # 3. Slack 通知（由 Claude Code MCP 工具推送，不用 webhook bot）
+        _log.info("Slack 推送由 Claude Code 负责（用户账号）")
+        results["slack_notification"] = {"skipped": "handled_by_claude_mcp"}
 
         _log.info("Auto-commit & Notify 完成")
         return results
@@ -2169,8 +2153,8 @@ def main():
     parser.add_argument(
         '--tickers',
         nargs='+',
-        default=["NVDA", "TSLA", "VKTX", "META", "MSFT", "RKLB", "BILI", "AMZN"],
-        help='要扫描的股票代码列表（空格分隔，默认：NVDA TSLA VKTX META MSFT RKLB BILI AMZN）'
+        default=["NVDA", "TSLA", "VKTX", "META", "MSFT", "RKLB", "BILI", "AMZN", "CRCL"],
+        help='要扫描的股票代码列表（空格分隔，默认：NVDA TSLA VKTX META MSFT RKLB BILI AMZN CRCL）'
     )
     parser.add_argument(
         '--all-watchlist',
@@ -2187,8 +2171,49 @@ def main():
         action='store_true',
         help='检查今日财报并自动更新简报（可单独运行，不需要重新扫描）'
     )
+    parser.add_argument(
+        '--no-llm',
+        action='store_true',
+        help='跳过询问，直接使用规则引擎模式（不调用 Claude API）'
+    )
+    parser.add_argument(
+        '--use-llm',
+        action='store_true',
+        help='跳过询问，直接使用 LLM 混合模式'
+    )
 
     args = parser.parse_args()
+
+    # ── LLM 模式选择（每次跑简报前询问）──
+    import llm_service as _llm_svc
+    _llm_key_exists = bool(_llm_svc._load_api_key())
+
+    if args.no_llm:
+        use_llm = False
+    elif args.use_llm:
+        use_llm = True
+    elif _llm_key_exists:
+        print("\n┌─────────────────────────────────────────┐")
+        print("│        Alpha Hive — 分析模式选择        │")
+        print("├─────────────────────────────────────────┤")
+        print("│  [1] LLM 混合模式  Claude API（推荐）   │")
+        print("│      QueenDistiller + BuzzBee 语义增强  │")
+        print("│      耗时 ~100s / 9 标的，约 $0.10      │")
+        print("│                                         │")
+        print("│  [2] 规则引擎模式  纯规则（测试迭代）   │")
+        print("│      耗时 ~26s，$0 API 费用             │")
+        print("└─────────────────────────────────────────┘")
+        choice = input("请选择 [1/2，默认 1]：").strip()
+        use_llm = (choice != "2")
+    else:
+        use_llm = False
+        print("⚠️  未检测到 API Key，使用规则引擎模式")
+
+    if not use_llm:
+        _llm_svc.disable()
+        print("🔧 规则引擎模式\n")
+    else:
+        print("🧠 LLM 混合模式（Claude API）\n")
 
     # 创建报告生成器
     reporter = AlphaHiveDailyReporter()

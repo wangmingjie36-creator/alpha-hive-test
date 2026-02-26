@@ -220,6 +220,12 @@ WATCHLIST = {
         "polymarket_slug": "amazon-aws-revenue",
         "monitor_events": ["earnings", "aws_growth", "prime_day", "regulatory"],
     },
+    "CRCL": {
+        "name": "Circle Internet Financial",
+        "sector": "Fintech",
+        "polymarket_slug": "circle-ipo",
+        "monitor_events": ["ipo", "earnings", "usdc_growth", "regulatory", "crypto_policy"],
+    },
 }
 
 # ==================== 数据源优先级 ====================

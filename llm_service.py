@@ -66,6 +66,8 @@ def _load_api_key() -> Optional[str]:
 def _get_client():
     """获取 Anthropic client（懒加载）"""
     global _client, _api_key
+    if _disabled:
+        return None
     with _lock:
         if _client is not None:
             return _client
@@ -83,8 +85,19 @@ def _get_client():
             return None
 
 
+_disabled: bool = False
+
+
+def disable() -> None:
+    """临时禁用 LLM（本次进程内有效，规则引擎模式）"""
+    global _disabled
+    _disabled = True
+
+
 def is_available() -> bool:
     """检查 LLM 服务是否可用"""
+    if _disabled:
+        return False
     return _get_client() is not None
 
 

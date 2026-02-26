@@ -272,8 +272,18 @@ class OptionsDataFetcher:
             if not hasattr(stock, "options") or not stock.options:
                 return 1.25
 
-            # 取最近的到期日
-            expiry = stock.options[0]
+            # 跳过 DTE<7 的近期到期日（近到期期权 IV 因 Gamma 效应被人为抬高）
+            today_dt = datetime.now()
+            expiry = None
+            for _e in stock.options:
+                try:
+                    if (datetime.strptime(_e, "%Y-%m-%d") - today_dt).days >= 7:
+                        expiry = _e
+                        break
+                except (ValueError, TypeError):
+                    continue
+            if expiry is None:
+                expiry = stock.options[0]  # 降级：无 DTE≥7 则取最近的
             chain = stock.option_chain(expiry)
             calls = chain.calls
 

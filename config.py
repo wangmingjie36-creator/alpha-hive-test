@@ -194,6 +194,26 @@ WATCHLIST = {
         "polymarket_slug": "upstart-ai-lending",
         "monitor_events": ["earnings", "partnership"],
     },
+
+    # 用户自选标的 (User Watchlist)
+    "META": {
+        "name": "Meta Platforms Inc",
+        "sector": "Technology",
+        "polymarket_slug": "meta-ai-revenue",
+        "monitor_events": ["earnings", "ai_product_launch", "regulatory"],
+    },
+    "RKLB": {
+        "name": "Rocket Lab USA",
+        "sector": "Aerospace",
+        "polymarket_slug": "rocket-lab-launch",
+        "monitor_events": ["launch_success", "contract_award", "earnings"],
+    },
+    "BILI": {
+        "name": "Bilibili Inc",
+        "sector": "Technology",
+        "polymarket_slug": "bilibili-user-growth",
+        "monitor_events": ["earnings", "monthly_active_users", "regulatory"],
+    },
 }
 
 # ==================== 数据源优先级 ====================

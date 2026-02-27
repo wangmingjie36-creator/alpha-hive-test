@@ -187,6 +187,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
 ::-webkit-scrollbar-thumb{background:rgba(102,126,234,.4);border-radius:3px}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .status-dot{width:10px;height:10px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite;display:inline-block}
+/* HISTORY */
+.hist-list{display:flex;flex-direction:column;gap:14px}
+.hist-card{display:flex;align-items:center;gap:20px;padding:18px 20px;
+           border:1px solid var(--border);border-radius:12px;background:var(--surface2);
+           transition:border-color .2s,box-shadow .2s}
+.hist-card:hover{border-color:var(--acc2);box-shadow:0 4px 16px rgba(102,126,234,.1)}
+.hist-left{min-width:110px}
+.hist-date{font-size:.95em;font-weight:800;color:var(--tp)}
+.hist-meta{font-size:.78em;color:var(--ts);margin-top:3px}
+.hist-mid{display:flex;flex-wrap:wrap;gap:8px;flex:1}
+.htop-chip{display:flex;align-items:center;gap:5px;background:var(--bg);
+           border:1px solid var(--border);border-radius:8px;padding:5px 10px}
+.hticker{font-weight:800;font-size:.88em;color:var(--tp)}
+.hscore{font-size:.82em;font-weight:700}
+.hdir{font-size:.85em}
+.hist-right{display:flex;flex-wrap:wrap;gap:6px;min-width:220px;justify-content:flex-end}
+.hlink{display:inline-block;padding:4px 10px;border-radius:6px;font-size:.76em;
+       font-weight:700;text-decoration:none;transition:opacity .2s}
+.hlink:hover{opacity:.8}
+.hlink-md{background:rgba(102,126,234,.15);color:var(--acc2)}
+.hlink-json{background:rgba(118,75,162,.15);color:var(--acc3)}
+.hlink-ml{background:rgba(244,165,50,.15);color:var(--acc)}
+.hist-empty{text-align:center;color:var(--ts);padding:32px;font-size:.92em}
+@media(max-width:768px){
+  .hist-card{flex-direction:column;align-items:flex-start;gap:12px}
+  .hist-right{justify-content:flex-start}
+}
 
 </style>
 </head>
@@ -195,11 +222,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
 <nav class="nav">
   <a href="#" class="nav-logo">🐝 Alpha Hive</a>
   <div class="nav-links">
-    <a href="#today"  class="nav-link">今日简报</a>
-    <a href="#charts" class="nav-link">图表</a>
-    <a href="#list"   class="nav-link">完整清单</a>
-    <a href="#deep"   class="nav-link">个股深度</a>
-    <a href="#report" class="nav-link">完整简报</a>
+    <a href="#today"   class="nav-link">今日简报</a>
+    <a href="#charts"  class="nav-link">图表</a>
+    <a href="#list"    class="nav-link">完整清单</a>
+    <a href="#deep"    class="nav-link">个股深度</a>
+    <a href="#report"  class="nav-link">完整简报</a>
+    <a href="#history" class="nav-link">📅 历史简报</a>
   </div>
   <button class="dark-btn" id="darkBtn" onclick="toggleDark()">🌙 暗黑</button>
 </nav>
@@ -212,7 +240,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
       <h1 class="hero-title">去中心化<span>蜂群智能</span><br>投资研究平台</h1>
       <p class="hero-sub">8 自治工蜂协作 · SEC EDGAR 真实数据 · 每日自动扫描</p>
       <div class="hero-meta">
-        <span class="hero-time">🕐 2026-02-26 19:03 PST</span>
+        <span class="hero-time">🕐 2026-02-26 19:27 PST</span>
         <span class="hero-dbadge">📊 数据真实度 86%</span>
       </div>
     </div>
@@ -246,7 +274,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
       <div class="hstat-lbl">扫描标的</div>
     </div>
     <div class="hstat">
-      <div class="hstat-val">5.3</div>
+      <div class="hstat-val">5.2</div>
       <div class="hstat-lbl">平均综合分</div>
     </div>
   </div>
@@ -1312,11 +1340,37 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
 <p>本报告为蜂群 AI 分析，不构成投资建议，不替代持牌投顾。预测存在误差，所有交易决策需自行判断和风控。</p>
 <br></div>
   </div>
+
+  <!-- ── Historical Reports ── -->
+  <div class="section" id="history">
+    <div class="sec-title">📅 历史简报回溯</div>
+    <div class="hist-list">
+                <div class="hist-card">
+                  <div class="hist-left">
+                    <div class="hist-date">2026-02-25</div>
+                    <div class="hist-meta">5 标的 · 均分 <span class="sc-m">6.4</span></div>
+                  </div>
+                  <div class="hist-mid"><div class="htop-chip">
+                      <span class="hticker">MSFT</span>
+                      <span class="hscore sc-h">7.5</span>
+                      <span class="hdir">🟡</span>
+                    </div><div class="htop-chip">
+                      <span class="hticker">NVDA</span>
+                      <span class="hscore sc-m">6.1</span>
+                      <span class="hdir">🟡</span>
+                    </div><div class="htop-chip">
+                      <span class="hticker">TSLA</span>
+                      <span class="hscore sc-m">5.5</span>
+                      <span class="hdir">🟡</span>
+                    </div></div>
+                  <div class="hist-right"><a href="alpha-hive-daily-2026-02-25.md" class="hlink hlink-md">📄 简报</a><a href="alpha-hive-daily-2026-02-25.json" class="hlink hlink-json">📊 JSON</a><a href="alpha-hive-MSFT-ml-enhanced-2026-02-25.html" class="hlink hlink-ml">MSFT</a><a href="alpha-hive-NVDA-ml-enhanced-2026-02-25.html" class="hlink hlink-ml">NVDA</a><a href="alpha-hive-TSLA-ml-enhanced-2026-02-25.html" class="hlink hlink-ml">TSLA</a><a href="alpha-hive-VKTX-ml-enhanced-2026-02-25.html" class="hlink hlink-ml">VKTX</a></div>
+                </div></div>
+  </div>
 </div>
 
 <footer class="footer">
   <p>🐝 Alpha Hive — 去中心化蜂群智能投资研究平台</p>
-  <p>更新：2026-02-26 19:03 PST | 9 标的 | SEC 真实数据 | 真实度 86%</p>
+  <p>更新：2026-02-26 19:27 PST | 9 标的 | SEC 真实数据 | 真实度 86%</p>
   <p style="margin-top:8px;font-size:.82em;opacity:.6">
     声明：本报告由 AI 蜂群自动生成，仅供研究参考，不构成投资建议。所有决策请自行判断。
   </p>

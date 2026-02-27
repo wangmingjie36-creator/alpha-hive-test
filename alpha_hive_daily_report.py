@@ -1976,172 +1976,627 @@ class AlphaHiveDailyReporter:
             except Exception:
                 _rpt_body = "<p>报告加载失败</p>"
 
+
+        # ── Chart & Radar Data ──
+        import json as _json
+
+        _dir_counts = {"bullish": 0, "bearish": 0, "neutral": 0}
+        for _td in all_tickers_sorted:
+            _drd = str(opp_by_ticker.get(_td, {}).get("direction") or
+                       swarm_detail.get(_td, {}).get("direction", "neutral")).lower()
+            if "多" in _drd:   _drd = "bullish"
+            elif "空" in _drd: _drd = "bearish"
+            elif _drd not in ("bullish","bearish","neutral"): _drd = "neutral"
+            _dir_counts[_drd] += 1
+
+        _all_scores = [
+            (_td2, float(opp_by_ticker.get(_td2, {}).get("opp_score") or
+                         swarm_detail.get(_td2, {}).get("final_score", 0)))
+            for _td2 in all_tickers_sorted
+        ]
+        _avg_score = (sum(s for _, s in _all_scores) / len(_all_scores)) if _all_scores else 0
+
+        def _radar_data(ticker):
+            sd = swarm_detail.get(ticker, {})
+            ad = sd.get("agent_details", {})
+            oracle_det = ad.get("OracleBeeEcho", {}).get("details", {})
+            iv_r  = oracle_det.get("iv_rank", 50) or 50
+            pc_r  = oracle_det.get("put_call_ratio", 1.0) or 1.0
+            buzz_d = ad.get("BuzzBeeWhisper", {}).get("discovery", "")
+            sm3 = _re.search(r'情绪\s*([\d.]+)%', buzz_d)
+            sent_v = float(sm3.group(1)) if sm3 else 50.0
+            scout_s  = float(ad.get("ScoutBeeNova", {}).get("self_score", 5.0)) * 10
+            chron_s  = float(ad.get("ChronosBeeHorizon", {}).get("self_score", 5.0)) * 10
+            bear_s   = float(ad.get("BearBeeContrarian", {}).get("score", 5.0))
+            risk_v   = max(0.0, (10.0 - bear_s) * 10)
+            iv_n     = min(100.0, float(iv_r))
+            pc_v     = float(pc_r)
+            pc_n     = max(0.0, min(100.0, (2.0 - pc_v) / 1.5 * 100))
+            return [round(iv_n,1), round(pc_n,1), round(min(100,sent_v),1),
+                    round(min(100,scout_s),1), round(min(100,chron_s),1), round(risk_v,1)]
+
+        _scores_js  = _json.dumps([[t, round(s, 1)] for t, s in _all_scores])
+        _dir_js     = _json.dumps([_dir_counts["bullish"], _dir_counts["bearish"], _dir_counts["neutral"]])
+        _radar_js   = _json.dumps({t: _radar_data(t) for t in all_tickers_sorted})
+
+        _DOMAINS = {
+            "MSFT": "microsoft.com", "NVDA": "nvidia.com",  "TSLA": "tesla.com",
+            "META": "meta.com",       "AMZN": "amazon.com",  "RKLB": "rocketlabusa.com",
+            "BILI": "bilibili.com",   "VKTX": "vikingtherapeutics.com", "CRCL": "circle.com",
+            "GOOGL": "google.com",    "AAPL": "apple.com",   "NFLX": "netflix.com",
+        }
+
+        # ── New CSS (plain string – no f-string brace escaping) ──
+        new_css = """
+:root{--bg:#f0f4ff;--surface:#fff;--surface2:#f8f9fc;--border:#e8ecf3;
+      --tp:#1a1f2e;--ts:#64748b;--acc:#F4A532;--acc2:#667eea;--acc3:#764ba2;
+      --bull:#22c55e;--bear:#ef4444;--neut:#f59e0b;--nav-h:60px}
+html.dark{--bg:#0A0F1C;--surface:#141928;--surface2:#1a2035;--border:#2a3050;--tp:#e2e8f0;--ts:#94a3b8}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+     background:var(--bg);color:var(--tp);min-height:100vh;transition:background .3s,color .3s}
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);
+     background:rgba(10,15,28,.96);backdrop-filter:blur(10px);
+     border-bottom:1px solid rgba(244,165,50,.2);
+     display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.nav-logo{display:flex;align-items:center;gap:8px;font-weight:900;font-size:1.1em;color:var(--acc);text-decoration:none}
+.nav-links{display:flex;gap:2px}
+.nav-link{padding:7px 12px;border-radius:6px;font-size:.85em;font-weight:500;
+          color:rgba(255,255,255,.7);text-decoration:none;transition:all .2s}
+.nav-link:hover{background:rgba(244,165,50,.15);color:var(--acc)}
+.dark-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+          color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:.82em;transition:all .2s}
+.dark-btn:hover{background:rgba(244,165,50,.2);border-color:var(--acc)}
+@media(max-width:768px){.nav-links{display:none}}
+/* HERO */
+.hero{background:linear-gradient(135deg,#0A0F1C 0%,#141928 55%,#1a1040 100%);
+      padding:calc(var(--nav-h) + 36px) 32px 0;position:relative;overflow:hidden}
+.hero-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;
+            justify-content:space-between;padding-bottom:36px;gap:40px}
+.hero-left{flex:1}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;
+            background:rgba(244,165,50,.12);border:1px solid rgba(244,165,50,.3);
+            color:var(--acc);padding:5px 14px;border-radius:20px;
+            font-size:.82em;font-weight:700;margin-bottom:18px}
+.hero-title{font-size:clamp(1.8em,3.5vw,2.8em);font-weight:900;color:#fff;
+            line-height:1.15;margin-bottom:12px}
+.hero-title span{background:linear-gradient(135deg,#F4A532,#f7c55a);
+                 -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{color:rgba(255,255,255,.55);font-size:1em;margin-bottom:18px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.hero-time{color:rgba(255,255,255,.45);font-size:.85em}
+.hero-dbadge{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);
+             color:#4ade80;padding:3px 12px;border-radius:12px;font-size:.8em;font-weight:700}
+.hero-right{flex-shrink:0;width:260px}
+.hero-svg{width:100%;height:auto}
+@keyframes hive-float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-8px) rotate(2deg)}}
+@keyframes hex-pulse{0%,100%{opacity:.6}50%{opacity:1}}
+.hive-anim{animation:hive-float 4s ease-in-out infinite}
+.hex-p{animation:hex-pulse 2s ease-in-out infinite}
+/* HERO STATS ROW */
+.hero-stats{max-width:1280px;margin:0 auto;
+            display:grid;grid-template-columns:repeat(4,1fr);
+            border-top:1px solid rgba(244,165,50,.12)}
+.hstat{padding:22px;text-align:center;border-right:1px solid rgba(244,165,50,.08);transition:background .2s}
+.hstat:last-child{border-right:none}
+.hstat:hover{background:rgba(244,165,50,.04)}
+.hstat-val{font-size:2.1em;font-weight:900;color:var(--acc);line-height:1}
+.hstat-lbl{font-size:.78em;color:rgba(255,255,255,.45);margin-top:5px;text-transform:uppercase;letter-spacing:.05em}
+/* MAIN */
+.main{max-width:1280px;margin:0 auto;padding:36px 28px}
+.section{background:var(--surface);border-radius:14px;padding:28px;margin-bottom:24px;border:1px solid var(--border)}
+.sec-title{font-size:1.2em;font-weight:800;color:var(--tp);margin-bottom:20px;
+           display:flex;align-items:center;gap:10px}
+.sec-title::before{content:'';display:inline-block;width:4px;height:20px;
+                   background:linear-gradient(135deg,var(--acc),var(--acc2));border-radius:2px}
+/* TOP 6 CARDS */
+.top6-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:1024px){.top6-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.top6-grid{grid-template-columns:1fr}}
+.scard{border:1px solid var(--border);border-radius:13px;overflow:hidden;
+       background:var(--surface2);transition:transform .2s,box-shadow .2s,border-color .2s;position:relative}
+.scard:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(244,165,50,.14);border-color:var(--acc)}
+.scard-head{padding:16px 16px 12px;display:flex;align-items:flex-start;justify-content:space-between}
+.slogo-wrap{position:relative}
+.slogo{width:42px;height:42px;border-radius:9px;object-fit:contain;
+       background:#fff;padding:4px;border:1px solid var(--border)}
+.slogo-fb{width:42px;height:42px;border-radius:9px;display:flex;align-items:center;
+          justify-content:center;font-weight:900;font-size:.82em;color:#fff;
+          background:linear-gradient(135deg,var(--acc2),var(--acc3))}
+.srank{font-size:.7em;font-weight:800;background:var(--acc);color:#0A0F1C;
+       padding:2px 7px;border-radius:5px;position:absolute;top:-5px;right:-5px}
+.sdir{padding:4px 11px;border-radius:18px;font-size:.78em;font-weight:700}
+.sdir-bull{background:rgba(34,197,94,.13);color:var(--bull)}
+.sdir-bear{background:rgba(239,68,68,.13);color:var(--bear)}
+.sdir-neut{background:rgba(245,158,11,.13);color:var(--neut)}
+.scard-body{padding:0 16px 16px}
+.sticker{font-size:1.4em;font-weight:900;color:var(--tp)}
+.sname{font-size:.75em;color:var(--ts);margin-top:1px}
+.score-row{display:flex;align-items:center;gap:10px;margin:12px 0 7px}
+.score-big{font-size:1.9em;font-weight:900;line-height:1}
+.score-big.sc-h{color:var(--bull)}.score-big.sc-m{color:var(--neut)}.score-big.sc-l{color:var(--bear)}
+.sbar-wrap{flex:1}
+.sbar-lbl{font-size:.7em;color:var(--ts);margin-bottom:3px;display:flex;justify-content:space-between}
+.sbar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.sbar-fill{height:100%;border-radius:3px}
+.fill-h{background:linear-gradient(90deg,#22c55e,#4ade80)}
+.fill-m{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.fill-l{background:linear-gradient(90deg,#ef4444,#f87171)}
+.sinsight{font-size:.78em;color:var(--ts);line-height:1.5;border-top:1px solid var(--border);
+          padding-top:9px;margin-top:4px;
+          display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ml-btn{display:inline-flex;align-items:center;gap:4px;margin-top:11px;padding:5px 13px;
+        background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;
+        border-radius:7px;font-size:.76em;font-weight:700;text-decoration:none;transition:opacity .2s}
+.ml-btn:hover{opacity:.85}
+/* CHARTS */
+.charts-grid{display:grid;grid-template-columns:1fr 2fr 1fr;gap:20px}
+@media(max-width:900px){.charts-grid{grid-template-columns:1fr}}
+.chart-box{background:var(--surface2);border-radius:12px;padding:22px;border:1px solid var(--border)}
+.chart-ttl{font-size:.82em;font-weight:700;color:var(--ts);text-transform:uppercase;
+           letter-spacing:.06em;margin-bottom:14px;text-align:center}
+/* TABLE */
+.tbl-search-row{display:flex;gap:12px;margin-bottom:14px;align-items:center}
+.tbl-search{flex:1;max-width:260px;padding:9px 14px;background:var(--surface2);
+            border:1px solid var(--border);border-radius:8px;color:var(--tp);
+            font-size:.88em;outline:none}
+.tbl-search:focus{border-color:var(--acc2)}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;border:1px solid var(--border)}
+.full-table{width:100%;border-collapse:collapse;min-width:620px}
+.full-table thead{position:sticky;top:0;z-index:5}
+.full-table th{padding:11px 13px;text-align:left;font-size:.8em;font-weight:700;
+               background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;
+               letter-spacing:.04em;white-space:nowrap}
+.full-table td{padding:10px 13px;font-size:.86em;border-bottom:1px solid var(--border);color:var(--tp)}
+.full-table tbody tr:hover{background:var(--surface2)}
+.dcell-bull{background:rgba(34,197,94,.12);color:var(--bull);font-weight:700;
+            border-radius:4px;padding:2px 9px;font-size:.8em;display:inline-block}
+.dcell-bear{background:rgba(239,68,68,.12);color:var(--bear);font-weight:700;
+            border-radius:4px;padding:2px 9px;font-size:.8em;display:inline-block}
+.dcell-neut{background:rgba(245,158,11,.12);color:var(--neut);font-weight:700;
+            border-radius:4px;padding:2px 9px;font-size:.8em;display:inline-block}
+.ml-btn-sm{display:inline-block;padding:3px 9px;background:linear-gradient(135deg,#667eea,#764ba2);
+           color:#fff;border-radius:5px;font-size:.75em;font-weight:700;text-decoration:none}
+.sc-h{color:var(--bull)}.sc-m{color:var(--neut)}.sc-l{color:var(--bear)}
+/* COMPANY DEEP CARDS */
+.company-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:20px}
+@media(max-width:600px){.company-grid{grid-template-columns:1fr}}
+.company-card{border:1px solid var(--border);border-radius:13px;overflow:hidden;background:var(--surface2)}
+.cc-header{padding:14px 18px;color:#fff;display:flex;justify-content:space-between;align-items:center}
+.cc-ticker{font-size:1.25em;font-weight:900}
+.cc-dir{font-size:.78em;background:rgba(255,255,255,.18);padding:2px 10px;border-radius:10px}
+.cc-score{font-size:.95em;font-weight:700}
+.cc-body{padding:16px 18px}
+.cc-two{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.cc-metric{display:flex;justify-content:space-between;padding:4px 0;
+           border-bottom:1px solid var(--border);font-size:.82em}
+.cc-metric:last-child{border-bottom:none}
+.cm-l{color:var(--ts)}.cm-v{font-weight:700;color:var(--tp)}
+.cc-signals{list-style:none;padding:0;margin:12px 0 0}
+.cc-signals li{padding:4px 0;border-bottom:1px dashed var(--border);
+               font-size:.8em;color:var(--ts);line-height:1.5}
+.cc-signals li:last-child{border-bottom:none}
+.cc-footer{margin-top:12px;text-align:right}
+.ml-btn-cc{display:inline-flex;align-items:center;gap:4px;padding:5px 13px;
+           background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;
+           border-radius:7px;font-size:.76em;font-weight:700;text-decoration:none}
+/* REPORT */
+.report-body{max-height:750px;overflow-y:auto;padding-right:8px;font-size:.88em;
+             line-height:1.8;color:var(--tp)}
+.report-body h1{font-size:1.35em;color:var(--acc2);border-bottom:2px solid var(--acc2);
+                padding-bottom:6px;margin:16px 0 8px}
+.report-body h2{font-size:1.1em;color:var(--acc2);border-left:4px solid var(--acc2);
+                padding-left:9px;margin:13px 0 5px}
+.report-body h3{font-size:.98em;color:var(--acc3);font-weight:700;margin:9px 0 3px}
+.report-body ul{margin:4px 0 8px 18px}.report-body li{margin:2px 0}
+.report-body hr{border:none;border-top:1px solid var(--border);margin:11px 0}
+.report-body p{margin:2px 0}.sub-ul{margin-top:4px;padding-left:16px}
+/* MISC */
+.res-y{background:rgba(34,197,94,.14);color:var(--bull);border-radius:7px;
+       padding:2px 8px;font-size:.77em;font-weight:700;display:inline-block}
+.res-n{background:rgba(239,68,68,.1);color:var(--bear);border-radius:7px;
+       padding:2px 8px;font-size:.77em;font-weight:700;display:inline-block}
+.bear-bar{height:5px;background:var(--border);border-radius:3px;margin-top:2px}
+.bear-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#f59e0b,#ef4444)}
+.footer{background:#0A0F1C;color:rgba(255,255,255,.45);text-align:center;
+        padding:28px;font-size:.85em}
+.footer p{margin:4px 0}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(102,126,234,.4);border-radius:3px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.status-dot{width:10px;height:10px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite;display:inline-block}
+"""
+
+        # ── Build new Top-6 cards ──
+        new_cards_html = ""
+        for _ci, _tc6 in enumerate(all_tickers_sorted[:6], 1):
+            _oc6   = opp_by_ticker.get(_tc6, {})
+            _sc6   = float(_oc6.get("opp_score") or swarm_detail.get(_tc6, {}).get("final_score", 0))
+            _dr6   = str(_oc6.get("direction") or swarm_detail.get(_tc6, {}).get("direction", "neutral")).lower()
+            if "多" in _dr6: _dr6 = "bullish"
+            elif "空" in _dr6: _dr6 = "bearish"
+            elif _dr6 not in ("bullish","bearish","neutral"): _dr6 = "neutral"
+            _dlbl6 = {"bullish":"🟢 看多","bearish":"🔴 看空","neutral":"🟡 中性"}[_dr6]
+            _dcls6 = {"bullish":"sdir-bull","bearish":"sdir-bear","neutral":"sdir-neut"}[_dr6]
+            _scls6 = sc_cls(_sc6)
+            _fcls6 = "fill-h" if _sc6 >= 7.0 else ("fill-m" if _sc6 >= 5.5 else "fill-l")
+            _pct6  = int(_sc6 * 10)
+            _dom6  = _DOMAINS.get(_tc6, "")
+            _logo6 = (f'<img class="slogo" src="https://logo.clearbit.com/{_dom6}" '
+                      f'alt="{_html.escape(_tc6)}" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'">'
+                      f'<div class="slogo-fb" style="display:none">{_html.escape(_tc6[:2])}</div>') if _dom6 else \
+                     f'<div class="slogo-fb">{_html.escape(_tc6[:2])}</div>'
+            # Insight: first non-empty discovery
+            _ins6 = ""
+            for _agt6 in ["ScoutBeeNova","OracleBeeEcho","BuzzBeeWhisper","ChronosBeeHorizon"]:
+                _d6 = swarm_detail.get(_tc6,{}).get("agent_details",{}).get(_agt6,{}).get("discovery","")
+                if _d6:
+                    _ins6 = _html.escape(_d6.split("|")[0].strip()[:100])
+                    break
+            _ml6ex = _Path(self.report_dir / f"alpha-hive-{_tc6}-ml-enhanced-{date_str}.html").exists()
+            _ml6   = (f'<a href="alpha-hive-{_tc6}-ml-enhanced-{date_str}.html" class="ml-btn">ML 详情 →</a>'
+                      if _ml6ex else '<span style="font-size:.75em;color:var(--ts);">ML 报告生成中</span>')
+            new_cards_html += f"""
+            <div class="scard">
+              <div class="scard-head">
+                <div class="slogo-wrap">{_logo6}<span class="srank">#{_ci}</span></div>
+                <span class="sdir {_dcls6}">{_dlbl6}</span>
+              </div>
+              <div class="scard-body">
+                <div class="sticker">{_html.escape(_tc6)}</div>
+                <div class="score-row">
+                  <span class="score-big {_scls6}">{_sc6:.1f}</span>
+                  <div class="sbar-wrap">
+                    <div class="sbar-lbl"><span>综合分</span><span>/10</span></div>
+                    <div class="sbar"><div class="sbar-fill {_fcls6}" style="width:{_pct6}%"></div></div>
+                  </div>
+                </div>
+                {f'<div class="sinsight">{_ins6}</div>' if _ins6 else ''}
+                {_ml6}
+              </div>
+            </div>"""
+
+        # ── Build Full Table rows ──
+        new_rows_html = ""
+        for _ri, _trt in enumerate(all_tickers_sorted, 1):
+            _ort = opp_by_ticker.get(_trt, {})
+            _srt = float(_ort.get("opp_score") or swarm_detail.get(_trt, {}).get("final_score", 0))
+            _drt = str(_ort.get("direction") or swarm_detail.get(_trt, {}).get("direction","neutral")).lower()
+            if "多" in _drt: _drt = "bullish"
+            elif "空" in _drt: _drt = "bearish"
+            elif _drt not in ("bullish","bearish","neutral"): _drt = "neutral"
+            _dlrt = {"bullish":"看多","bearish":"看空","neutral":"中性"}[_drt]
+            _dclrt = {"bullish":"dcell-bull","bearish":"dcell-bear","neutral":"dcell-neut"}[_drt]
+            _scrt = sc_cls(_srt)
+            _det_rt = _detail(_trt)
+            _res_rt = swarm_detail.get(_trt,{}).get("resonance",{}).get("resonance_detected",False)
+            _sup_rt = int(_ort.get("supporting_agents") or swarm_detail.get(_trt,{}).get("supporting_agents",0))
+            _res_html_rt = (f'<span class="res-y">{_sup_rt}A</span>' if _res_rt else '<span class="res-n">无</span>')
+            _ml_ex_rt = _Path(self.report_dir / f"alpha-hive-{_trt}-ml-enhanced-{date_str}.html").exists()
+            _ml_rt = (f'<a href="alpha-hive-{_trt}-ml-enhanced-{date_str}.html" class="ml-btn-sm">查看</a>'
+                      if _ml_ex_rt else "-")
+            _pc_st_rt = (' style="color:var(--bull);font-weight:700"' if _det_rt["pc"] != "-" and float(_det_rt["pc"]) < 0.7
+                         else (' style="color:var(--bear);font-weight:700"' if _det_rt["pc"] != "-" and float(_det_rt["pc"]) > 1.5 else ""))
+            new_rows_html += f"""
+            <tr>
+              <td>{_ri}</td>
+              <td><strong>{_html.escape(_trt)}</strong></td>
+              <td><span class="{_dclrt}">{_dlrt}</span></td>
+              <td class="{_scrt}"><strong>{_srt:.1f}</strong>/10</td>
+              <td>{_res_html_rt}</td>
+              <td>{_det_rt['bullish']}/{_det_rt['bearish_v']}/{_det_rt['neutral_v']}</td>
+              <td>{_det_rt['iv_rank']}</td>
+              <td{_pc_st_rt}>{_det_rt['pc']}</td>
+              <td style="color:var(--neut)">{_det_rt['bear_score']:.1f}</td>
+              <td>{_ml_rt}</td>
+            </tr>"""
+
+        # ── Build Deep Analysis cards (with radar canvas) ──
+        _dir_hdr3 = {"bullish":"#1a7a3a","bearish":"#8b1a1a","neutral":"#7a5c1a"}
+        new_company_html = ""
+        for _tkrd in all_tickers_sorted:
+            _sdd = swarm_detail.get(_tkrd, {})
+            _add = _sdd.get("agent_details", {})
+            _scd = float(opp_by_ticker.get(_tkrd,{}).get("opp_score") or _sdd.get("final_score", 0))
+            _drd = str(opp_by_ticker.get(_tkrd,{}).get("direction") or _sdd.get("direction","neutral")).lower()
+            if "多" in _drd: _drd = "bullish"
+            elif "空" in _drd: _drd = "bearish"
+            elif _drd not in ("bullish","bearish","neutral"): _drd = "neutral"
+            _dlbld = {"bullish":"看多 ↑","bearish":"看空 ↓","neutral":"中性 →"}[_drd]
+            _hcd   = _dir_hdr3.get(_drd, "#1a3a7a")
+            _detd  = _detail(_tkrd)
+            _blstd = []
+            for _discd, _icod, _lbd in [
+                (_add.get("ScoutBeeNova",{}).get("discovery",""),       "📋","内幕"),
+                (_add.get("OracleBeeEcho",{}).get("discovery",""),      "📊","期权"),
+                (_add.get("BuzzBeeWhisper",{}).get("discovery",""),     "💬","情绪"),
+                (_add.get("BearBeeContrarian",{}).get("discovery",""),  "🐻","风险"),
+            ]:
+                _fd = _discd.split("|")[0].strip()[:85] if _discd else ""
+                if _fd:
+                    _blstd.append(f'<li>{_icod} <strong>{_lbd}：</strong>{_html.escape(_fd)}</li>')
+            _bhtmld = "\n                    ".join(_blstd) if _blstd else "<li>数据采集中</li>"
+            _ml_exd = _Path(self.report_dir / f"alpha-hive-{_tkrd}-ml-enhanced-{date_str}.html").exists()
+            _mlbtnd = (f'<a href="alpha-hive-{_tkrd}-ml-enhanced-{date_str}.html" class="ml-btn-cc">ML 增强分析 →</a>'
+                       if _ml_exd else '<span style="font-size:.78em;color:var(--ts)">ML 报告生成中</span>')
+            new_company_html += f"""
+            <div class="company-card">
+              <div class="cc-header" style="background:{_hcd};">
+                <span class="cc-ticker">{_html.escape(_tkrd)}</span>
+                <span class="cc-dir">{_dlbld}</span>
+                <span class="cc-score">{_scd:.1f}/10</span>
+              </div>
+              <div class="cc-body">
+                <div class="cc-two">
+                  <div class="cc-metrics-col">
+                    <div class="cc-metric"><span class="cm-l">IV Rank</span><span class="cm-v">{_detd['iv_rank']}</span></div>
+                    <div class="cc-metric"><span class="cm-l">P/C Ratio</span><span class="cm-v">{_detd['pc']}</span></div>
+                    <div class="cc-metric"><span class="cm-l">看空强度</span><span class="cm-v">{_detd['bear_score']:.1f}/10</span></div>
+                    <div class="cc-metric"><span class="cm-l">投票</span><span class="cm-v">{_detd['bullish']}多/{_detd['bearish_v']}空</span></div>
+                  </div>
+                  <div class="radar-wrap"><canvas id="radar-{_html.escape(_tkrd)}" width="160" height="160"></canvas></div>
+                </div>
+                <ul class="cc-signals">{_bhtmld}</ul>
+                <div class="cc-footer">{_mlbtnd}</div>
+              </div>
+            </div>"""
+
+        # ── Avg Score formatted ──
+        _avg_score_str = f"{_avg_score:.1f}"
+        _fg_str2 = _fg_str  # already computed above
+
         return f"""<!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alpha Hive - 投资简报仪表板</title>
-    <style>
-        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-               background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-               min-height: 100vh; padding: 20px; }}
-        .container {{ max-width: 1400px; margin: 0 auto; }}
-        .header {{ background: white; border-radius: 15px; padding: 40px;
-                   margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; }}
-        .header h1 {{ font-size: 2.5em; color: #667eea; margin-bottom: 10px; }}
-        .header p {{ color: #666; font-size: 1.1em; }}
-        .header .update-time {{ display: inline-block; margin-top: 12px; padding: 6px 18px;
-            background: #f0f0ff; border-radius: 20px; color: #667eea; font-size: 0.95em; font-weight: 500; }}
-        .main-grid {{ display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 30px; }}
-        .section {{ background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }}
-        .section h2 {{ color: #667eea; font-size: 1.6em; margin-bottom: 20px;
-                       display: flex; align-items: center; gap: 10px; }}
-        .section h2::before {{ content: ''; display: inline-block; width: 4px; height: 28px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px; }}
-        .opp-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }}
-        .opp-card {{ border: 1px solid #e0e0e0; border-radius: 12px; padding: 22px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%); position: relative;
-            transition: transform 0.3s, box-shadow 0.3s; }}
-        .opp-card:hover {{ transform: translateY(-5px); box-shadow: 0 15px 35px rgba(102,126,234,0.2); }}
-        .card-rank {{ position: absolute; top: 10px; right: 15px; font-size: 0.85em;
-            font-weight: bold; color: #667eea; background: #f0f0f0; padding: 4px 8px; border-radius: 5px; }}
-        .card-hd {{ display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #eee; }}
-        .card-hd h3 {{ font-size: 1.5em; color: #333; }}
-        .dir-badge {{ padding: 4px 14px; border-radius: 20px; color: white; font-size: 0.85em; font-weight: bold; }}
-        .dir-bullish {{ background: #28a745; }} .dir-neutral {{ background: #ffc107; color: #333; }}
-        .dir-bearish {{ background: #dc3545; }}
-        .card-body {{ display: flex; flex-direction: column; gap: 8px; }}
-        .mr {{ display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 0.93em; }}
-        .mr .lbl {{ color: #666; font-weight: 500; }} .mr .val {{ color: #333; font-weight: bold; }}
-        .sc-h {{ color: #28a745; }} .sc-m {{ color: #fd7e14; }} .sc-l {{ color: #dc3545; }}
-        .res-badge {{ display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 0.8em; font-weight: bold; }}
-        .res-y {{ background: #d4edda; color: #155724; }} .res-n {{ background: #f8d7da; color: #721c24; }}
-        .bear-bar {{ height: 6px; border-radius: 3px; background: #eee; margin-top: 4px; }}
-        .bear-fill {{ height: 100%; border-radius: 3px; background: linear-gradient(90deg, #ffc107, #dc3545); }}
-        .status-card {{ border: 2px solid #28a745; border-radius: 10px; padding: 20px;
-            background: linear-gradient(135deg, rgba(102,126,234,0.05), rgba(118,75,162,0.05)); }}
-        .status-hd {{ display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }}
-        .status-hd h3 {{ color: #667eea; font-size: 1.2em; }}
-        .status-ind {{ display: flex; align-items: center; gap: 8px; font-size: 1.1em; font-weight: bold; color: #28a745; }}
-        .status-dot {{ width: 12px; height: 12px; border-radius: 50%; background-color: #28a745; animation: pulse 2s infinite; }}
-        @keyframes pulse {{ 0%,100% {{ opacity:1; }} 50% {{ opacity:0.5; }} }}
-        .si {{ display: flex; flex-direction: column; gap: 10px; font-size: 0.95em; }}
-        .sr {{ display: flex; justify-content: space-between; }}
-        .sr .sl {{ color: #666; }} .sr .sv {{ color: #333; font-weight: bold; }}
-        .full-table {{ width: 100%; border-collapse: collapse; margin-top: 10px; }}
-        .full-table th, .full-table td {{ padding: 11px 12px; text-align: left; border-bottom: 1px solid #eee; }}
-        .full-table th {{ background: linear-gradient(135deg, #667eea, #764ba2); color: white; font-weight: 600; font-size: 0.88em; }}
-        .full-table tr:hover {{ background-color: #f8f9fa; }}
-        .full-table td {{ font-size: 0.93em; }}
-        .footer {{ text-align: center; color: white; margin-top: 30px; font-size: 0.95em; }}
-        .footer p {{ margin: 5px 0; }}
-        @media (max-width: 768px) {{
-            .main-grid {{ grid-template-columns: 1fr; }}
-            .header {{ padding: 20px; }} .header h1 {{ font-size: 1.8em; }}
-            .opp-grid {{ grid-template-columns: 1fr; }}
-            .full-table {{ font-size: 0.82em; }} .full-table th, .full-table td {{ padding: 8px 6px; }}
-            .company-grid {{ grid-template-columns: 1fr; }}
-        }}
-    {extra_css}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpha Hive 投资仪表板</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"><\/script>
+<style>
+{new_css}
+</style>
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <h1>Alpha Hive 每日投资简报</h1>
-        <p>去中心化蜂群智能投资研究平台 | {n_agents} 个自治工蜂 + 二阶段看空对冲</p>
-        <div class="update-time">{now_str} | {n_tickers} 标的扫描 | SEC 真实数据 | 数据真实度 {avg_real}</div>
+<!-- ── Fixed Nav ── -->
+<nav class="nav">
+  <a href="#" class="nav-logo">🐝 Alpha Hive</a>
+  <div class="nav-links">
+    <a href="#today"  class="nav-link">今日简报</a>
+    <a href="#charts" class="nav-link">图表</a>
+    <a href="#list"   class="nav-link">完整清单</a>
+    <a href="#deep"   class="nav-link">个股深度</a>
+    <a href="#report" class="nav-link">完整简报</a>
+  </div>
+  <button class="dark-btn" id="darkBtn" onclick="toggleDark()">🌙 暗黑</button>
+</nav>
+
+<!-- ── Hero Banner ── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge">🐝 Alpha Hive Intelligence · 蜂群驱动</div>
+      <h1 class="hero-title">去中心化<span>蜂群智能</span><br>投资研究平台</h1>
+      <p class="hero-sub">{n_agents} 自治工蜂协作 · SEC EDGAR 真实数据 · 每日自动扫描</p>
+      <div class="hero-meta">
+        <span class="hero-time">🕐 {now_str}</span>
+        <span class="hero-dbadge">📊 数据真实度 {avg_real}</span>
+      </div>
     </div>
-    <div class="main-grid">
-        <div class="section">
-            <h2>今日 Top 6 机会</h2>
-            <div class="opp-grid">{cards_html}
-            </div>
-        </div>
-        <div>
-            <div class="section" style="margin-bottom: 30px;">
-                <div class="status-card">
-                    <div class="status-hd">
-                        <h3>系统状态</h3>
-                        <div class="status-ind"><div class="status-dot"></div>运行正常</div>
-                    </div>
-                    <div class="si">
-                        <div class="sr"><span class="sl">更新日期</span><span class="sv">{date_str}</span></div>
-                        <div class="sr"><span class="sl">最后更新</span><span class="sv">{now_str.split()[1]}</span></div>
-                        <div class="sr"><span class="sl">扫描标的</span><span class="sv">{n_tickers} 个</span></div>
-                        <div class="sr"><span class="sl">Agent 架构</span><span class="sv">{n_agents} Agent + 看空蜂</span></div>
-                        <div class="sr"><span class="sl">共振检测</span><span class="sv" style="color:#28a745;">{n_resonance}/{n_tickers} 标的</span></div>
-                        <div class="sr"><span class="sl">数据真实度</span><span class="sv" style="color:#28a745;">{avg_real}</span></div>
-                        <div class="sr"><span class="sl">SEC 数据</span><span class="sv" style="color:#28a745;">真实 EDGAR API</span></div>
-                    </div>
-                </div>
-            </div>
-            <div class="section" style="margin-bottom: 30px;">
-                <h2>宏观环境</h2>
-                <div class="si">
-                    <div class="sr"><span class="sl">恐贪指数 F&G</span>
-                        <span class="sv" style="color:{_fg_color};">{_fg_str} {_fg_label}</span></div>
-                    <div class="sr"><span class="sl">平均多头情绪</span>
-                        <span class="sv">{_avg_sent_str}</span></div>
-                    <div class="sr"><span class="sl">共振标的</span>
-                        <span class="sv" style="color:#28a745;">{n_resonance}/{n_tickers}</span></div>
-                    <div class="sr"><span class="sl">数据来源</span>
-                        <span class="sv" style="color:#28a745;">EDGAR API</span></div>
-                </div>
-            </div>
-            <div class="section">
-                <h2>今日报告</h2>
-                <div class="reports-list">
-                    <div class="report-item">
-                        <div class="report-date">{now_str} - 蜂群扫描 ({n_tickers}标的)</div>
-                        <div class="report-links">
-                            <a href="alpha-hive-daily-{date_str}.md" class="rl md">完整简报</a>
-                            <a href="alpha-hive-daily-{date_str}.json" class="rl json">JSON</a>
-                        </div>
-                    </div>
-                    {f'<div class="report-item"><div class="report-date">ML 增强分析</div><div class="report-links">{_ml_ql}</div></div>' if _ml_ql else ''}
-                </div>
-            </div>
-        </div>
+    <div class="hero-right">
+      <svg class="hero-svg hive-anim" viewBox="0 0 280 260" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="140,55 180,78 180,124 140,147 100,124 100,78" fill="#F4A532" opacity=".9"/>
+        <text x="140" y="112" text-anchor="middle" font-size="40" fill="white">🐝</text>
+        <polygon class="hex-p" points="140,5 170,22 170,57 140,74 110,57 110,22" fill="none" stroke="#F4A532" stroke-width="1.5" opacity=".55" style="animation-delay:.3s"/>
+        <polygon class="hex-p" points="190,32 220,49 220,84 190,101 160,84 160,49" fill="rgba(244,165,50,.12)" stroke="#F4A532" stroke-width="1" opacity=".5" style="animation-delay:.7s"/>
+        <polygon class="hex-p" points="190,107 220,124 220,159 190,176 160,159 160,124" fill="rgba(102,126,234,.18)" stroke="#667eea" stroke-width="1" opacity=".45" style="animation-delay:1.1s"/>
+        <polygon class="hex-p" points="190,182 220,199 220,234 190,251 160,234 160,199" fill="none" stroke="#764ba2" stroke-width="1" opacity=".35" style="animation-delay:1.5s"/>
+        <polygon class="hex-p" points="140,155 170,172 170,207 140,224 110,207 110,172" fill="rgba(244,165,50,.09)" stroke="#F4A532" stroke-width="1.5" opacity=".45" style="animation-delay:1.9s"/>
+        <polygon class="hex-p" points="90,182 120,199 120,234 90,251 60,234 60,199" fill="none" stroke="#667eea" stroke-width="1" opacity=".35" style="animation-delay:2.3s"/>
+        <polygon class="hex-p" points="90,107 120,124 120,159 90,176 60,159 60,124" fill="rgba(102,126,234,.13)" stroke="#667eea" stroke-width="1" opacity=".45" style="animation-delay:2.7s"/>
+        <polygon class="hex-p" points="90,32 120,49 120,84 90,101 60,84 60,49" fill="none" stroke="#764ba2" stroke-width="1" opacity=".35" style="animation-delay:3.1s"/>
+      </svg>
     </div>
-    <div class="section" style="margin-bottom: 30px;">
-        <h2>完整机会清单</h2>
-        <table class="full-table">
-            <thead>
-                <tr>
-                    <th>#</th><th>标的</th><th>方向</th><th>综合分</th><th>共振</th>
-                    <th>投票(多/空/中)</th><th>IV Rank</th><th>P/C Ratio</th><th>看空强度</th><th>ML 详情</th>
-                </tr>
-            </thead>
-            <tbody>{rows_html}
-            </tbody>
-        </table>
+  </div>
+  <!-- Stats Row -->
+  <div class="hero-stats">
+    <div class="hstat">
+      <div class="hstat-val">{n_resonance}</div>
+      <div class="hstat-lbl">共振信号</div>
     </div>
-    <div class="section" style="margin-bottom: 30px;">
-        <h2>个股深度分析</h2>
-        <div class="company-grid">{company_cards_html}
-        </div>
+    <div class="hstat">
+      <div class="hstat-val" style="color:{_fg_color}">{_fg_str2}</div>
+      <div class="hstat-lbl">Fear & Greed</div>
     </div>
-    <div class="section" style="margin-bottom: 30px;">
-        <h2>完整蜂群简报</h2>
-        <div class="report-body">{_rpt_body}
-        </div>
+    <div class="hstat">
+      <div class="hstat-val">{n_tickers}</div>
+      <div class="hstat-lbl">扫描标的</div>
     </div>
-    <div class="footer">
-        <p>Alpha Hive - 完全自动化蜂群智能投资研究平台</p>
-        <p>最后更新：{now_str} | {n_tickers} 标的蜂群扫描 | SEC 真实数据 | 数据真实度 {avg_real}</p>
-        <p style="font-size:0.9em;margin-top:10px;opacity:0.8;">
-            声明：本报告为 AI 蜂群自动生成，仅供参考，不构成投资建议。预测存在误差，所有交易决策需自行判断和风控。
-        </p>
+    <div class="hstat">
+      <div class="hstat-val">{_avg_score_str}</div>
+      <div class="hstat-lbl">平均综合分</div>
     </div>
+  </div>
+</section>
+
+<div class="main">
+  <!-- ── Top 6 Cards ── -->
+  <div class="section" id="today">
+    <div class="sec-title">今日 Top {min(6, len(all_tickers_sorted))} 机会</div>
+    <div class="top6-grid">
+      {new_cards_html}
+    </div>
+  </div>
+
+  <!-- ── Charts ── -->
+  <div class="section" id="charts">
+    <div class="sec-title">市场可视化</div>
+    <div class="charts-grid">
+      <div class="chart-box">
+        <div class="chart-ttl">😨 Fear &amp; Greed 指数</div>
+        <div class="chart-canvas-wrap" style="height:180px"><canvas id="fgChart"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-ttl">📊 各标的综合评分</div>
+        <div class="chart-canvas-wrap" style="height:{'{}px'.format(max(160, len(all_tickers_sorted)*28))}"><canvas id="scoresChart"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-ttl">🗳 看多 / 看空 / 中性</div>
+        <div class="chart-canvas-wrap" style="height:180px"><canvas id="dirChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Full Table ── -->
+  <div class="section" id="list">
+    <div class="sec-title">完整机会清单</div>
+    <div class="tbl-search-row">
+      <input class="tbl-search" id="tableSearch" type="text" placeholder="🔍 搜索标的..." oninput="filterTable()">
+    </div>
+    <div class="tbl-wrap">
+      <table class="full-table" id="oppTable">
+        <thead><tr>
+          <th>#</th><th>标的</th><th>方向</th><th>综合分</th><th>共振</th>
+          <th>投票(多/空/中)</th><th>IV Rank</th><th>P/C</th><th>看空强度</th><th>ML 详情</th>
+        </tr></thead>
+        <tbody>{new_rows_html}</tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── Deep Analysis ── -->
+  <div class="section" id="deep">
+    <div class="sec-title">个股深度分析（含雷达图）</div>
+    <div class="company-grid">{new_company_html}</div>
+  </div>
+
+  <!-- ── Markdown Report ── -->
+  <div class="section" id="report">
+    <div class="sec-title">完整蜂群简报</div>
+    <div class="report-body">{_rpt_body}</div>
+  </div>
 </div>
+
+<footer class="footer">
+  <p>🐝 Alpha Hive — 去中心化蜂群智能投资研究平台</p>
+  <p>更新：{now_str} | {n_tickers} 标的 | SEC 真实数据 | 真实度 {avg_real}</p>
+  <p style="margin-top:8px;font-size:.82em;opacity:.6">
+    声明：本报告由 AI 蜂群自动生成，仅供研究参考，不构成投资建议。所有决策请自行判断。
+  </p>
+</footer>
+
+<script>
+// ── Dark Mode ──
+function toggleDark(){{
+  var h=document.documentElement;
+  h.classList.toggle('dark');
+  localStorage.setItem('ahDark',h.classList.contains('dark')?'1':'0');
+  document.getElementById('darkBtn').textContent=h.classList.contains('dark')?'☀️ 亮色':'🌙 暗黑';
+}}
+if(localStorage.getItem('ahDark')==='1'){{
+  document.documentElement.classList.add('dark');
+}}
+document.addEventListener('DOMContentLoaded',function(){{
+  var b=document.getElementById('darkBtn');
+  if(b&&document.documentElement.classList.contains('dark'))b.textContent='☀️ 亮色';
+}});
+
+// ── Table Search ──
+function filterTable(){{
+  var q=document.getElementById('tableSearch').value.toLowerCase();
+  document.querySelectorAll('#oppTable tbody tr').forEach(function(tr){{
+    tr.style.display=tr.textContent.toLowerCase().includes(q)?'':'none';
+  }});
+}}
+
+// ── Charts ──
+document.addEventListener('DOMContentLoaded',function(){{
+  var dark=document.documentElement.classList.contains('dark');
+  var tc=dark?'rgba(255,255,255,.65)':'rgba(0,0,0,.55)';
+  var gc=dark?'rgba(255,255,255,.07)':'rgba(0,0,0,.06)';
+
+  // F&G Gauge
+  var fgCtx=document.getElementById('fgChart');
+  if(fgCtx){{
+    var fv={_fv3};
+    var fc=fv<=25?'#ef4444':fv<=45?'#f97316':fv<=55?'#f59e0b':fv<=75?'#22c55e':'#16a34a';
+    var fl='{_fg_label}';
+    new Chart(fgCtx,{{
+      type:'doughnut',
+      data:{{datasets:[{{data:[fv,100-fv],backgroundColor:[fc,dark?'#2a3050':'#e8ecf3'],
+                         borderWidth:0,circumference:180,rotation:-90}}]}},
+      options:{{responsive:true,maintainAspectRatio:false,cutout:'72%',
+               plugins:{{legend:{{display:false}},tooltip:{{enabled:false}}}}}},
+      plugins:[{{id:'fgTxt',afterDraw:function(ch){{
+        var cx=ch.ctx,w=ch.width,h=ch.height;
+        cx.save();
+        cx.font='bold 26px system-ui';cx.fillStyle=fc;cx.textAlign='center';cx.textBaseline='middle';
+        cx.fillText(fv,w/2,h*.60);
+        cx.font='11px system-ui';cx.fillStyle=tc;cx.fillText(fl,w/2,h*.60+20);
+        cx.restore();
+      }}}}]
+    }});
+  }}
+
+  // Scores Bar
+  var scCtx=document.getElementById('scoresChart');
+  if(scCtx){{
+    var sc={_scores_js};
+    var clrs=sc.map(function(x){{return x[1]>=7?'rgba(34,197,94,.85)':x[1]>=5.5?'rgba(245,158,11,.85)':'rgba(239,68,68,.85)';}});
+    new Chart(scCtx,{{
+      type:'bar',
+      data:{{labels:sc.map(function(x){{return x[0];}}),
+             datasets:[{{data:sc.map(function(x){{return x[1];}}),backgroundColor:clrs,borderRadius:5,borderSkipped:false}}]}},
+      options:{{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+               plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:function(c){{return' '+c.raw+'/10';}}}}}}}},
+               scales:{{
+                 x:{{min:0,max:10,grid:{{color:gc}},ticks:{{color:tc,font:{{size:10}}}}}},
+                 y:{{grid:{{display:false}},ticks:{{color:tc,font:{{size:10,weight:'bold'}}}}}}
+               }}}}
+    }});
+  }}
+
+  // Direction Donut
+  var dirCtx=document.getElementById('dirChart');
+  if(dirCtx){{
+    var dd={_dir_js};
+    new Chart(dirCtx,{{
+      type:'doughnut',
+      data:{{labels:['看多','看空','中性'],
+             datasets:[{{data:dd,
+                         backgroundColor:['rgba(34,197,94,.85)','rgba(239,68,68,.85)','rgba(245,158,11,.85)'],
+                         borderColor:[dark?'#141928':'#fff'],borderWidth:2}}]}},
+      options:{{responsive:true,maintainAspectRatio:false,cutout:'58%',
+               plugins:{{legend:{{position:'bottom',labels:{{color:tc,font:{{size:10}},boxWidth:11,padding:10}}}},
+                         tooltip:{{callbacks:{{label:function(c){{return' '+c.label+': '+c.raw+' 只';}}}}}}}}}}
+    }});
+  }}
+
+  // Radar per ticker
+  var rd={_radar_js};
+  var rl=['IV Rank','P/C信号','情绪','聪明钱','催化剂','风险控制'];
+  Object.keys(rd).forEach(function(tk){{
+    var cv=document.getElementById('radar-'+tk);
+    if(!cv)return;
+    new Chart(cv,{{
+      type:'radar',
+      data:{{labels:rl,datasets:[{{data:rd[tk],fill:true,
+               backgroundColor:'rgba(102,126,234,.13)',borderColor:'#667eea',
+               pointBackgroundColor:'#667eea',pointBorderColor:'#fff',pointRadius:2,borderWidth:1.5}}]}},
+      options:{{responsive:true,maintainAspectRatio:true,
+               scales:{{r:{{min:0,max:100,beginAtZero:true,
+                            grid:{{color:gc}},angleLines:{{color:gc}},
+                            ticks:{{display:false}},
+                            pointLabels:{{color:tc,font:{{size:8}}}}}}}},
+               plugins:{{legend:{{display:false}}}}}}
+    }});
+  }});
+}});
+<\/script>
 </body>
 </html>"""
-
 
 def main():
     """主入口"""

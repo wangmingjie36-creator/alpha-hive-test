@@ -1402,28 +1402,44 @@ class AlphaHiveDailyReporter:
         else:
             _log.info("无需提交（工作目录干净）")
 
-        # 2. Git 推送：LLM 模式 → 生产（origin），规则模式 → 测试（test remote）
+        # 2. Git 推送：LLM 模式 → 生产（origin main），规则模式 → 测试（test remote）
+        #    规则模式使用临时分支，不污染本地 main，推完即删除
         import llm_service as _llm_check
         _using_llm = _llm_check.is_available()
-        remote = "origin" if _using_llm else "test"
         env_label = "🧠 生产（LLM）" if _using_llm else "🔧 测试（规则引擎）"
-        _log.info("Git push → %s remote [%s]", remote, env_label)
+        _log.info("Git push → [%s]", env_label)
 
-        # 检查 test remote 是否存在
-        _remote_check = self.agent_helper.git.run_git_cmd("git remote")
-        _remotes = _remote_check.get("stdout", "")
-        if remote == "test" and "test" not in _remotes:
-            _log.warning("test remote 不存在，跳过推送（请先配置测试仓库）")
-            push_result = {"success": False, "error": "test remote not configured"}
-        else:
-            r = self.agent_helper.git.run_git_cmd(f"git push {remote} main")
-            push_result = {"success": r["success"],
-                           "remote": remote,
+        if _using_llm:
+            # 生产模式：正常推送 origin main
+            r = self.agent_helper.git.run_git_cmd("git push origin main")
+            push_result = {"success": r["success"], "remote": "origin",
                            "output": r.get("stdout", "") or r.get("stderr", "")}
+        else:
+            # 测试模式：临时分支 → test remote → 删除临时分支 → 本地 main 回滚到 origin/main
+            _remote_check = self.agent_helper.git.run_git_cmd("git remote")
+            if "test" not in _remote_check.get("stdout", ""):
+                _log.warning("test remote 不存在，跳过推送")
+                push_result = {"success": False, "error": "test remote not configured"}
+            else:
+                _tmp = "_test_snapshot"
+                # 从当前 HEAD 创建临时分支并推送到 test:main
+                self.agent_helper.git.run_git_cmd(f"git branch -D {_tmp}", check=False)
+                self.agent_helper.git.run_git_cmd(f"git checkout -b {_tmp}")
+                r = self.agent_helper.git.run_git_cmd(f"git push test {_tmp}:main --force")
+                push_result = {"success": r["success"], "remote": "test",
+                               "output": r.get("stdout", "") or r.get("stderr", "")}
+                # 回到 main 并删除临时分支，本地 main 恢复干净状态
+                self.agent_helper.git.run_git_cmd("git checkout main")
+                self.agent_helper.git.run_git_cmd(f"git branch -D {_tmp}")
+                # 重置本地 main 到 origin/main，撤销测试数据对本地 main 的污染
+                self.agent_helper.git.run_git_cmd("git fetch origin")
+                self.agent_helper.git.run_git_cmd("git reset --hard origin/main")
+                _log.info("本地 main 已恢复至 origin/main（测试数据不污染生产）")
+
         results["git_push"] = push_result
         results["deploy_env"] = "production" if _using_llm else "test"
         if push_result["success"]:
-            _log.info("Git push 成功 → %s", remote)
+            _log.info("Git push 成功 → %s", push_result.get("remote"))
         else:
             _log.warning("Git push 失败：%s", push_result.get("error") or push_result.get("output", ""))
 

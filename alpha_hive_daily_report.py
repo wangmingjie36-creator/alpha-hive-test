@@ -1423,7 +1423,7 @@ class AlphaHiveDailyReporter:
             else:
                 _tmp = "_test_snapshot"
                 # 从当前 HEAD 创建临时分支并推送到 test:main
-                self.agent_helper.git.run_git_cmd(f"git branch -D {_tmp}", check=False)
+                self.agent_helper.git.run_git_cmd(f"git branch -D {_tmp}")
                 self.agent_helper.git.run_git_cmd(f"git checkout -b {_tmp}")
                 r = self.agent_helper.git.run_git_cmd(f"git push test {_tmp}:main --force")
                 push_result = {"success": r["success"], "remote": "test",

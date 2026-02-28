@@ -112,7 +112,7 @@ class GitHubTool:
         """执行 Git 命令"""
         try:
             result = subprocess.run(
-                f"cd {self.repo_path} && {cmd}",
+                f'cd "{self.repo_path}" && {cmd}',
                 shell=True,
                 capture_output=True,
                 text=True,

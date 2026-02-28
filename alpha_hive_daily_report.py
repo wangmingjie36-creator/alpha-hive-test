@@ -566,13 +566,22 @@ class AlphaHiveDailyReporter:
                 direction = data.get("direction", "neutral")
                 dir_cn = {"bullish": "看多", "bearish": "看空", "neutral": "中性"}.get(direction, direction)
 
+                # NA2：调整说明（附加到 Slack 推送）
+                adj_note = self._format_score_adjustments(data)
+                details_list = [f"评分 {score:.1f}/10"]
+                if adj_note:
+                    details_list.append(adj_note)
+                cov = data.get("dimension_coverage_pct", 100.0)
+                if cov < 100.0:
+                    details_list.append(f"维度覆盖 {cov:.0f}%")
+
                 # 高分机会推送（>= 7.5）
                 if score >= 7.5:
                     self._submit_bg(
                         self.slack_notifier.send_opportunity_alert,
                         ticker, score, dir_cn,
                         data.get("discovery", "高分机会"),
-                        [f"评分 {score:.1f}/10"]
+                        details_list
                     )
 
                 # 异常信号推送：强看空 或 内幕大额交易
@@ -580,7 +589,7 @@ class AlphaHiveDailyReporter:
                     self._submit_bg(
                         self.slack_notifier.send_risk_alert,
                         f"{ticker} 低分预警",
-                        f"蜂群评分仅 {score:.1f}/10，方向 {dir_cn}",
+                        f"蜂群评分仅 {score:.1f}/10，方向 {dir_cn}" + (f" | {adj_note}" if adj_note else ""),
                         "HIGH"
                     )
 
@@ -820,6 +829,47 @@ class AlphaHiveDailyReporter:
 
         return report
 
+    @staticmethod
+    def _format_score_adjustments(data: Dict) -> str:
+        """
+        NA2：将 distill() 返回的调整字段格式化为人类可读注释。
+        返回空字符串表示无调整发生。
+
+        示例输出：
+          "⚠️ 反对蜂看空 8.5 → 封顶 9.25 | ⚠️ 数据质量 60% (×0.875) | 🤖 LLM蒸馏(0.8) 基础分8.3 | ❌ 维度覆盖64%"
+        """
+        parts = []
+
+        # BearBee 封顶
+        if data.get("bear_cap_applied"):
+            bs = data.get("bear_strength", 0.0)
+            rs = data.get("rule_score", data.get("final_score", 0.0))
+            parts.append(f"⚠️ 反对蜂看空强度{bs:.1f} → 封顶{rs:.2f}")
+
+        # 数据质量折扣
+        if data.get("dq_penalty_applied"):
+            rp = data.get("data_real_pct", 0.0)
+            qf = data.get("dq_quality_factor", 1.0)
+            parts.append(f"⚠️ 数据质量{rp:.0f}%(×{qf:.3f})")
+
+        # LLM 蒸馏
+        if data.get("distill_mode") == "llm_enhanced":
+            lc = data.get("llm_confidence", 0.0)
+            rs = data.get("rule_score", data.get("final_score", 0.0))
+            parts.append(f"🤖 LLM蒸馏(置信{lc:.1f}) 基础分{rs:.1f}")
+
+        # 维度覆盖率不足
+        cov = data.get("dimension_coverage_pct", 100.0)
+        if cov < 80.0:
+            missing = [
+                dim for dim, st in data.get("dimension_status", {}).items()
+                if st != "present"
+            ]
+            missing_str = "/".join(missing) if missing else ""
+            parts.append(f"❌ 维度覆盖{cov:.0f}%({missing_str})")
+
+        return " | ".join(parts)
+
     def _generate_swarm_markdown_report(self, swarm_results: Dict,
                                          concentration: Dict = None,
                                          macro_context: Dict = None,
@@ -1049,6 +1099,18 @@ class AlphaHiveDailyReporter:
                 f"{data_pct:.0f}% | {thesis_break} |"
             )
         md.append("")
+
+        # NA2：评分调整注释（bear_cap / dq_penalty / llm_enhanced / 低维度覆盖）
+        adj_lines = []
+        for ticker, data in sorted_results:
+            adj = self._format_score_adjustments(data)
+            if adj:
+                adj_lines.append(f"- **{ticker}**：{adj}")
+        if adj_lines:
+            md.append("### 评分调整说明")
+            md.append("")
+            md.extend(adj_lines)
+            md.append("")
 
         # GuardBeeSentinel 详细交叉验证
         md.append("### 交叉验证详情")

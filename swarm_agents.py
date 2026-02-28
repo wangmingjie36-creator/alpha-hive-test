@@ -1689,6 +1689,26 @@ class QueenDistiller:
                 dim_scores[dim] = r.get("score", 5.0)
                 dim_confidence[dim] = r.get("confidence", 0.5)
 
+        # 2.5 维度状态追踪（NA1：可视化哪些维度缺失及原因）
+        dim_status: Dict[str, str] = {}    # present / absent / error
+        dim_missing_reason: Dict[str, str] = {}
+        for dim in self.DIMENSION_WEIGHTS:
+            if dim in dim_scores:
+                dim_status[dim] = "present"
+            else:
+                # 区分"Agent 报错"还是"完全没返回"
+                error_result = next(
+                    (r for r in all_results if r.get("dimension") == dim and "error" in r), None
+                )
+                if error_result:
+                    dim_status[dim] = "error"
+                    dim_missing_reason[dim] = str(error_result["error"])[:80]
+                else:
+                    dim_status[dim] = "absent"
+                    dim_missing_reason[dim] = "Agent 未返回该维度"
+        present_count = sum(1 for s in dim_status.values() if s == "present")
+        dimension_coverage_pct = round(present_count / len(self.DIMENSION_WEIGHTS) * 100, 1)
+
         # 3. ML 辅助分（按 confidence 缩放影响力）
         ml_adjustment = 0.0
         for r in valid_results:
@@ -1916,4 +1936,8 @@ class QueenDistiller:
             "bear_cap_applied": bear_cap_applied,
             "dq_quality_factor": quality_factor,
             "dq_penalty_applied": dq_penalty_applied,
+            # NA1: 维度状态可视化
+            "dimension_status": dim_status,
+            "dimension_missing_reason": dim_missing_reason,
+            "dimension_coverage_pct": dimension_coverage_pct,
         }

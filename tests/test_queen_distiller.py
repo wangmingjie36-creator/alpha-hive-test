@@ -91,10 +91,10 @@ class TestDistill:
         queen_no_res = QueenDistiller(board)
         out_baseline = queen_no_res.distill("NVDA", results)
 
-        # 制造共振：4 个同向 bullish 信号
-        for i in range(4):
+        # 制造共振：4 个不同维度的同向 bullish 信号（P2a：需要 ≥3 不同维度）
+        for agent in ["ScoutBeeNova", "OracleBeeEcho", "BuzzBeeWhisper", "ChronosBeeHorizon"]:
             board.publish(PheromoneEntry(
-                agent_id=f"Agent{i}", ticker="NVDA",
+                agent_id=agent, ticker="NVDA",
                 discovery="test", source="test",
                 self_score=8.0, direction="bullish",
             ))

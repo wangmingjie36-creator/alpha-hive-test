@@ -1851,6 +1851,25 @@ class QueenDistiller:
                     # LLM 高置信度时覆盖规则引擎方向
                     final_direction = llm_direction
 
+        # 10. 数据质量折扣（P4 门控）
+        # 数据真实度不足时，将 final_score 向中性值 5.0 压缩，防止低质数据产生高置信结论
+        # ≥ 80%: quality_factor = 1.0（无折扣）
+        # 60–80%: 线性从 1.0 降至 0.875
+        # 40%:    factor = 0.75；0%: factor = 0.5（最大压缩，偏差减半）
+        dq_penalty_applied = False
+        quality_factor = 1.0
+        if data_real_pct < 80.0:
+            quality_factor = round(0.5 + 0.5 * (data_real_pct / 80.0), 3)
+            pre_dq = final_score
+            final_score = round(5.0 + (final_score - 5.0) * quality_factor, 2)
+            final_score = max(0.0, min(10.0, final_score))
+            if abs(final_score - pre_dq) >= 0.05:
+                dq_penalty_applied = True
+                _log.info(
+                    "%s 数据质量折扣: real_pct=%.1f%% factor=%.3f %.2f→%.2f",
+                    ticker, data_real_pct, quality_factor, pre_dq, final_score,
+                )
+
         # 保留各 Agent 的原始分析内容（discovery + details）
         agent_details = {}
         for r in all_results:
@@ -1895,4 +1914,6 @@ class QueenDistiller:
             "rule_direction": rule_direction,
             "bear_strength": bear_strength,
             "bear_cap_applied": bear_cap_applied,
+            "dq_quality_factor": quality_factor,
+            "dq_penalty_applied": dq_penalty_applied,
         }

@@ -71,12 +71,14 @@ class TestResonance:
         assert not res["resonance_detected"]
 
     def test_resonance_at_three_agents(self, board):
-        for i in range(3):
-            board.publish(_entry(agent=f"Agent{i}"))
+        # P2a: 需要来自 ≥3 个不同数据维度的真实 Agent 名才触发共振
+        # signal(ScoutBeeNova) + odds(OracleBeeEcho) + sentiment(BuzzBeeWhisper) = 3 维
+        for agent in ["ScoutBeeNova", "OracleBeeEcho", "BuzzBeeWhisper"]:
+            board.publish(_entry(agent=agent))
         res = board.detect_resonance("NVDA")
         assert res["resonance_detected"]
         assert res["direction"] == "bullish"
-        assert res["supporting_agents"] >= 3
+        assert res["cross_dim_count"] >= 3
 
     def test_confidence_boost_capped(self, board):
         for i in range(10):

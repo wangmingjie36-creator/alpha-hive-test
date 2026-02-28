@@ -659,10 +659,11 @@ class Backtester:
 
         返回: {agent_id_abbrev_8chars: bias_float}，样本不足的 Agent 返回 0.0
         """
-        # agent 全名 → 缩写（pheromone_compact 用 agent_id[:8]）
+        # agent 全名 → 缩写（pheromone_compact 用 agent_id[:8] 截取）
+        # 注意：OracleBeeEcho[:8] = "OracleBe"（非 "OracleBee"）
         agent_abbrevs = {
             "ScoutBeeNova":      "ScoutBee",
-            "OracleBeeEcho":     "OracleBee",
+            "OracleBeeEcho":     "OracleBe",   # [:8] = "OracleBe"，不是"OracleBee"
             "BuzzBeeWhisper":    "BuzzBeeW",
             "ChronosBeeHorizon": "ChronosB",
             "GuardBeeSentinel":  "GuardBee",
@@ -748,11 +749,14 @@ class Backtester:
         }
 
         # 默认权重（来自 config，此处作为兜底）
+        _fallback_weights = {"signal": 0.30, "catalyst": 0.20, "sentiment": 0.20, "odds": 0.15, "risk_adj": 0.15}
         try:
             from config import EVALUATION_WEIGHTS
-            default_weights = {k: v for k, v in EVALUATION_WEIGHTS.items() if k in agent_dim_map.values()}
+            base = {k: v for k, v in EVALUATION_WEIGHTS.items() if k in agent_dim_map.values()}
+            # Bug 9: 补全 config 中可能缺失的维度，避免后续 KeyError
+            default_weights = {dim: base.get(dim, _fallback_weights[dim]) for dim in _fallback_weights}
         except (ImportError, AttributeError):
-            default_weights = {"signal": 0.30, "catalyst": 0.20, "sentiment": 0.20, "odds": 0.15, "risk_adj": 0.15}
+            default_weights = _fallback_weights
 
         # T+1 平滑因子更保守（T+1 噪声大，不能大幅改变权重）
         new_weight_ratio = 0.8 if period == "t7" else 0.5
@@ -830,7 +834,7 @@ class Backtester:
         # 规则：|bias| > 0.5 才修正，最大修正幅度 ±10%，避免震荡
         dim_to_abbrev = {
             "signal":    "ScoutBee",
-            "odds":      "OracleBee",
+            "odds":      "OracleBe",   # OracleBeeEcho[:8] = "OracleBe"
             "sentiment": "BuzzBeeW",
             "catalyst":  "ChronosB",
             "risk_adj":  "GuardBee",
@@ -851,7 +855,7 @@ class Backtester:
                 s2 = sum(smoothed.values())
                 smoothed = {dim: round(v / s2, 3) for dim, v in smoothed.items()}
                 _log.info("NA5 self_score 偏差校正: %s", bias_applied)
-        except Exception as e:  # pylint: disable=broad-except
+        except (sqlite3.Error, OSError, json.JSONDecodeError, KeyError, TypeError, ValueError, ZeroDivisionError) as e:
             _log.debug("self_score 偏差校正跳过（样本不足或异常）: %s", e)
 
         _log.info(

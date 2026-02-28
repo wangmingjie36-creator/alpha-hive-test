@@ -866,10 +866,11 @@ class AlphaHiveDailyReporter:
         # 维度覆盖率不足
         cov = data.get("dimension_coverage_pct", 100.0)
         if cov < 80.0:
-            missing = [
-                dim for dim, st in data.get("dimension_status", {}).items()
-                if st != "present"
-            ]
+            dim_status = data.get("dimension_status", {})
+            missing = (
+                [dim for dim, st in dim_status.items() if st != "present"]
+                if isinstance(dim_status, dict) else []
+            )
             missing_str = "/".join(missing) if missing else ""
             parts.append(f"❌ 维度覆盖{cov:.0f}%({missing_str})")
 

@@ -141,3 +141,69 @@ class TestDistill:
         out = queen.distill("NVDA", results)
         # error 结果应被过滤，不参与加权
         assert out["supporting_agents"] == 0
+
+    # ── NA3：置信度加权投票 ──────────────────────────────────────────────
+    def test_na3_weighted_vote_high_conf_wins(self, queen):
+        """2个高置信度看多应胜过3个低置信度看空（NA3）"""
+        results = [
+            _make_result("signal",    8.5, direction="bullish", confidence=0.9),
+            _make_result("catalyst",  8.0, direction="bullish", confidence=0.85),
+            _make_result("sentiment", 3.0, direction="bearish", confidence=0.2),
+            _make_result("odds",      3.5, direction="bearish", confidence=0.2),
+            _make_result("risk_adj",  4.0, direction="bearish", confidence=0.25),
+        ]
+        out = queen.distill("NVDA", results)
+        vw = out["direction_vote_weights"]
+        # 加权后多方应占优
+        assert vw["bullish"] > vw["bearish"], "高置信度看多应比低置信度看空权重更高"
+        assert out["rule_direction"] == "bullish"
+
+    def test_na3_vote_weights_present(self, queen):
+        """返回结果应包含 direction_vote_weights 字段（NA3）"""
+        out = queen.distill("NVDA", [_make_result("signal", 7.0)])
+        assert "direction_vote_weights" in out
+        vw = out["direction_vote_weights"]
+        assert set(vw.keys()) == {"bullish", "bearish", "neutral"}
+
+    # ── NA4：GuardBeeSentinel 风险关门 ─────────────────────────────────
+    def test_na4_guard_penalty_triggered(self, queen):
+        """GuardBee score < 4.0 时应触发折扣（NA4）"""
+        results = [
+            _make_result("signal",   9.0, direction="bullish"),
+            _make_result("risk_adj", 1.5, direction="neutral"),
+        ]
+        out = queen.distill("NVDA", results)
+        assert out["guard_penalty_applied"] is True
+        assert out["guard_penalty"] > 0.0
+
+    def test_na4_guard_no_penalty_above_threshold(self, queen):
+        """GuardBee score >= 4.0 时不应触发折扣（NA4）"""
+        results = [
+            _make_result("signal",   8.0, direction="bullish"),
+            _make_result("risk_adj", 5.0, direction="neutral"),
+        ]
+        out = queen.distill("NVDA", results)
+        assert out["guard_penalty_applied"] is False
+        assert out["guard_penalty"] == 0.0
+
+    def test_na4_guard_penalty_scales_with_score(self, queen):
+        """GuardBee 分越低，折扣越大（NA4）"""
+        def _penalty(guard_score):
+            r = [_make_result("signal", 8.0), _make_result("risk_adj", guard_score)]
+            return queen.distill("TEST", r)["guard_penalty"]
+
+        assert _penalty(3.0) < _penalty(1.0), "guard=1.0 应比 guard=3.0 折扣更大"
+
+    # ── NA1：维度状态 ────────────────────────────────────────────────────
+    def test_na1_dimension_status_present(self, queen):
+        """有效结果对应维度应为 present（NA1）"""
+        out = queen.distill("NVDA", [_make_result("signal", 7.0)])
+        assert out["dimension_status"]["signal"] == "present"
+        assert out["dimension_coverage_pct"] > 0
+
+    def test_na1_dimension_status_absent(self, queen):
+        """未返回维度应为 absent（NA1）"""
+        out = queen.distill("NVDA", [_make_result("signal", 7.0)])
+        # catalyst/odds/sentiment/risk_adj 均未提供
+        assert out["dimension_status"]["catalyst"] == "absent"
+        assert out["dimension_status"]["odds"] == "absent"

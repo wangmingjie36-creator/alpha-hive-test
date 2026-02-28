@@ -1707,7 +1707,8 @@ class QueenDistiller:
                     dim_status[dim] = "absent"
                     dim_missing_reason[dim] = "Agent 未返回该维度"
         present_count = sum(1 for s in dim_status.values() if s == "present")
-        dimension_coverage_pct = round(present_count / len(self.DIMENSION_WEIGHTS) * 100, 1)
+        _n_dims = len(self.DIMENSION_WEIGHTS)
+        dimension_coverage_pct = round(present_count / _n_dims * 100, 1) if _n_dims else 100.0
 
         # 3. ML 辅助分（按 confidence 缩放影响力）
         ml_adjustment = 0.0
